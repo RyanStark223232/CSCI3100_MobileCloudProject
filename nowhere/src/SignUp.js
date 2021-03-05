@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+import auth from "./Firebase.js";
 
 function Copyright() {
   return (
@@ -48,7 +50,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
-
+  const pwRef = useRef()
+  const emailRef = useRef()
+  
+  async function handleSignUp(e){
+    // console.log("inside handleSignUp")
+    e.preventDefault()
+    // console.log(emailRef.current.value)
+    try{
+      auth.createUserWithEmailAndPassword(emailRef.current.value,pwRef.current.value).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode == 'auth/weak-password') {
+          alert('The password is too weak.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+      })
+    } catch(e) {
+      console.log(e)
+    }
+    
+  }
+  
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -59,7 +85,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form onSubmit={handleSignUp} className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -93,6 +119,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                inputRef = {emailRef}
               />
             </Grid>
             <Grid item xs={12}>
@@ -105,15 +132,18 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                inputRef= {pwRef}
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
+            
+          {/*  <Grid item xs={12}>*/}
+          {/*    <FormControlLabel*/}
+          {/*      control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
+          {/*      label="I want to receive inspiration, marketing promotions and updates via email."*/}
+          {/*    />*/}
+          {/*  </Grid>*/}
           </Grid>
+          
           <Button
             type="submit"
             fullWidth

@@ -4,6 +4,7 @@ import SignUp from './SignUp.js';
 import Home from './Home.js';
 import Search from './Search.js';
 import Personal from './Personal.js'
+import Firebase from "./Firebase";
 import {
   BrowserRouter as Router,
   Switch,
