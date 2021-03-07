@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useRef}from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import auth from './Firebase';
 
 function Copyright() {
   return (
@@ -49,6 +50,32 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
 
+  const pwRef = useRef()
+  const emailRef = useRef()
+
+  
+  
+  async function handleSignIn(e){
+    console.log("inside handleSignIN")
+    e.preventDefault()
+    // console.log(emailRef.current.value)
+    auth.signInWithEmailAndPassword(emailRef.current.value, pwRef.current.value)
+    .then((userCredential) => {
+      // Signed in
+      var user = userCredential.user;
+      console.log("signed in with email= ",user.email)
+      // ...
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      alert(errorMessage)
+    })
+    console.log("current user's id is ", auth.currentUser.uid)
+
+    
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -59,7 +86,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form onSubmit={handleSignIn} className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -70,6 +97,7 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            inputRef = {emailRef}
           />
           <TextField
             variant="outlined"
@@ -81,6 +109,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            inputRef = {pwRef}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
