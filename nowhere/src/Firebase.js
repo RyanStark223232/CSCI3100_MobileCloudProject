@@ -1,4 +1,5 @@
 import firebase from "firebase/app";
+import "firebase/database";
 import "firebase/auth"
 
 const firebaseConfig = {
@@ -12,7 +13,15 @@ const firebaseConfig = {
 };
 
 const app = firebase.initializeApp(firebaseConfig)
-export const auth = app.auth()
+const auth = app.auth()
+const f_database = firebase.database()
+// f_database.set({
+//    username: "potato",
+//    email: "email@email.com",
+//    age: "10"
+// })
+export { app, auth,f_database}
 export default auth
+
 
 // auth.createUserWithEmailAndPassword("potato@potato.com","potato1234")

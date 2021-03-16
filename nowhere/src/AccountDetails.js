@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
+// import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -13,20 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import auth from "./Firebase.js";
+import auth,{f_database} from "./Firebase.js";
 
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://material-ui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,32 +38,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function AccountDetails() {
   const classes = useStyles();
-  const pwRef = useRef()
-  const emailRef = useRef()
-  const pwVRef= useRef()
-  
-  async function handleSignUp(e){
+  const fnameRef = useRef()
+  const lnameRef = useRef()
+  const unameRef = useRef()
+  const ageRef = useRef()
+
+
+  async function handleSubmit(e){
     // console.log("inside handleSignUp")
     e.preventDefault()
     // console.log(emailRef.current.value)
+
     try{
-      auth.createUserWithEmailAndPassword(emailRef.current.value,pwRef.current.value).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        if (errorCode === 'auth/weak-password') {
-          alert('The password is too weak.');
-        } else {
-          alert(errorMessage);
-        }
-        console.log(error);
-      })
+        await f_database.ref("users/" + auth.currentUser.uid).set({
+            username: unameRef.current.value,
+            email: auth.currentUser.email,
+            age: ageRef.current.value,
+            first_name: fnameRef.current.value,
+            last_name: lnameRef.current.value,
+        })
     } catch(e) {
       console.log(e)
     }
-    
+
   }
   
   return (
@@ -84,71 +73,72 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Fill in account details
         </Typography>
-        <form onSubmit={handleSignUp} className={classes.form} noValidate>
+        <form onSubmit={handleSubmit} className={classes.form} noValidate>
           <Grid container spacing={2}>
-            {/*<Grid item xs={12} sm={6}>*/}
-            {/*  <TextField*/}
-            {/*    autoComplete="fname"*/}
-            {/*    name="firstName"*/}
-            {/*    variant="outlined"*/}
-            {/*    required*/}
-            {/*    fullWidth*/}
-            {/*    id="firstName"*/}
-            {/*    label="First Name"*/}
-            {/*    autoFocus*/}
-            {/*  />*/}
-            {/*</Grid>*/}
-            {/*<Grid item xs={12} sm={6}>*/}
-            {/*  <TextField*/}
-            {/*    variant="outlined"*/}
-            {/*    required*/}
-            {/*    fullWidth*/}
-            {/*    id="lastName"*/}
-            {/*    label="Last Name"*/}
-            {/*    name="lastName"*/}
-            {/*    autoComplete="lname"*/}
-            {/*  />*/}
-            {/*</Grid>*/}
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                inputRef = {emailRef}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                inputRef= {pwRef}
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                   variant="outlined"
                   required
                   fullWidth
-                  name="password_verifier"
-                  label="Enter Again Your Password"
-                  type="password"
-                  id="password_verifier"
-                  autoComplete="current-password"
-                  inputRef= {pwVRef}
+                  id="username"
+                  label="Username"
+                  name="usernam"
+                  // autoComplete=
+                  inputRef = {unameRef}
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="fname"
+                name="firstName"
+                variant="outlined"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+                inputRef = {fnameRef}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="lname"
+                inputRef = {lnameRef}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                  // autoComplete="fname"
+                  name="age"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="age"
+                  label="Age"
+                  autoFocus
+                  inputRef = {ageRef}
+              />
+            </Grid>
+            {/*<Grid item xs={12} sm={6}>*/}
+            {/*  <TextField*/}
+            {/*      variant="outlined"*/}
+            {/*      required*/}
+            {/*      fullWidth*/}
+            {/*      id="sex"*/}
+            {/*      label="Sex"*/}
+            {/*      name="lastName"*/}
+            {/*      // autoComplete="lname"*/}
+            {/*  />*/}
+            {/*</Grid>*/}
+            
             
           {/*  <Grid item xs={12}>*/}
           {/*    <FormControlLabel*/}
@@ -165,14 +155,14 @@ export default function SignUp() {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            Submit
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
               {/*<Link href="/personal" variant="body2">*/}
-              <Link href="/signin" >
-                Already have an account? Sign in
-              </Link>
+              {/*<Link href="/personal" >*/}
+              {/*  Already have an account? Sign in*/}
+              {/*</Link>*/}
             </Grid>
           </Grid>
         </form>
