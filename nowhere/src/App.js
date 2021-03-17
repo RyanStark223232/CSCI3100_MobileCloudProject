@@ -4,7 +4,8 @@ import SignUp from './SignUp.js';
 import Home from './Home.js';
 import Search from './Search.js';
 import Personal from './Personal.js'
-import Firebase from "./Firebase";
+import AccountDetails from "./AccountDetails.js";
+// import Firebase from "./Firebase";
 import {
   BrowserRouter as Router,
   Switch,
@@ -37,7 +38,10 @@ function App() {
                 <Link to="/search">Search Posts</Link>
               </li>
               <li>
-                <Link to="/personal">Personal Information</Link>
+                <Link to="/personal"> Personal Information </Link>
+              </li>
+              <li>
+                <Link to="/accountdetails" >   Accountdetails</Link>
               </li>
             </ul>
           </nav>
@@ -59,10 +63,15 @@ function App() {
             <Route path="/personal">
               <Personal />
             </Route>
+
+            <Route path="/AccountDetails">
+              <AccountDetails />
+            </Route>
             
             <Route path="/">
               <Home />
             </Route>
+            
 
           </Switch>
         </div>
@@ -74,3 +83,4 @@ function App() {
 }
 
 export default App;
+// withRouter(observer(MyComponent))

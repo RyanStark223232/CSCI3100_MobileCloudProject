@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,18 +13,21 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import auth from "./Firebase";
+import {Comment, Functions} from "@material-ui/icons";
+
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://material-ui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,6 +51,40 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const emailRef = useRef()
+  const pwRef = useRef()
+
+  async function handleSignin(e) {
+      e.preventDefault()
+    try{
+       await auth.signInWithEmailAndPassword(emailRef.current.value, pwRef.current.value).then(value => {
+        if (auth.currentUser != null){
+          alert("sign in succeeded with email ="+ emailRef.current.value )
+        }else {
+          alert("login failed")
+        }
+      }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if (errorCode === 'auth/wrong-password') {
+              alert('Wrong password.');
+            } else {
+              alert(errorMessage);
+            }
+            console.log(error);
+          })
+    }catch (e) {
+      alert(e)
+    }
+    
+    
+  }
+
+  function logOut() {
+      console.log("in LogOut()")
+    auth.signOut()
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +96,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form onSubmit={handleSignin} className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -70,6 +107,7 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            inputRef= {emailRef}
           />
           <TextField
             variant="outlined"
@@ -81,6 +119,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            inputRef= {pwRef}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -102,15 +141,21 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
+            </Grid>
+            <Grid container>
+              <h1 onClick={logOut}> 
+              <Link href="#" variant="body2">
+                {"\nlog out"}
+              </Link></h1>
             </Grid>
           </Grid>
         </form>
       </div>
       <Box mt={8}>
-        <Copyright />
+        {/*<Copyright />*/}
       </Box>
     </Container>
   );

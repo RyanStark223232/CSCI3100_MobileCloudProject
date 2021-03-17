@@ -1,10 +1,11 @@
-import React, {useRef} from 'react';
+import React, {Component, useRef} from 'react';
+import {Redirect} from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -14,19 +15,32 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import auth from "./Firebase.js";
+import App from "./App";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// class signUp extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleSignUp = this.handleSignUp.bind(this)
+//   }
+//   handleSignUp() {
+//     this.props.handleSignUp(this.props.char);
+//   }
+//
+// }
+
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://material-ui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,8 +66,10 @@ export default function SignUp() {
   const classes = useStyles();
   const pwRef = useRef()
   const emailRef = useRef()
+  const pwVRef= useRef()
+  App.bind(handleSignUp)
   
-  async function handleSignUp(e){
+   function handleSignUp(e){
     // console.log("inside handleSignUp")
     e.preventDefault()
     // console.log(emailRef.current.value)
@@ -62,13 +78,17 @@ export default function SignUp() {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        if (errorCode == 'auth/weak-password') {
+        if (errorCode === 'auth/weak-password') {
           alert('The password is too weak.');
         } else {
           alert(errorMessage);
         }
         console.log(error);
+      }).then(value => {
+        alert("Signed up successfully with email "+ emailRef.current.value + "   uid = " + auth.currentUser.uid)
       })
+      
+
     } catch(e) {
       console.log(e)
     }
@@ -87,29 +107,29 @@ export default function SignUp() {
         </Typography>
         <form onSubmit={handleSignUp} className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
+            {/*<Grid item xs={12} sm={6}>*/}
+            {/*  <TextField*/}
+            {/*    autoComplete="fname"*/}
+            {/*    name="firstName"*/}
+            {/*    variant="outlined"*/}
+            {/*    required*/}
+            {/*    fullWidth*/}
+            {/*    id="firstName"*/}
+            {/*    label="First Name"*/}
+            {/*    autoFocus*/}
+            {/*  />*/}
+            {/*</Grid>*/}
+            {/*<Grid item xs={12} sm={6}>*/}
+            {/*  <TextField*/}
+            {/*    variant="outlined"*/}
+            {/*    required*/}
+            {/*    fullWidth*/}
+            {/*    id="lastName"*/}
+            {/*    label="Last Name"*/}
+            {/*    name="lastName"*/}
+            {/*    autoComplete="lname"*/}
+            {/*  />*/}
+            {/*</Grid>*/}
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -135,6 +155,19 @@ export default function SignUp() {
                 inputRef= {pwRef}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password_verifier"
+                  label="Enter Again Your Password"
+                  type="password"
+                  id="password_verifier"
+                  autoComplete="current-password"
+                  inputRef= {pwVRef}
+              />
+            </Grid>
             
           {/*  <Grid item xs={12}>*/}
           {/*    <FormControlLabel*/}
@@ -155,7 +188,8 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              {/*<Link href="/personal" variant="body2">*/}
+              <Link href="/signin" >
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -163,7 +197,7 @@ export default function SignUp() {
         </form>
       </div>
       <Box mt={5}>
-        <Copyright />
+        {/*<Copyright />*/}
       </Box>
     </Container>
   );
