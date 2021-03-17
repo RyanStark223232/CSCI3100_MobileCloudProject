@@ -47,20 +47,19 @@ export default function AccountDetails() {
 
 
   async function handleSubmit(e){
-    // console.log("inside handleSignUp")
     e.preventDefault()
-    // console.log(emailRef.current.value)
-
     try{
-        await f_database.ref("users/" + auth.currentUser.uid).set({
+        await f_database.ref("users/" + unameRef.current.value).set({
             username: unameRef.current.value,
             email: auth.currentUser.email,
             age: ageRef.current.value,
             first_name: fnameRef.current.value,
             last_name: lnameRef.current.value,
         })
+        alert("Submitted to database users/"+ unameRef.current.value)
     } catch(e) {
       console.log(e)
+      alert(e)
     }
 
   }

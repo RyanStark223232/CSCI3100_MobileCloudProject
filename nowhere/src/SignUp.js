@@ -1,4 +1,5 @@
-import React, {useRef} from 'react';
+import React, {Component, useRef} from 'react';
+import {Redirect} from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +15,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import auth from "./Firebase.js";
+import App from "./App";
+
+// class signUp extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.handleSignUp = this.handleSignUp.bind(this)
+//   }
+//   handleSignUp() {
+//     this.props.handleSignUp(this.props.char);
+//   }
+//
+// }
 
 // function Copyright() {
 //   return (
@@ -27,6 +40,7 @@ import auth from "./Firebase.js";
 //     </Typography>
 //   );
 // }
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,8 +67,9 @@ export default function SignUp() {
   const pwRef = useRef()
   const emailRef = useRef()
   const pwVRef= useRef()
+  App.bind(handleSignUp)
   
-  async function handleSignUp(e){
+   function handleSignUp(e){
     // console.log("inside handleSignUp")
     e.preventDefault()
     // console.log(emailRef.current.value)
@@ -69,7 +84,11 @@ export default function SignUp() {
           alert(errorMessage);
         }
         console.log(error);
+      }).then(value => {
+        alert("Signed up successfully with email "+ emailRef.current.value + "   uid = " + auth.currentUser.uid)
       })
+      
+
     } catch(e) {
       console.log(e)
     }

@@ -38,11 +38,11 @@ function App() {
                 <Link to="/search">Search Posts</Link>
               </li>
               <li>
-                <Link to="/personal">Personal Information</Link>
+                <Link to="/personal"> Personal Information </Link>
               </li>
-              {/*<li>*/}
-              {/*  <Link to="/accountdetails" >Accountdetals</Link>*/}
-              {/*</li>*/}
+              <li>
+                <Link to="/accountdetails" >   Accountdetails</Link>
+              </li>
             </ul>
           </nav>
 
@@ -83,3 +83,4 @@ function App() {
 }
 
 export default App;
+// withRouter(observer(MyComponent))
