@@ -5,6 +5,9 @@ import Home from './Home.js';
 import Search from './Search.js';
 import Personal from './Personal.js'
 import AccountDetails from "./AccountDetails.js";
+import EditProfile from "./EditProfile.js";
+
+
 // import Firebase from "./Firebase";
 import {
   BrowserRouter as Router,
@@ -43,6 +46,9 @@ function App() {
               <li>
                 <Link to="/accountdetails" >   Accountdetails</Link>
               </li>
+              <li>
+                <Link to="/editprofile" >Edit Profile</Link>
+              </li>
             </ul>
           </nav>
 
@@ -66,6 +72,10 @@ function App() {
 
             <Route path="/AccountDetails">
               <AccountDetails />
+            </Route>
+
+            <Route path="/editprofile">
+              <EditProfile />
             </Route>
             
             <Route path="/">
