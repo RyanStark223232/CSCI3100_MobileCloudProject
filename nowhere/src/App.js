@@ -6,6 +6,9 @@ import Search from './Search.js';
 import Personal from './Personal.js'
 import AccountDetails from "./AccountDetails.js";
 import CreatePost from "./CreatePost.js";
+import EditProfile from "./EditProfile.js";
+
+
 // import Firebase from "./Firebase";
 import {
   BrowserRouter as Router,
@@ -47,6 +50,9 @@ function App() {
               <li>
                 <Link to="/createpost"> Create Post </Link>
               </li>
+              <li>
+                <Link to="/editprofile" >Edit Profile</Link>
+              </li>
             </ul>
           </nav>
 
@@ -76,6 +82,10 @@ function App() {
               <CreatePost />
             </Route>
 
+            <Route path="/editprofile">
+              <EditProfile />
+            </Route>
+            
             <Route path="/">
               <Home />
             </Route>
