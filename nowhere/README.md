@@ -16,9 +16,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Search Tab
 
-### Location Search
-Not yet implemented
-
 ### Image Search
 We implemented image search using TFJS. This function is intended to let travellers who can visualize where his/her desired travel destination would be but cannot pinpoint the exact location. The procedure is achieved by 1) import a pre-trained MobileNetV2 model 2) obtain the activation in the middle of the model 3) perform classification using K-Nearest Neighbor Model
 1. Click `Load` to import trained model
@@ -26,6 +23,17 @@ We implemented image search using TFJS. This function is intended to let travell
 3. Displays the most `Similar Location` in our database 
 > The database currently only contains 5 locations Africa/HK/USA/India/England. They were only chosen because the google search results of these looked distinct enough for demo
 4. The result would be supplied to location search to return posts of said location 
+
+### Search-Result Table (FilteringTable)
+This Search-Result Table is immature. The Image Search function above is not yet compatible to the Search-Result Table i.e. the result generated in the image search would not be the input in the "location" search at this moment. Moreover, the search method might change in future. (Instead of typing box, dropdown may be used)
+
+Users can type their desired location, travelling style, travelling period and group size in the search-result table to search the output "posts". Initially, all the "posts" will be displayed on the page, until the users type in the search bar. In this initial code phase, the data is limited as follows:
+-Location: {Britain, Hong Kong, Japan)
+-Travel Style: {Shopping, Sporty, Cultural}
+-Period: {Day-Trip, Short-Trip, Weeks-Trip, Long-Trip, Exchange(student)}
+-Size: {Small, Medium, Large}
+
+Multiselect would be included in the future updates. 
 
 ## Create Post & Edit Post Tab
 
