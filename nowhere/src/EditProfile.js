@@ -92,7 +92,8 @@ class ImageUpload extends React.Component{
         return (
           <React.Fragment>
             <CardContent> 
-              <Grid container alignmentItems='Center' justify='center'>
+              {/* alignmentItems='Center' */}
+              <Grid container  justify='center'>
               <input
                   accept="image/*"
                   id="contained-button-file"
@@ -256,7 +257,7 @@ export default function EditProfile() {
                   value={values.userName}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  helperText={errors.userName}
+                  // helperText={errors.userName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -273,7 +274,7 @@ export default function EditProfile() {
                 value={values.firstName}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                helperText={errors.firstName}
+                // helperText={errors.firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -288,7 +289,7 @@ export default function EditProfile() {
                 value={values.lastName}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                helperText={errors.lastName}
+                // helperText={errors.lastName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -302,7 +303,7 @@ export default function EditProfile() {
                   value={values.age}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  helperText={errors.age}
+                  // helperText={errors.age}
                   min='0'
               />
             </Grid>
@@ -317,7 +318,7 @@ export default function EditProfile() {
                   autoFocus
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  helperText={errors.email}
+                  // helperText={errors.email}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -331,7 +332,7 @@ export default function EditProfile() {
                         value={values.sex}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        helperText={errors.sex}
+                        // helperText={errors.sex}
                         >
                     <MenuItem value={'M'}>Male</MenuItem>
                     <MenuItem value={'F'}>Female</MenuItem>
@@ -367,9 +368,9 @@ export default function EditProfile() {
                     fullWidth
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    helperText={errors.email}
+                    // helperText={errors.email}
                     value = {values.bio}
-                    helperText={errors.bio}
+                    // helperText={errors.bio}
                 />
             </Grid>
             
