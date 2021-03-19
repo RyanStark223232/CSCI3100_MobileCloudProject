@@ -32,21 +32,10 @@ textarea{
   width:50%;
 }
 
-button{
-  display:inline-block;
-  padding:5px;
-
-  border-radius: 4px;
-  background-color:#4eb5f1;
-  color:#FFFFFF;
-}
-button:hover{
-  background-color:#4095c6;
-}
-
 h1{
   text-align: center;
 }
+
 .title-container{
   height: auto;
   width :100%;
@@ -54,8 +43,18 @@ h1{
   background-color:#0000;
 }
 
-
-
 #save-btn{
   text-align: center;
+}
+
+#save-btn button{
+  display:inline-block;
+  padding:5px;
+
+  border-radius: 4px;
+  background-color:#4eb5f1;
+  color:#FFFFFF;
+}
+#save-btn button:hover{
+  background-color:#4095c6;
 }

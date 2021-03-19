@@ -31,7 +31,7 @@ class CreatePost extends React.Component {
         return (
             <header className="container">
                 <h1>
-                    Create Post Page
+                    Create / Edit Post Page
                 </h1>
                 <div className="wrapper">
                   <div className="left-item"><span>Title:</span></div>
