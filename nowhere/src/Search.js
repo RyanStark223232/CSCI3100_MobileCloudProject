@@ -1,6 +1,7 @@
 import React from "react";
 import SearchField from "react-search-field";
 import * as tf from '@tensorflow/tfjs';
+import FilteringTable from './FilteringTable.jsx';
 
 {/* Template Source: https://github.com/nutboltu/react-search-field */}
 
@@ -140,6 +141,7 @@ class Search extends React.Component {
                     <h5>Similar 3rd: {this.state.p3}</h5>
                     <h1>Similar Location: {this.state.place}</h1>
                 </div>
+                <FilteringTable/>
             </header>
         );
     }

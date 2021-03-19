@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { useTable, useFilters } from 'react-table'
 import MOCK_DATA from './MOCK_DATA.json'
 import { COLUMNS } from './columns'
-import './FilteringTable.css'
+//import './FilteringTable.css'
 
 export const FilteringTable = () => {
 
@@ -58,3 +58,5 @@ export const FilteringTable = () => {
         </table>
     )
 }
+
+export default FilteringTable;

@@ -3,7 +3,6 @@ import SignIn from './SignIn.js';
 import SignUp from './SignUp.js';
 import Home from './Home.js';
 import Search from './Search.js';
-import Personal from './Personal.js'
 import AccountDetails from "./AccountDetails.js";
 import CreatePost from "./CreatePost.js";
 import EditProfile from "./EditProfile.js";
@@ -42,9 +41,6 @@ function App() {
                 <Link to="/search">Search Posts</Link>
               </li>
               <li>
-                <Link to="/personal"> Personal Information </Link>
-              </li>
-              <li>
                 <Link to="/accountdetails" >   Accountdetails</Link>
               </li>
               <li>
@@ -68,10 +64,6 @@ function App() {
 
             <Route path="/search">
               <Search />
-            </Route>
-
-            <Route path="/personal">
-              <Personal />
             </Route>
 
             <Route path="/AccountDetails">
