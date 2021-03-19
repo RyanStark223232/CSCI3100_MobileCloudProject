@@ -14,6 +14,7 @@ class Search extends React.Component {
             p2:null,
             p3:null,
             place:null,
+            loaded:false,
         };
         this.onChange = this.onChange.bind(this);
         this.loadImage = this.loadImage.bind(this);
@@ -40,7 +41,6 @@ class Search extends React.Component {
 
     // Upon uploading an image, it perform neural network inference and find closest location
     loadImage = async(event) =>{
-        // Obtain TFJS backend
         require('@tensorflow/tfjs-backend-webgl');
         if ((event.target.files[0]) == null){return};
         var url = URL.createObjectURL(event.target.files[0]);
@@ -48,19 +48,17 @@ class Search extends React.Component {
         const img = document.getElementById('image');
         const mobilenet = require('@tensorflow-models/mobilenet');
 
-        // Download MobilenetV2
         const model = await mobilenet.load();
         const predictions = await model.classify(img);      
 
-        // Get Default Prediction Result
         console.log('Predictions: ');
         console.log(predictions);
+
         this.setState({p1:predictions[0].className,
                        p2:predictions[1].className,
                        p3:predictions[2].className
         })
 
-        // Classify Most Similar Places
         if (this.classifier.getNumClasses() > 0) {      
             // Get the activation from mobilenet from the webcam.
             const inf_activation = model.infer(img, 'conv_preds');
@@ -100,13 +98,22 @@ class Search extends React.Component {
     */
 
     load() {
-        // Load Transfer Learning Trained Model
+        if (this.state.loaded){
+            console.log('data loaded');
+            return
+        }
+        //can be change to other source
         require('@tensorflow/tfjs-backend-webgl');
         var data = require('./myData.json')
         console.log(data)
         let tensorObj = data
+        //covert back to tensor
+        Object.keys(tensorObj).forEach((key) => {
+            tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1024, 1024])
+        })
         this.classifier.setClassifierDataset(tensorObj);
         console.log("Model Loaded");
+        this.setState({loaded:true});
     }
 
     render(){
