@@ -74,7 +74,9 @@ export default function SignUp() {
     e.preventDefault()
     // console.log(emailRef.current.value)
     try{
-      auth.createUserWithEmailAndPassword(emailRef.current.value,pwRef.current.value).catch(function(error) {
+      auth.createUserWithEmailAndPassword(emailRef.current.value,pwRef.current.value).then((authData) => {
+          alert("Signed up successfully with email "+ emailRef.current.value + "   uid = " + auth.currentUser.uid)
+      }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -84,11 +86,8 @@ export default function SignUp() {
           alert(errorMessage);
         }
         console.log(error);
-      }).then(value => {
-        alert("Signed up successfully with email "+ emailRef.current.value + "   uid = " + auth.currentUser.uid)
       })
       
-
     } catch(e) {
       console.log(e)
     }
