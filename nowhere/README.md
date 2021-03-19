@@ -1,70 +1,40 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `yarn start`
+### `npm install`
+
+Installs dependencies used in our website.
+
+### `npm run start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Available Tabs
 
-### `yarn test`
+## Search Tab
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Location Search
+Not yet implemented
 
-### `yarn build`
+### Image Search
+We implemented image search using TFJS. This function is intended to let travellers who can visualize where his/her desired travel destination would be but cannot pinpoint the exact location. The procedure is achieved by 1) import a pre-trained MobileNetV2 model 2) obtain the activation in the middle of the model 3) perform classification using K-Nearest Neighbor Model
+1. Click `Load` to import trained model
+2. Click `Choose File` to upload image in .jpg format
+3. Displays the most `Similar Location` in our database 
+> The database currently only contains 5 locations Africa/HK/USA/India/England. They were only chosen because the google search results of these looked distinct enough for demo
+4. The result would be supplied to location search to return posts of said location 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Create Post & Edit Post Tab
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Users can create and edit their profiles to seek out travel buddies of similar interests. Users can create their post to invite others to join their groups and travel together. Once the users create or edit their posts, the post details will be recorded to the Firebase backend. There are some fields that users have to input, including title, description, location, period of time, quota and remarks.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Sign up & Sign in Tab
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+User Accounts are managed by Firebase as the backend server. We created a shared Firebase project and imported the javascript SDK into our App to associate the app with the Firebase project. 
+When the user signs up for an account, the library function 
+createUserWithEmailAndPassword() 
+will be called, An account will be created in the Firebase project if the email and password are in valid format. The user will be automatically signed in once the account is successfully created.Then the user shall be directed to another page which shows a form requiring the user to provide detailed information about the account such as last name, first name, profile pic, etc. On submission of the form, all the data in the form will be sent to the realtime database in the Firebase project. The data will be associated with the user account so every account will maintain only one record. The User can modify these profile details later.
+Once the user finishes the sign up procedures, He/She can login and logout with the matched email and password in the login page.
