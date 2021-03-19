@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -31,7 +31,8 @@ import Fab from "@material-ui/core/Fab";
 
 
 import auth,{f_database} from "./Firebase.js";
-import {nationData} from './NationList.js'
+import {nationData} from './NationList.js';
+import {validate} from './Validate.js';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +61,6 @@ class ImageUpload extends React.Component{
         super();
     }
 
-
     state = {
         mainState: "initial", // initial, search, gallery, uploaded
         imageUploaded: 0,
@@ -78,7 +78,7 @@ class ImageUpload extends React.Component{
             selectedFile: [reader.result]
           });
         }.bind(this);
-        console.log(url); // Would see a path?
+        console.log(url); 
     
         this.setState({
           mainState: "uploaded",
@@ -120,7 +120,7 @@ class ImageUpload extends React.Component{
             <CardMedia 
                 image={this.state.selectedFile}
                 title="Contemplative Reptile"
-                style={{height:300,maxHeight:300,width:'auto',maxWidth:300}}>
+                style={{height:300,maxHeight:'auto',width:'100%',maxWidth:'auto', objectFit:'cover'}}>
             </CardMedia>
                 
             </CardActionArea>
@@ -140,8 +140,8 @@ class ImageUpload extends React.Component{
       render() {    
         return (
           <React.Fragment>
-              <div style={{justify:'center', alignmentItems:'center',}}>
-                <Card className={this.props.cardName} style={{ height:300, width:300}}>
+              <div style={{justify:'center'}}>
+                <Card className={this.props.cardName} style={{ height:300, marginLeft:'auto',marginRight:'auto', display:'block'}}>
                     {(this.state.mainState == "initial" && this.renderInitialState()) ||
                     (this.state.mainState == "uploaded" &&
                         this.renderUploadedState())}
@@ -153,42 +153,83 @@ class ImageUpload extends React.Component{
       }
 }
 
+
+
 export default function EditProfile() {
   const classes = useStyles();
-  const fnameRef = useRef()
-  const lnameRef = useRef()
-  const unameRef = useRef()
-  const ageRef = useRef()
-  const emailRef = useRef()
-  const sexRef = useRef()
-  const bioRef = useRef()
 
-  const [sex, setSex] = React.useState('');
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
+  const handleChange = evt => {
+    const { name, value: newValue, type } = evt.target;
+
+
+    // keep number fields as numbers
+    const value = type === 'number' ? +newValue : newValue;
+    
+    
+      //save field values
+    setValues({
+      ...values,
+      [name]: value,
+    });
+
+    // was the field modified
+    setTouched({
+      ...touched,
+      [name]: true,
+    });
+    
+
+    
+  };
+
+  const handleBlur = evt => {
+    let { name, value } = evt.target;
+
+
+    // remove whatever error was there previously
+    const { [name]: removedError, ...rest } = errors;
+
+    // check for a new error
+    const error = validate[name](value);
+
+    // // validate the field if the value has been touched
+    setErrors({
+      ...rest,
+      ...(error && { [name]: touched[name] && error }),
+    });
+  };
+
+  
 
   async function handleSubmit(e){
     e.preventDefault()
+
+    //not finished, needs form validation
+   
+    alert("Updating "+values.userName+"'s Profile")
+
     try{
-        await f_database.ref("users/" + unameRef.current.value).set({
-            username: unameRef.current.value,
+        await f_database.ref("users/" + values.userName).set({
+            username: values.userName,
             email: auth.currentUser.email,
-            age: ageRef.current.value,
-            first_name: fnameRef.current.value,
-            last_name: lnameRef.current.value,
-            sex: sexRef.current.value,
+            age: values.age,
+            first_name: values.firstName,
+            last_name: values.lastName,
+            sex: values.sex,
+            bio: values.bio,
             
         })
-        alert("Submitted to database users/"+ unameRef.current.value)
+        alert("Submitted to database users/"+ values.userName)
     } catch(e) {
       console.log(e)
       alert(e)
     }
-
   }
 
-  const handleChange = (event) => {
-    setSex(event.target.value);
-  };
   
   return (
     <Container component="main" maxWidth="md">
@@ -200,7 +241,7 @@ export default function EditProfile() {
         <Typography component="h1" variant="h5">
           Edit Profile
         </Typography>
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        <form onSubmit={handleSubmit} className={classes.form}>
         <ImageUpload></ImageUpload>
           <Grid container spacing={2} style={{marginTop:1}}>
             <Grid item xs={12}>
@@ -208,11 +249,14 @@ export default function EditProfile() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="username"
-                  label="Username"
-                  name="usernam"
-                  // autoComplete=
-                  inputRef = {unameRef}
+                  id="userName"
+                  label="UserName"
+                  name="userName"
+
+                  value={values.userName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  helperText={errors.userName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -225,7 +269,11 @@ export default function EditProfile() {
                 id="firstName"
                 label="First Name"
                 autoFocus
-                inputRef = {fnameRef}
+
+                value={values.firstName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                helperText={errors.firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -237,25 +285,29 @@ export default function EditProfile() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
-                inputRef = {lnameRef}
+                value={values.lastName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                helperText={errors.lastName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                  // autoComplete="fname"
                   name="age"
                   variant="outlined"
                   required
                   fullWidth
                   id="age"
                   label="Age"
-                  autoFocus
-                  inputRef = {ageRef}
+                  value={values.age}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  helperText={errors.age}
+                  min='0'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                  // autoComplete="fname"
                   name="email"
                   variant="outlined"
                   required
@@ -263,7 +315,9 @@ export default function EditProfile() {
                   id="email"
                   label="Email"
                   autoFocus
-                  inputRef = {emailRef}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  helperText={errors.email}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -272,10 +326,12 @@ export default function EditProfile() {
                         <Select
                         label="Sex"
                         id="sex"
-                        value={sex}
-                        onChange={handleChange}
-                        inputRef = {sexRef}
+                        name='sex'
                         autoWidth
+                        value={values.sex}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={errors.sex}
                         >
                     <MenuItem value={'M'}>Male</MenuItem>
                     <MenuItem value={'F'}>Female</MenuItem>
@@ -286,12 +342,16 @@ export default function EditProfile() {
             <Grid item xs={12} sm={6}>
             <Autocomplete
                 id="nationality"
+                name='nationality'
                 options={nationData}
                 getOptionLabel={(option) => option.name}
                 style={{ width: '70%' }}
-                renderInput={(params) => <TextField {...params} label="Nationality" variant="outlined" />}
-                
-                autoFocus
+                value={values.nationality}
+                onChange={(e,v)=>{ setValues({...values,['nationality']: v.name,});
+                                    setTouched({ ...touched,['nationality']: true,});
+                }}
+                renderInput={(params) => <TextField {...params} label="Nationality" variant="outlined" name='nationality'
+                 />}
                 />
             </Grid>
 
@@ -305,7 +365,11 @@ export default function EditProfile() {
                     label="Description"
                     autoFocus
                     fullWidth
-                    inputRef = {bioRef}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={errors.email}
+                    value = {values.bio}
+                    helperText={errors.bio}
                 />
             </Grid>
             
@@ -320,6 +384,15 @@ export default function EditProfile() {
           >
             Submit
           </Button>
+
+            
+          {/* For Debugging
+          <code>Values: {JSON.stringify(values)}</code>
+          <br />
+      <code>Errors: {JSON.stringify(errors)}</code>
+      <br />
+      <code>Touched: {JSON.stringify(touched)}</code>
+              <br />*/}
           
         </form>
       </div>
