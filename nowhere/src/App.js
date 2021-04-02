@@ -21,7 +21,7 @@ function App() {
     <header>
 
       <div name="title">
-        <h1>NowHere</h1>
+        <h1>&nbsp;&nbsp;</h1>
       </div>
 
       <Router>

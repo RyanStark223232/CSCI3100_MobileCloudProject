@@ -25,7 +25,6 @@ export const FilteringTable = () => {
     } = tableInstance
 
     return (
-
         <table {...getTableProps()}>
             <thead>
                 {headerGroups.map((headerGroup) => (
