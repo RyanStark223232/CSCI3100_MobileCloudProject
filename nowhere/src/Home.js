@@ -9,12 +9,18 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SearchIcon from '@material-ui/icons/Search';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 
 // Constant Variable for class styling
 const useStyles = theme => ({
     formControl: {
       margin: theme.spacing(0),
-      marginTop: theme.spacing(1),
+      marginTop: theme.spacing(3),
       minWidth: 200,
       background:"white",
     },
@@ -25,8 +31,13 @@ const useStyles = theme => ({
     input: {
         color: "black",
     },
-    button: {
-        marginTop: theme.spacing(1.5),
+    upload_button: {
+        marginTop: theme.spacing(4),
+        background:"white",
+    },
+    search_button: {
+        marginTop: theme.spacing(0.5),
+        background:"white",
     },
 });
 
@@ -74,7 +85,7 @@ class Home extends React.Component{
         else {
             console.log(event.target.value);
             this.setState({group_size:event.target.value});
-        }
+        }        
     }
 
     render(){
@@ -120,22 +131,27 @@ class Home extends React.Component{
                         </FormControl>
 
                         <FormControl className={classes.imageControl} >
-                            <Button
-                                variant="contained"
-                                color="default"
-                                className={classes.button}
-                                startIcon={<CloudUploadIcon />}
-                            >
-                                Upload Image
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="default"
-                                className={classes.button}
-                                startIcon={<SearchIcon />}
-                            >
-                                Search
-                            </Button>
+                            <Link to={{pathname:"/search", state:this.state}}>
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    className={classes.upload_button}
+                                    startIcon={<CloudUploadIcon />}
+                                >
+                                    Upload Image
+                                </Button>
+                            </Link>
+                            
+                            <Link to={{pathname:"/search", state:this.state}}>
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    className={classes.search_button}
+                                    startIcon={<SearchIcon />}
+                                >
+                                    Search
+                                </Button>
+                            </Link>
                         </FormControl>
                     </div>
                 </div>

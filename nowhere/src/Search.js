@@ -17,6 +17,12 @@ class Search extends React.Component {
             place:null,
             loaded:false,
         };
+        // props.location.state stores the data passed from Homepage
+        // if you go to search tab by clicking "Search" on top, props.location.state is undefined
+        // if you use the search function in Homepage, there will be data
+        if (props.location.state != null){
+            console.log("Data Passed In", props.location.state);
+        }
         this.onChange = this.onChange.bind(this);
         this.loadImage = this.loadImage.bind(this);
         this.load = this.load.bind(this);
@@ -118,6 +124,7 @@ class Search extends React.Component {
     }
 
     render(){
+        
         return (
             <header>
                 <SearchField
