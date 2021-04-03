@@ -20,10 +20,15 @@ function App() {
   return (
     <header>
       <Router>
-        <div name="title" class="logo">
+        <div name="title">
           <Link to="/">
-            <img src={nowhere} alt="logo"></img>
-          </Link>        
+            <img src={nowhere} alt="logo" class="logo"></img>
+          </Link>
+          <div class="accountSetting">
+            <Link to="/signin"> SignIn </Link>
+            <Link to="/signup"> SignUp </Link>
+            <Link to="/accountdetails" > Accountdetails </Link>
+          </div>          
         </div>
         <div>
           <nav>
@@ -34,18 +39,9 @@ function App() {
                 </Link>
               </li>
               <li>
-                <Link to="/signin">SignIn </Link>
-              </li>
-              <li>
-                <Link to="/signup">SignUp </Link>
-              </li>
-              <li>
                 <Link to="/search">
                   <Button variant="outlined">Search Post</Button>
                 </Link>
-              </li>
-              <li>
-                <Link to="/accountdetails" >   Accountdetails</Link>
               </li>
               <li>
                 <Link to="/createpost">

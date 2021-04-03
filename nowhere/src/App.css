@@ -61,4 +61,10 @@ img {
   top: 0px;
 }
 
+.accountSetting {
+  position:absolute;
+  right: 5%;
+  top: 5%;
+}
+
 body {background-color:rgb(255, 255, 255); min-width: fit-content;}
