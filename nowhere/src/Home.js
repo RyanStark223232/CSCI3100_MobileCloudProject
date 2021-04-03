@@ -1,5 +1,5 @@
-import nowhere from './NowHere-logos-Trim.jpeg';
-import hk from './hk.jpg';
+
+import hk from './hk-Trim.png';
 import './Home.css';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -34,10 +34,12 @@ const useStyles = theme => ({
     upload_button: {
         marginTop: theme.spacing(4),
         background:"white",
+        width: "200px",
     },
     search_button: {
         marginTop: theme.spacing(0.5),
         background:"white",
+        width: "200px",
     },
 });
 
@@ -92,9 +94,6 @@ class Home extends React.Component{
         const {classes} = this.props;
         return (
             <header>
-                <div name="Logo" class="logo">
-                    <img src={nowhere} alt="logo"></img>
-                </div>
                 <div class="container">
                     <img src={hk} alt="hk" class="hk"></img>
                     <div>

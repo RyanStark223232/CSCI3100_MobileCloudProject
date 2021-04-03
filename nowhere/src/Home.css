@@ -1,22 +1,13 @@
-.logo {
-    position: absolute;
-    top:0px;
-    left:-10%;
-    transform: translate(-10%, -10%);
-}
-
 .hk {
     width:100%;
+    position:absolute;
 }
 
 .container {
     position: relative;
     text-align: center;
     color: white;
-}
-
-.container img{
-    position:absolute;
+    width:100%;
 }
 
 .centered {
@@ -27,4 +18,7 @@
     z-index:1;
 }
 
-body {background-color: white;}
+body {
+    background-color: white;
+    min-width: fit-content;
+}

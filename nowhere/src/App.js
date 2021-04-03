@@ -7,8 +7,7 @@ import AccountDetails from "./AccountDetails.js";
 import CreatePost from "./CreatePost.js";
 import EditProfile from "./EditProfile.js";
 import Button from '@material-ui/core/Button';
-
-
+import nowhere from './Logo_Temp.jpg';
 // import Firebase from "./Firebase";
 import {
   BrowserRouter as Router,
@@ -20,12 +19,12 @@ import {
 function App() {
   return (
     <header>
-
-      <div name="title">
-        <h1>&nbsp;&nbsp;</h1>
-      </div>
-
       <Router>
+        <div name="title" class="logo">
+          <Link to="/">
+            <img src={nowhere} alt="logo"></img>
+          </Link>        
+        </div>
         <div>
           <nav>
             <ul>

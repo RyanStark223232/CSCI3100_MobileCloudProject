@@ -148,7 +148,7 @@ class Search extends React.Component {
                     <h5>Similar 3rd: {this.state.p3}</h5>
                     <h1>Similar Location: {this.state.place}</h1>
                 </div>
-                <FilteringTable/>
+                <FilteringTable state={{state:this.state}}/>
             </header>
         );
     }
