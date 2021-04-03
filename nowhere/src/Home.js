@@ -29,7 +29,7 @@ const useStyles = theme => ({
       marginTop: theme.spacing(0),
     },
     input: {
-        color: "black",
+        display: 'none',
     },
     upload_button: {
         marginTop: theme.spacing(4),
@@ -55,6 +55,7 @@ class Home extends React.Component{
         // You need to bind function to class
         this.onChangeSize = this.onChangeSize.bind(this);
         this.onChangeLocation = this.onChangeLocation.bind(this);
+        this.uploadImage = this.uploadImage.bind(this);
         // Default Input Options for Material UI
         this.defaultPropsLocations = {
             options: topLocations,
@@ -65,6 +66,13 @@ class Home extends React.Component{
             getOptionLabel: (option) => option.size,
         };
     }
+
+    uploadImage = async(event) =>{
+        if ((event.target.files[0]) == null){return};
+        var url = URL.createObjectURL(event.target.files[0]);
+        await this.setState({image:url});
+        console.log(this.state);
+    };
 
     // onChange for Location Input
     onChangeLocation (event, values){
@@ -130,24 +138,28 @@ class Home extends React.Component{
                         </FormControl>
 
                         <FormControl className={classes.imageControl} >
-                            <Link to={{pathname:"/search", state:this.state}}>
-                                <Button
-                                    variant="contained"
-                                    color="default"
-                                    className={classes.upload_button}
-                                    startIcon={<CloudUploadIcon />}
-                                >
+                            <input
+                                accept="image/*"
+                                className={classes.input}
+                                id="contained-button-file"
+                                multiple
+                                type="file"
+                                onChange={this.uploadImage}
+                            />
+                            <label htmlFor="contained-button-file">
+                                <Button variant="contained"
+                                    className={classes.upload_button} 
+                                    component="span"
+                                    startIcon={<CloudUploadIcon />}>
                                     Upload Image
                                 </Button>
-                            </Link>
-                            
+                            </label>
                             <Link to={{pathname:"/search", state:this.state}}>
                                 <Button
                                     variant="contained"
                                     color="default"
                                     className={classes.search_button}
-                                    startIcon={<SearchIcon />}
-                                >
+                                    startIcon={<SearchIcon />}>
                                     Search
                                 </Button>
                             </Link>
