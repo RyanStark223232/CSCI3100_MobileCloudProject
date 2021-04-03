@@ -1,9 +1,13 @@
 import React from "react";
-import SearchField from "react-search-field";
 import * as tf from '@tensorflow/tfjs';
 import FilteringTable from './FilteringTable.jsx';
-
-{/* Template Source: https://github.com/nutboltu/react-search-field */}
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import FormControl from '@material-ui/core/FormControl';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import SearchIcon from '@material-ui/icons/Search';
 
 class Search extends React.Component {
     constructor(props){
@@ -21,15 +25,33 @@ class Search extends React.Component {
         // if you go to search tab by clicking "Search" on top, props.location.state is undefined
         // if you use the search function in Homepage, there will be data
         this.props = props;
-        this.onChange = this.onChange.bind(this);
         this.loadImage = this.loadImage.bind(this);
         this.loadImagePassIn = this.loadImagePassIn.bind(this);
         this.load = this.load.bind(this);
         this.neuralInference = this.neuralInference.bind(this);
         const knnClassifier = require('@tensorflow-models/knn-classifier');
-        this.classifier = knnClassifier.create();
-
+        this.classifier = knnClassifier.create(); 
         
+        // Default Input Options for Material UI
+        this.defaultPropsLocations = {
+            options: topLocations,
+            getOptionLabel: (option) => option.name,
+        };
+
+        this.defaultPropsSize = {
+            options: sampleSize,
+            getOptionLabel: (option) => option.size,
+        };
+
+        this.defaultPropsType = {
+            options: sampleType,
+            getOptionLabel: (option) => option.type,
+        };
+
+        this.defaultPropsPeriod = {
+            options: samplePeriod,
+            getOptionLabel: (option) => option.type,
+        };
     }
 
     componentDidMount(){
@@ -85,11 +107,6 @@ class Search extends React.Component {
         await this.neuralInference();
     };
 
-    onChange(value, event){
-        console.log(value);
-        console.log(event);
-    }
-
     load() {
         if (this.state.loaded){
             console.log('data loaded');
@@ -115,37 +132,180 @@ class Search extends React.Component {
     }
 
     render(){
-        
+        const {classes} = this.props;
         return (
             <header>
-                <SearchField
-                    placeholder="Search..."
-                    onChange={this.onChange}
-                    searchText="This is initial search text"
-                    classNames="test-class"
-                />
                 <div>
-                    <input type="file" id="input_image" onChange={this.loadImage}/>
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsLocations}
+                                id="Location"
+                                debug
+                                onChange={this.onChangeLocation}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Location" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangeLocation}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsSize}
+                                id="GroupSize"
+                                debug
+                                onChange={this.onChangeSize}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Group Size" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangeSize}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsType}
+                                id="Type"
+                                debug
+                                onChange={this.onChangeType}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Type" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangeType}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsPeriod}
+                                id="Period"
+                                debug
+                                onChange={this.onChangePeriod}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Period" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangePeriod}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl className={classes.imageControl} >
+                        <input
+                            accept="image/*"
+                            className={classes.input}
+                            id="contained-button-file"
+                            multiple
+                            type="file"
+                            onChange={this.loadImage}
+                        />
+                        <label htmlFor="contained-button-file">
+                            <Button variant="contained"
+                                className={classes.upload_button} 
+                                component="span"
+                                startIcon={<CloudUploadIcon />}>
+                                Upload Image
+                            </Button>
+                        </label>
+                        <Button
+                            variant="contained"
+                            color="default"
+                            className={classes.search_button}
+                            startIcon={<SearchIcon />}>
+                            Search
+                        </Button>
+                    </FormControl>
                 </div>
-                <div>
-                    <button onClick={this.load} id="button2">Load</button>
-                </div>
-                <div>
-                    <img src={this.state.image} id="image" crossOrigin="anonymous" alt="test" style={{display: "none"}}></img>
-                </div>
-                <div>
-                    <h5>Similar 1st: {this.state.p1}</h5>
-                    <h5>Similar 2nd: {this.state.p2}</h5>
-                    <h5>Similar 3rd: {this.state.p3}</h5>
-                    <h1>Similar Location: {this.state.place}</h1>
-                </div>
+
                 <FilteringTable state={{state:this.state}}/>
             </header>
         );
     }
 }
 
-export default Search;
+// Constant Variable for class styling
+const useStyles = theme => ({
+    formControl: {
+      margin: theme.spacing(-1),
+      marginTop: theme.spacing(3),
+      minWidth: 200,
+      background: "white",
+      borderRadius: "10px",
+      
+    },
+    imageControl: {
+      margin: theme.spacing(2),
+      marginTop: theme.spacing(0),
+    },
+    input: {
+        display: 'none',
+    },
+    upload_button: {
+        marginTop: theme.spacing(4),
+        background:"white",
+        width: "200px",
+    },
+    search_button: {
+        marginTop: theme.spacing(0.5),
+        background:"white",
+        width: "200px",
+    },
+    search_bar: {
+        borderRadius: "25px",
+        marginTop: theme.spacing(0.5),
+        background:"white",
+        width: "200px",
+        display: 'flex',
+    },
+});
+
+export default withStyles(useStyles)(Search);
+
+// Options for each input field
+const topLocations = [
+    { name: 'Japan' },
+    { name: 'Britain' },
+    { name: 'Hong Kong' },
+    { name: 'United States' },
+    { name: 'Africa' },
+];
+
+const sampleSize = [
+    { size: '2-4' },
+    { size: '4-8' },
+    { size: '8+' },
+];
+
+const sampleType = [
+    { type: 'sporty' },
+    { type: 'shopping' },
+    { type: 'nature' },
+]
+
+const samplePeriod = [
+    { type: 'Day-Trip' },
+    { type: 'Weeks-Trip' },
+    { type: 'Months-Trip' },
+    { type: 'Exchange(student)'},
+]
 
 // Code for training, Commented out since it is useless now
 /*

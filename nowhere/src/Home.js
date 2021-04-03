@@ -9,39 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SearchIcon from '@material-ui/icons/Search';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
-
-// Constant Variable for class styling
-const useStyles = theme => ({
-    formControl: {
-      margin: theme.spacing(0),
-      marginTop: theme.spacing(3),
-      minWidth: 200,
-      background:"white",
-    },
-    imageControl: {
-      margin: theme.spacing(0),
-      marginTop: theme.spacing(0),
-    },
-    input: {
-        display: 'none',
-    },
-    upload_button: {
-        marginTop: theme.spacing(4),
-        background:"white",
-        width: "200px",
-    },
-    search_button: {
-        marginTop: theme.spacing(0.5),
-        background:"white",
-        width: "200px",
-    },
-});
+import { Link } from "react-router-dom";
 
 class Home extends React.Component{
     constructor(props){
@@ -51,19 +19,33 @@ class Home extends React.Component{
             image:null,
             location:null,
             group_size:null,
+            type:null,
         };
-        // You need to bind function to class
+        // Bind function to class
         this.onChangeSize = this.onChangeSize.bind(this);
         this.onChangeLocation = this.onChangeLocation.bind(this);
+        this.onChangeType = this.onChangeType.bind(this);
+        this.onChangePeriod = this.onChangePeriod.bind(this);
         this.uploadImage = this.uploadImage.bind(this);
         // Default Input Options for Material UI
         this.defaultPropsLocations = {
             options: topLocations,
             getOptionLabel: (option) => option.name,
         };
+
         this.defaultPropsSize = {
             options: sampleSize,
             getOptionLabel: (option) => option.size,
+        };
+
+        this.defaultPropsType = {
+            options: sampleType,
+            getOptionLabel: (option) => option.type,
+        };
+
+        this.defaultPropsPeriod = {
+            options: samplePeriod,
+            getOptionLabel: (option) => option.type,
         };
     }
 
@@ -98,6 +80,30 @@ class Home extends React.Component{
         }        
     }
 
+    // onChange for Type
+    onChangeType (event, values){
+        if (values != null){
+            console.log(values.type)
+            this.setState({type:values.type});
+        }
+        else {
+            console.log(event.target.value);
+            this.setState({type:event.target.value});
+        }        
+    }
+
+    // onChange for Period
+    onChangePeriod (event, values){
+        if (values != null){
+            console.log(values.type)
+            this.setState({period:values.type});
+        }
+        else {
+            console.log(event.target.value);
+            this.setState({period:event.target.value});
+        }        
+    }
+
     render(){
         const {classes} = this.props;
         return (
@@ -105,36 +111,77 @@ class Home extends React.Component{
                 <div class="container">
                     <img src={hk} alt="hk" class="hk"></img>
                     <div>
-                        <FormControl  className={classes.formControl} >
-                            <Autocomplete
-                                class="search"
-                                {...this.defaultPropsLocations}
-                                id="Location"
-                                debug
-                                onChange={this.onChangeLocation}
-                                renderInput={(params) => <TextField {...params} 
-                                    label="Location" 
-                                    variant="filled" 
-                                    margin="normal" 
+
+                        <FormControl  className={classes.formControl}>
+                            <div>
+                                <Autocomplete
+                                    className={classes.search_bar}
+                                    {...this.defaultPropsLocations}
+                                    id="Location"
+                                    debug
                                     onChange={this.onChangeLocation}
-                                />}
-                            />
+                                    renderInput={(params) => <TextField {...params} 
+                                        label="Location" 
+                                        variant="filled" 
+                                        margin="normal" 
+                                        onChange={this.onChangeLocation}
+                                    />}
+                                />
+                            </div>
                         </FormControl>
 
-                        <FormControl className={classes.formControl} >
-                            <Autocomplete
-                                class="search"
-                                {...this.defaultPropsSize}
-                                id="GroupSize"
-                                debug
-                                onChange={this.onChangeSize}
-                                renderInput={(params) => <TextField {...params} 
-                                    label="Group Size" 
-                                    variant="filled" 
-                                    margin="normal" 
+                        <FormControl  className={classes.formControl}>
+                            <div>
+                                <Autocomplete
+                                    className={classes.search_bar}
+                                    {...this.defaultPropsSize}
+                                    id="GroupSize"
+                                    debug
                                     onChange={this.onChangeSize}
-                                />}
-                            />
+                                    renderInput={(params) => <TextField {...params} 
+                                        label="Group Size" 
+                                        variant="filled" 
+                                        margin="normal" 
+                                        onChange={this.onChangeSize}
+                                    />}
+                                />
+                            </div>
+                        </FormControl>
+
+                        <FormControl  className={classes.formControl}>
+                            <div>
+                                <Autocomplete
+                                    className={classes.search_bar}
+                                    {...this.defaultPropsType}
+                                    id="Type"
+                                    debug
+                                    onChange={this.onChangeType}
+                                    renderInput={(params) => <TextField {...params} 
+                                        label="Type" 
+                                        variant="filled" 
+                                        margin="normal" 
+                                        onChange={this.onChangeType}
+                                    />}
+                                />
+                            </div>
+                        </FormControl>
+
+                        <FormControl  className={classes.formControl}>
+                            <div>
+                                <Autocomplete
+                                    className={classes.search_bar}
+                                    {...this.defaultPropsPeriod}
+                                    id="Period"
+                                    debug
+                                    onChange={this.onChangePeriod}
+                                    renderInput={(params) => <TextField {...params} 
+                                        label="Period" 
+                                        variant="filled" 
+                                        margin="normal" 
+                                        onChange={this.onChangePeriod}
+                                    />}
+                                />
+                            </div>
                         </FormControl>
 
                         <FormControl className={classes.imageControl} >
@@ -170,6 +217,43 @@ class Home extends React.Component{
         );
     }
 }
+
+// Constant Variable for class styling
+const useStyles = theme => ({
+    formControl: {
+      margin: theme.spacing(-1),
+      marginTop: theme.spacing(3),
+      minWidth: 200,
+      background: "white",
+      borderRadius: "10px",
+      
+    },
+    imageControl: {
+      margin: theme.spacing(2),
+      marginTop: theme.spacing(0),
+    },
+    input: {
+        display: 'none',
+    },
+    upload_button: {
+        marginTop: theme.spacing(4),
+        background:"white",
+        width: "200px",
+    },
+    search_button: {
+        marginTop: theme.spacing(0.5),
+        background:"white",
+        width: "200px",
+    },
+    search_bar: {
+        borderRadius: "25px",
+        marginTop: theme.spacing(0.5),
+        background:"white",
+        width: "200px",
+        display: 'flex',
+    },
+});
+
 export default withStyles(useStyles)(Home);
 
 // Options for each input field
@@ -185,4 +269,17 @@ const sampleSize = [
     { size: '2-4' },
     { size: '4-8' },
     { size: '8+' },
+];
+
+const sampleType = [
+    { type: 'sporty' },
+    { type: 'shopping' },
+    { type: 'nature' },
+]
+
+const samplePeriod = [
+    { type: 'Day-Trip' },
+    { type: 'Weeks-Trip' },
+    { type: 'Months-Trip' },
+    { type: 'Exchange(student)'},
 ]

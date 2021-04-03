@@ -24,7 +24,7 @@ export const FilteringTable = (props) => {
         prepareRow,
     } = tableInstance
 
-    console.log(props);
+    console.log(props.state.state);
 
     return (
         <table {...getTableProps()}>
@@ -35,7 +35,7 @@ export const FilteringTable = (props) => {
                         headerGroup.headers.map((column) => (
                             <th {...column.getHeaderProps()}>
                                 {column.render('Header')}
-                                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                                <div>{column.canFilter ? column.render('Filter') : "Japan"}</div>
                             </th>
                         ))}
                 </tr>
