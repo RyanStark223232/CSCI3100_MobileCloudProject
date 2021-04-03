@@ -25,9 +25,26 @@ function App() {
             <img src={nowhere} alt="logo" class="logo"></img>
           </Link>
           <div class="accountSetting">
-            <Link to="/signin"> SignIn </Link>
-            <Link to="/signup"> SignUp </Link>
-            <Link to="/accountdetails" > Accountdetails </Link>
+            <Link to="/signup" > 
+              <Button variant="contained" size="small" color="primary">
+                Sign Up
+              </Button>
+            </Link>
+            <Link to="/signin" > 
+              <Button variant="contained" size="small" color="primary">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/accountdetails" > 
+              <Button variant="contained" size="small" color="primary">
+                Accountdetails
+              </Button>
+            </Link>
+            <Link to="/editprofile" >
+              <Button variant="contained" size="small" color="primary">
+                Edit Profile
+              </Button>
+            </Link>
           </div>          
         </div>
         <div>
@@ -35,24 +52,20 @@ function App() {
             <ul>
               <li>
                 <Link to="/">
-                  <Button variant="outlined">Home</Button>
+                  <Button variant="outlined" size="large">Home</Button>
                 </Link>
               </li>
               <li>
                 <Link to="/search">
-                  <Button variant="outlined">Search Post</Button>
+                  <Button variant="outlined" size="large">Search Post</Button>
                 </Link>
               </li>
               <li>
                 <Link to="/createpost">
-                  <Button variant="outlined">Create Post</Button>
+                  <Button variant="outlined" size="large">Create Post</Button>
                 </Link>
               </li>
-              <li>
-                <Link to="/editprofile" >
-                  <Button variant="outlined">Edit Profile</Button>
-                </Link>
-              </li>
+              
             </ul>
           </nav>
 
