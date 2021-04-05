@@ -59,8 +59,19 @@ const sexValidation = sex =>{
 }
 
 const bioValidation = bio =>{
-    if(bio.trim() === ''){
+    if (bio.trim() === '') {
         return 'Your description cannot be empty';
+    }
+
+    if(bio.match(/(\w+)/g).length < 20){
+        return 'Your description must at least have 20 words';
+    }
+    return null;
+}
+
+const nationalityValidation = nationality =>{
+    if(nationality === null){
+        return 'Nationality is required';
     }
     return null;
 }
@@ -73,6 +84,6 @@ userName: userNameValidation,
 email: emailValidation,
 age: ageValidation,
 sex: sexValidation,
-nationality: null,
+nationality: nationalityValidation,
 bio: bioValidation,
 };

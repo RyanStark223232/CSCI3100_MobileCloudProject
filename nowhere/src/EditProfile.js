@@ -10,15 +10,16 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
-
+import Switch from '@material-ui/core/Switch';
+import PicUpload from "./ImageUpload.js";
+import defaultPic from './man-user.png'
 
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -33,369 +34,400 @@ import Fab from "@material-ui/core/Fab";
 import auth,{f_database} from "./Firebase.js";
 import {nationData} from './NationList.js';
 import {validate} from './Validate.js';
+import { FlipCameraIosRounded } from '@material-ui/icons';
+
+const useStyles =  (theme) => ({
+    paper: {
+      marginTop: theme.spacing(10),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+      width: '100%', // Fix IE 11 issue.
+      marginTop: theme.spacing(3),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+  });
 
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
-class ImageUpload extends React.Component{
-    
-    constructor(){
-        super();
-    }
-
-    state = {
-        mainState: "initial", // initial, search, gallery, uploaded
-        imageUploaded: 0,
-        selectedFile: null
+class EditProfile extends React.Component{
+    constructor(props){
+      super(props);
+      // State of this class
+      this.state = {
+          userName: '',
+          email: '',
+          age: -1,
+          firstName: '',
+          lastName: '',
+          sex: '',
+          bio: '',
+          touched: {},
+          errors: {},
+          img: defaultPic,
+          submitError: false,
+          smoker: false,
+          car: false,
       };
-    
-      handleUploadClick = event => {
-        console.log();
-        var file = event.target.files[0];
-        const reader = new FileReader();
-        var url = reader.readAsDataURL(file);
-    
-        reader.onloadend = function(e) {
-          this.setState({
-            selectedFile: [reader.result]
-          });
-        }.bind(this);
-        console.log(url); 
-    
-        this.setState({
-          mainState: "uploaded",
-          selectedFile: event.target.files[0],
-          imageUploaded: 1
-        });
-      };
-    
-     
-      renderInitialState() {
-        return (
-          <React.Fragment>
-            <CardContent> 
-              {/* alignmentItems='Center' */}
-              <Grid container  justify='center'>
-              <input
-                  accept="image/*"
-                  id="contained-button-file"
-                  multiple
-                  type="file"
-                  onChange={this.handleUploadClick}
-                  style={{display:'none'}}
-                />
-                <label htmlFor="contained-button-file">
-                    <Fab component="span">
-                    <AddPhotoAlternateIcon />
-                    </Fab>
-                </label>
-                
-              </Grid>
-            </CardContent>
-          </React.Fragment>
-        );
-      }
-    
-      renderUploadedState() {
-        return (
-          <React.Fragment>
-            <CardActionArea onClick={this.imageResetHandler}>
-            <CardMedia 
-                image={this.state.selectedFile}
-                title="Contemplative Reptile"
-                style={{height:300,maxHeight:'auto',width:'100%',maxWidth:'auto', objectFit:'cover'}}>
-            </CardMedia>
-                
-            </CardActionArea>
-          </React.Fragment>
-        );
-      }
-    
-      imageResetHandler = event => {
-        console.log("Click!");
-        this.setState({
-          mainState: "initial",
-          selectedFile: null,
-          imageUploaded: 0
-        });
-      };
-    
-      render() {    
-        return (
-          <React.Fragment>
-              <div style={{justify:'center'}}>
-                <Card className={this.props.cardName} style={{ height:300, marginLeft:'auto',marginRight:'auto', display:'block'}}>
-                    {(this.state.mainState == "initial" && this.renderInitialState()) ||
-                    (this.state.mainState == "uploaded" &&
-                        this.renderUploadedState())}
-                </Card>
-              </div>
-              
-          </React.Fragment>
-        );
-      }
-}
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleBlur = this.handleBlur.bind(this);
+      this.handleChange = this.handleChange.bind(this);
+      this.handleNationChange = this.handleNationChange.bind(this);
+      this.handleImgChange = this.handleImgChange.bind(this);
+      this.formValidate = this.formValidate.bind(this);
+      this.handleToggleChange = this.handleToggleChange.bind(this);
+      
+          
+  }
 
+  formValidate = () => {
+    let noError = !Object.values(this.state.errors).some(x => (x !== null && x !== '' && x!= undefined ));
+    let allTouched = Object.keys(this.state.touched).length >= 7; //There are 7 required fills
+    return allTouched && noError;
+  } 
 
-
-export default function EditProfile() {
-  const classes = useStyles();
-
-  const [values, setValues] = useState({});
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
-
-  const handleChange = evt => {
-    const { name, value: newValue, type } = evt.target;
-
-
-    // keep number fields as numbers
-    const value = type === 'number' ? +newValue : newValue;
-    
-    
-      //save field values
-    setValues({
-      ...values,
-      [name]: value,
-    });
-
-    // was the field modified
-    setTouched({
-      ...touched,
-      [name]: true,
-    });
-    
-
-    
-  };
-
-  const handleBlur = evt => {
-    let { name, value } = evt.target;
-
-
-    // remove whatever error was there previously
-    const { [name]: removedError, ...rest } = errors;
-
-    // check for a new error
-    const error = validate[name](value);
-
-    // // validate the field if the value has been touched
-    setErrors({
-      ...rest,
-      ...(error && { [name]: touched[name] && error }),
-    });
-  };
-
-  
-
-  async function handleSubmit(e){
+  async handleSubmit(e){
     e.preventDefault()
 
-    //not finished, needs form validation
+    if (!this.formValidate()){
+      this.setState({submitError: true});
+      return
+    } 
+    
    
-    alert("Updating "+values.userName+"'s Profile")
+    alert("Updating "+this.state.userName+"'s Profile")
 
     try{
-        await f_database.ref("users/" + values.userName).set({
-            username: values.userName,
+        await f_database.ref("users/" + this.state.userName).set({
+            username: this.state.userName,
             email: auth.currentUser.email,
-            age: values.age,
-            first_name: values.firstName,
-            last_name: values.lastName,
-            sex: values.sex,
-            bio: values.bio,
-            
+            age: this.state.age,
+            first_name: this.state.firstName,
+            last_name: this.state.lastName,
+            sex: this.state.sex,
+            bio: this.state.bio,
+            nationality: this.state.nationality,
+            smoker: this.state.smoker,
+            car: this.state.car,
         })
-        alert("Submitted to database users/"+ values.userName)
+        alert("Submitted to database users/"+ this.state.userName)
     } catch(e) {
       console.log(e)
       alert(e)
     }
   }
 
+  handleClear = (e) =>{
+    e.target.reset();
+    this.setState({
+      userName: '',
+      email: '',
+      age: -1,
+      firstName: '',
+      lastName: '',
+      sex: '',
+      bio: '',
+      nationality: '',
+    })
+  }
+
+  handleBlur = (event) => {
+    let nam = event.target.name;
+    let val = event.target.value;
+
+    // check for a new error
+    const error = validate[nam](val);
+
+    // // validate the field if the value has been touched
+    this.setState((prevState, props) => { 
+        return {
+            errors: {                   
+            ...prevState.errors,   
+            [nam]: prevState.touched[nam] && error
+        }}
+    });
+    this.formValidate();
+  }
+
+  handleChange = (event) => {
+    let nam = event.target.name;
+    let val = event.target.value;
+
+    this.setState((prevState, props) => { 
+        return {
+          [nam]:val,
+            touched: {                   
+            ...prevState.touched,   
+            [nam]: true     
+          }
+        }
+    });
+  }
+
+  handleNationChange = (e,v)=>{
+    let nation_val = (v != undefined) ? v.name : null;
+    const error = validate.nationality(nation_val);
+    this.setState((prevState, props) => { 
+        return {
+          nationality: (v != null) ? v.name : null,
+          touched: {                   
+            ...prevState.touched, nationality:true  
+          },
+          errors: {                   
+            ...prevState.errors,   
+            nationality: prevState.touched.nationality && error
+          }
+    }}
+    );}
+
+  handleToggleChange = (e) => {
+    let nam = e.target.name;
+    let val = e.target.checked;
+
+    this.setState((prevState, props) => { 
+        return {
+          [nam]:val,
+            touched: {                   
+            ...prevState.touched,   
+            [nam]: true     
+          }
+        }
+    });
+  }
   
-  return (
-    <Container component="main" maxWidth="md">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Edit Profile
-        </Typography>
-        <form onSubmit={handleSubmit} className={classes.form}>
-        <ImageUpload></ImageUpload>
-          <Grid container spacing={2} style={{marginTop:1}}>
-            <Grid item xs={12}>
-              <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="userName"
-                  label="UserName"
-                  name="userName"
 
-                  value={values.userName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  // helperText={errors.userName}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
+  handleImgChange = (im) =>{
+    this.setState({img: im})
+  }
+  
 
-                value={values.firstName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                // helperText={errors.firstName}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                value={values.lastName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                // helperText={errors.lastName}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                  name="age"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="age"
-                  label="Age"
-                  value={values.age}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  // helperText={errors.age}
-                  min='0'
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                  name="email"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  // helperText={errors.email}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl className={classes.formControl} style={{minWidth: '30%', marginLeft:'2%'}}>
-                    <InputLabel id="demo-simple-select-label">Sex</InputLabel>
-                        <Select
-                        label="Sex"
-                        id="sex"
-                        name='sex'
-                        autoWidth
-                        value={values.sex}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        // helperText={errors.sex}
-                        >
-                    <MenuItem value={'M'}>Male</MenuItem>
-                    <MenuItem value={'F'}>Female</MenuItem>
-                    <MenuItem value={'O'}>Other</MenuItem>
-                    </Select>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-            <Autocomplete
-                id="nationality"
-                name='nationality'
-                options={nationData}
-                getOptionLabel={(option) => option.name}
-                style={{ width: '70%' }}
-                value={values.nationality}
-                onChange={(e,v)=>{ setValues({...values,['nationality']: v.name,});
-                                    setTouched({ ...touched,['nationality']: true,});
-                }}
-                renderInput={(params) => <TextField {...params} label="Nationality" variant="outlined" name='nationality'
-                 />}
-                />
-            </Grid>
+  render(){
+    const {classes} = this.props;
+        return (
+            <Container component="main" maxWidth="md">
+            <CssBaseline />
+            <div className={classes.paper}>
 
-            <Grid item xs={12}>
-                <TextField
-                    name="bio"
-                    variant="outlined"
-                    multiline
-                    rows={4}
-                    id="bio"
-                    label="Description"
-                    fullWidth
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    // helperText={errors.email}
-                    value = {values.bio}
-                    // helperText={errors.bio}
-                />
-            </Grid>
+                <Typography component="h1" variant="h5">
+                Edit Profile
+                </Typography>
+                <form onSubmit={this.handleSubmit} onReset={this.handleClear} className={classes.form} id='editForm' noValidate>                
+                <Grid container spacing={2} style={{marginTop:1}}>
+                    <Grid item xs={12}>
+                    <PicUpload img={this.state.img} onSave={this.handleImgChange}/>  
+                    <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="userName"
+                        label="UserName"
+                        name="userName"
+                       
+
+                        onChange={this.handleChange}
+                        onBlur={this.handleBlur}
+                        helperText={this.state.errors.userName}
+                        error={this.state.touched.userName && this.state.errors.userName}
+                    />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                    <TextField
+                        autoComplete="fname"
+                        name="firstName"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="firstName"
+                        label="First Name"
+
+                        onChange={this.handleChange}
+                        onBlur={this.handleBlur}
+                        helperText={this.state.errors.firstName}
+                        error={this.state.touched.firstName && this.state.errors.firstName}
+                    />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                    <TextField
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="lastName"
+                        label="Last Name"
+                        name="lastName"
+                        autoComplete="lname"
+                        onChange={this.handleChange}
+                        onBlur={this.handleBlur}
+                        helperText={this.state.errors.lastName}
+                        error={this.state.touched.lastName && this.state.errors.lastName}
+                    />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                    <TextField
+                        name="age"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="age"
+                        label="Age"
+                        onChange={this.handleChange}
+                        onBlur={this.handleBlur}
+                        helperText={this.state.errors.age}
+                        min='0'
+                        error={this.state.touched.age && this.state.errors.age}
+                    />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                    <TextField
+                        name="email"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        onChange={this.handleChange}
+                        onBlur={this.handleBlur}
+                        helperText={this.state.errors.email}
+                        error={this.state.touched.email && this.state.errors.email}
+                    />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl className={classes.formControl} style={{minWidth: '30%', marginLeft:'2%'}} required>
+                            <InputLabel id="demo-simple-select-label">Sex</InputLabel>
+                                <Select
+                                label="Sex"
+                                id="sex"
+                                name='sex'
+                                autoWidth
+                                onChange={this.handleChange}
+                                onClose = {this.handleSelect}
+
+                                >
+                            <MenuItem value={'M'}>Male</MenuItem>
+                            <MenuItem value={'F'}>Female</MenuItem>
+                            <MenuItem value={'O'}>Other</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                    <Autocomplete
+                        id="nationality"
+                        name='nationality'
+                        options={nationData}
+                        getOptionLabel={(option) => option.name}
+                        style={{ width: '70%' }}
+                        onChange={this.handleNationChange}
+                        renderInput={(params) => 
+                          <TextField 
+                          {...params} 
+                          label="Nationality" 
+                          variant="outlined" 
+                          name='nationality' 
+                          required 
+                          error={this.state.touched.nationality && this.state.errors.nationality}
+                          helperText={this.state.errors.nationality}
+                        />}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <TextField
+                            name="bio"
+                            variant="outlined"
+                            multiline
+                            rows={4}
+                            id="bio"
+                            label="Description"
+                            fullWidth
+                            onChange={this.handleChange}
+                            onBlur={this.handleBlur}
+                            helperText={this.state.errors.bio}
+                            error={this.state.touched.bio && this.state.errors.bio}
+                        />
+
+                        
+                    </Grid>
+                    <Grid item xs={12} sm={6} >
+                    <Typography component="div" style={{paddingInline:'1%'}}> Smoker?
+                        <Grid component="label" container alignItems="center" spacing={1}>
+                          <Grid item>No</Grid>
+                          <Grid item>
+                            <Switch 
+                            onChange={this.handleToggleChange} 
+                            name="smoker" 
+                            checked={this.state.smoker}
+                            color='primary'
+                            inputProps={{ 'aria-label': 'primary checkbox'}} />
+                          </Grid>
+                          <Grid item>Yes</Grid>
+                        </Grid>
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} >
+                    <Typography component="div"  style={{paddingInline:'1%'}}> Have Car License?
+                        <Grid component="label" container alignItems="center" spacing={1}>
+                          <Grid item>No</Grid>
+                          <Grid item>
+                            <Switch 
+                            onChange={this.handleToggleChange} 
+                            name="car" 
+                            checked={this.state.car}
+                            color='primary'
+                            inputProps={{ 'aria-label': 'primary checkbox'}} />
+                          </Grid>
+                          <Grid item>Yes</Grid>
+                        </Grid>
+                      </Typography>
+                    </Grid>
+                    
+                </Grid>
+                <Grid style={{marginTop:'5%'}}>
+                  <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      mx='auto'
+                      style = {{width:'30%', marginInline:'10%'}}
+                  >
+                      Submit
+                  </Button>
+
+                  <Button
+                      type="reset"
+                      variant="contained"
+                      color="default"
+                      className={classes.submit}
+                      mx='auto'
+                      style = {{width:'30%', marginInline:'10%'}}
+                  >
+                      Clear
+                  </Button>         
+                </Grid>
+                
+
+                
+                </form>
+            </div>
             
-          </Grid>
-          
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Submit
-          </Button>
+            {this.state.submitError && 
+              <p style = {{color:'red', textAlign:'center'}}>
+                Error detected in profile submission. Please update your information correctly.</p>
+            }
 
-            
-          {/* For Debugging
-          <code>Values: {JSON.stringify(values)}</code>
-          <br />
-      <code>Errors: {JSON.stringify(errors)}</code>
-      <br />
-      <code>Touched: {JSON.stringify(touched)}</code>
-              <br />*/}
-          
-        </form>
-      </div>
-      
-    </Container>
-    
-  );
+            </Container>
+            //https://codesandbox.io/s/ui788?file=/src/components/StepForm.js
+        );
+    }
 }
+
+export default withStyles(useStyles)(EditProfile);
+  
