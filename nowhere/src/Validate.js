@@ -5,8 +5,8 @@ const nameValidation = (fieldName, fieldValue) => {
     if (/[^a-zA-Z -]/.test(fieldValue)) {
       return 'Invalid characters';
     }
-    if (fieldValue.trim().length < 3) {
-      return `${fieldName} needs to be at least three characters`;
+    if (fieldValue.trim().length < 2) {
+      return `${fieldName} needs to be at least two characters`;
     }
     return null;
   };
@@ -76,6 +76,12 @@ const nationalityValidation = nationality =>{
     return null;
 }
 
+const phoneNumValidation = phone =>{
+    if(/^[2-9][0-9]{7}$/.test(phone)){
+        return null;
+    }
+    return 'Please enter a valid phone number. i.e: xxxx-xxxx';
+}
 
 export const validate = {
 firstName: name => nameValidation('First Name', name),
@@ -86,4 +92,5 @@ age: ageValidation,
 sex: sexValidation,
 nationality: nationalityValidation,
 bio: bioValidation,
+phoneNum: phoneNumValidation,
 };

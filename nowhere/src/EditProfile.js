@@ -63,48 +63,94 @@ class EditProfile extends React.Component{
       super(props);
       // State of this class
       this.state = {
+          //Fields
           userName: '',
           email: '',
-          age: -1,
+          age: '',
           firstName: '',
           lastName: '',
           sex: '',
           bio: '',
-          touched: {},
-          errors: {},
           img: defaultPic,
-          submitError: false,
+          nationality:'',
+          phoneNum: '',
           smoker: false,
           car: false,
+
+          //Form Controls
+          touched: {},
+          errors: {},
+          submitError: false,
+          submitSuccessful: false,
       };
+      //Binding Methods
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleBlur = this.handleBlur.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.handleNationChange = this.handleNationChange.bind(this);
       this.handleImgChange = this.handleImgChange.bind(this);
       this.formValidate = this.formValidate.bind(this);
-      this.handleToggleChange = this.handleToggleChange.bind(this);
+      this.handleToggleChange = this.handleToggleChange.bind(this)
+  }
+
+  componentDidMount() {
+    //Fix later
+    let databaseRef = f_database.ref('users/' + 'asd');
+   
+    databaseRef.on('value', (snapshot) => {
+      if (snapshot.exists()){
+        const data = snapshot.val();
+        this.setState({ 
+          userName: data.username,
+          email: data.email,
+          age: data.age,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          sex: data.sex,
+          bio: data.bio,
+          phoneNum: data.phone_num,
+          nationality: data.nationality,
+          smoker: data.smoker,
+          car: data.car,});
+      } else {
+        this.setState({ 
+          userName: '',
+          email: '',
+          age: '',
+          firstName: '',
+          lastName: '',
+          sex: '',
+          bio: '',
+          img: defaultPic,
+          phoneNum: '',
+          smoker: false,
+          car: false,
+          nationality: '',
+        });
+      }
       
-          
+    });
   }
 
   formValidate = () => {
+    //Check if all necessary fields are touched and that there are no errors in the form
     let noError = !Object.values(this.state.errors).some(x => (x !== null && x !== '' && x!= undefined ));
-    let allTouched = Object.keys(this.state.touched).length >= 7; //There are 7 required fills
+    let allTouched = Object.keys(this.state.touched).length >= 8; //There are 8 required fills
     return allTouched && noError;
   } 
 
   async handleSubmit(e){
     e.preventDefault()
 
+    //Form Validation
     if (!this.formValidate()){
       this.setState({submitError: true});
       return
     } 
     
-   
     alert("Updating "+this.state.userName+"'s Profile")
-
+    this.setState({submitSuccessful: true});
+    //Update data according to the states
     try{
         await f_database.ref("users/" + this.state.userName).set({
             username: this.state.userName,
@@ -113,6 +159,7 @@ class EditProfile extends React.Component{
             first_name: this.state.firstName,
             last_name: this.state.lastName,
             sex: this.state.sex,
+            phone_num: this.state.phoneNum,
             bio: this.state.bio,
             nationality: this.state.nationality,
             smoker: this.state.smoker,
@@ -125,7 +172,9 @@ class EditProfile extends React.Component{
     }
   }
 
+
   handleClear = (e) =>{
+    //Reset Fields
     e.target.reset();
     this.setState({
       userName: '',
@@ -136,6 +185,7 @@ class EditProfile extends React.Component{
       sex: '',
       bio: '',
       nationality: '',
+      phoneNum: '',
     })
   }
 
@@ -154,13 +204,13 @@ class EditProfile extends React.Component{
             [nam]: prevState.touched[nam] && error
         }}
     });
-    this.formValidate();
   }
 
   handleChange = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
 
+    //Update touched and state for the associated field
     this.setState((prevState, props) => { 
         return {
           [nam]:val,
@@ -173,6 +223,7 @@ class EditProfile extends React.Component{
   }
 
   handleNationChange = (e,v)=>{
+    //Workaround for the name retrieval problem of nationality field due to props with Material UI Autocomplete
     let nation_val = (v != undefined) ? v.name : null;
     const error = validate.nationality(nation_val);
     this.setState((prevState, props) => { 
@@ -189,6 +240,7 @@ class EditProfile extends React.Component{
     );}
 
   handleToggleChange = (e) => {
+    //For toggle switch fields
     let nam = e.target.name;
     let val = e.target.checked;
 
@@ -205,6 +257,7 @@ class EditProfile extends React.Component{
   
 
   handleImgChange = (im) =>{
+    //For use in PicUpload components to update img in the EditProfile Class
     this.setState({img: im})
   }
   
@@ -230,7 +283,7 @@ class EditProfile extends React.Component{
                         id="userName"
                         label="UserName"
                         name="userName"
-                       
+                        value={this.state.userName}
 
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
@@ -247,6 +300,7 @@ class EditProfile extends React.Component{
                         fullWidth
                         id="firstName"
                         label="First Name"
+                        value = {this.state.firstName}
 
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
@@ -262,7 +316,7 @@ class EditProfile extends React.Component{
                         id="lastName"
                         label="Last Name"
                         name="lastName"
-                        autoComplete="lname"
+                        value = {this.state.lastName}
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         helperText={this.state.errors.lastName}
@@ -277,6 +331,7 @@ class EditProfile extends React.Component{
                         fullWidth
                         id="age"
                         label="Age"
+                        value = {this.state.age}
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         helperText={this.state.errors.age}
@@ -286,17 +341,34 @@ class EditProfile extends React.Component{
                     </Grid>
                     <Grid item xs={12} sm={6}>
                     <TextField
+                        name="phoneNum"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="phoneNum"
+                        label="Phone Number"
+                        onChange={this.handleChange}
+                        onBlur={this.handleBlur}
+                        helperText={this.state.errors.phoneNum}
+                        value = {this.state.phoneNum}
+                        error={this.state.touched.phoneNum && this.state.errors.phoneNum}
+                    />
+                    </Grid>
+                    <Grid item xs={12}>
+                    <TextField
                         name="email"
                         variant="outlined"
                         required
                         fullWidth
                         id="email"
                         label="Email"
+                        value = {this.state.email}
                         onChange={this.handleChange}
                         onBlur={this.handleBlur}
                         helperText={this.state.errors.email}
                         error={this.state.touched.email && this.state.errors.email}
                     />
+                    
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <FormControl className={classes.formControl} style={{minWidth: '30%', marginLeft:'2%'}} required>
@@ -308,6 +380,7 @@ class EditProfile extends React.Component{
                                 autoWidth
                                 onChange={this.handleChange}
                                 onClose = {this.handleSelect}
+                                value = {this.state.sex}
 
                                 >
                             <MenuItem value={'M'}>Male</MenuItem>
@@ -324,12 +397,15 @@ class EditProfile extends React.Component{
                         getOptionLabel={(option) => option.name}
                         style={{ width: '70%' }}
                         onChange={this.handleNationChange}
+                        value={{name: this.state.nationality}}
+
                         renderInput={(params) => 
                           <TextField 
                           {...params} 
                           label="Nationality" 
                           variant="outlined" 
-                          name='nationality' 
+
+                          
                           required 
                           error={this.state.touched.nationality && this.state.errors.nationality}
                           helperText={this.state.errors.nationality}
@@ -346,16 +422,18 @@ class EditProfile extends React.Component{
                             id="bio"
                             label="Description"
                             fullWidth
+                            required
                             onChange={this.handleChange}
                             onBlur={this.handleBlur}
                             helperText={this.state.errors.bio}
                             error={this.state.touched.bio && this.state.errors.bio}
+                            value= {this.state.bio}
                         />
 
                         
                     </Grid>
                     <Grid item xs={12} sm={6} >
-                    <Typography component="div" style={{paddingInline:'1%'}}> Smoker?
+                    <Typography component="div" style={{paddingInline:'3%'}}> Smoker?
                         <Grid component="label" container alignItems="center" spacing={1}>
                           <Grid item>No</Grid>
                           <Grid item>
@@ -372,7 +450,7 @@ class EditProfile extends React.Component{
                     </Grid>
 
                     <Grid item xs={12} sm={6} >
-                    <Typography component="div"  style={{paddingInline:'1%'}}> Have Car License?
+                    <Typography component="div"  style={{paddingInline:'3%'}}> Have Car License?
                         <Grid component="label" container alignItems="center" spacing={1}>
                           <Grid item>No</Grid>
                           <Grid item>
@@ -418,9 +496,13 @@ class EditProfile extends React.Component{
                 </form>
             </div>
             
-            {this.state.submitError && 
+            {(this.state.submitError && 
               <p style = {{color:'red', textAlign:'center'}}>
-                Error detected in profile submission. Please update your information correctly.</p>
+                Error detected in profile submission. Please update your information correctly.</p>)
+                ||
+              (this.state.submitSuccessful && 
+                <p style = {{color:'green', textAlign:'center'}}>
+                Profile successfully updated</p>)
             }
 
             </Container>

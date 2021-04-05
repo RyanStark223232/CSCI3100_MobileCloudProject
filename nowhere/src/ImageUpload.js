@@ -29,12 +29,15 @@ class PicUpload extends React.Component {
         this.props.img
     };
   }
+
+  //For zoom sliders
   handleZoomSlider(event, value) {
     let state = this.state;
     state.zoom = value;
     this.setState(state);
   }
 
+  //For uploading file
   handleFileChange(e) {
     let url = window.URL.createObjectURL(e.target.files[0]);
     ReactDom.findDOMNode(this.refs.in).value = "";
@@ -43,6 +46,8 @@ class PicUpload extends React.Component {
     state.cropperOpen = true;
     this.setState(state);
   }
+
+  //For saving the file
   handleSave(e) {
     if (this.editor) {
       const canvasScaled = this.editor.getImageScaledToCanvas();
@@ -54,9 +59,11 @@ class PicUpload extends React.Component {
       state.croppedImg = croppedImg;
       state.rotate = 0;
       this.setState(state);
+      //Update to EditProfile img state
       this.props.onSave(croppedImg);
     }
   }
+  //For cancelling the editor
   handleCancel() {
     let state = this.state;
     state.cropperOpen = false;
@@ -66,6 +73,7 @@ class PicUpload extends React.Component {
     this.editor = editor;
   }
 
+  //For rotate buttons
   rotateLeft() {
     this.setState({
       rotate: this.state.rotate - 90
