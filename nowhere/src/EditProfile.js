@@ -21,20 +21,10 @@ import Switch from '@material-ui/core/Switch';
 import PicUpload from "./ImageUpload.js";
 import defaultPic from './man-user.png'
 
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardHeader from "@material-ui/core/CardHeader";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import CardMedia from "@material-ui/core/CardMedia";
-import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
-import Fab from "@material-ui/core/Fab";
 
-
-import auth,{f_database} from "./Firebase.js";
+import auth,{f_database,f_storage} from "./Firebase.js";
 import {nationData} from './NationList.js';
 import {validate} from './Validate.js';
-import { FlipCameraIosRounded } from '@material-ui/icons';
 
 const useStyles =  (theme) => ({
     paper: {
@@ -76,12 +66,15 @@ class EditProfile extends React.Component{
           phoneNum: '',
           smoker: false,
           car: false,
+          diet: false,
+          allergy: false,
 
           //Form Controls
           touched: {},
           errors: {},
           submitError: false,
           submitSuccessful: false,
+          dbImported: false,
       };
       //Binding Methods
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -100,6 +93,7 @@ class EditProfile extends React.Component{
     databaseRef.on('value', (snapshot) => {
       if (snapshot.exists()){
         const data = snapshot.val();
+        //let profilePic = f_storage.ref().refFromURL(data.img);
         this.setState({ 
           userName: data.username,
           email: data.email,
@@ -111,7 +105,12 @@ class EditProfile extends React.Component{
           phoneNum: data.phone_num,
           nationality: data.nationality,
           smoker: data.smoker,
-          car: data.car,});
+          car: data.car,
+          img: data.img,
+          diet: data.diet,
+          allergy: data.allergy,
+          dbImported: true,
+        });
       } else {
         this.setState({ 
           userName: '',
@@ -126,8 +125,12 @@ class EditProfile extends React.Component{
           smoker: false,
           car: false,
           nationality: '',
+          img: defaultPic,
+          diet: false,
+          allergy: false,
+          dbImported: false,
         });
-      }
+      } 
       
     });
   }
@@ -136,7 +139,7 @@ class EditProfile extends React.Component{
     //Check if all necessary fields are touched and that there are no errors in the form
     let noError = !Object.values(this.state.errors).some(x => (x !== null && x !== '' && x!= undefined ));
     let allTouched = Object.keys(this.state.touched).length >= 8; //There are 8 required fills
-    return allTouched && noError;
+    return (allTouched && noError) || (this.state.dbImported && noError);
   } 
 
   async handleSubmit(e){
@@ -152,7 +155,8 @@ class EditProfile extends React.Component{
     this.setState({submitSuccessful: true});
     //Update data according to the states
     try{
-        await f_database.ref("users/" + this.state.userName).set({
+        let userDB = f_database.ref("users/" + this.state.userName)
+        userDB.set({
             username: this.state.userName,
             email: auth.currentUser.email,
             age: this.state.age,
@@ -164,7 +168,15 @@ class EditProfile extends React.Component{
             nationality: this.state.nationality,
             smoker: this.state.smoker,
             car: this.state.car,
-        })
+            diet: this.state.diet,
+            allergy: this.state.allergy,
+        });
+        let img_upload = f_storage.ref('profile_pictures/'+this.state.userName).child(this.state.userName+'.jpg')
+        img_upload.putString(this.state.img,'data_url',{contentType:'image/jpg'})
+        img_upload.getDownloadURL()
+        .then(url => {userDB.update({img:url})})
+        .then((snapshot)=>{console.log('Image Uploaded!')})
+        
         alert("Submitted to database users/"+ this.state.userName)
     } catch(e) {
       console.log(e)
@@ -272,7 +284,7 @@ class EditProfile extends React.Component{
                 <Typography component="h1" variant="h5">
                 Edit Profile
                 </Typography>
-                <form onSubmit={this.handleSubmit} onReset={this.handleClear} className={classes.form} id='editForm' noValidate>                
+                <form onSubmit={this.handleSubmit} onReset={this.handleClear} id='editForm' noValidate>                
                 <Grid container spacing={2} style={{marginTop:1}}>
                     <Grid item xs={12}>
                     <PicUpload img={this.state.img} onSave={this.handleImgChange}/>  
@@ -383,9 +395,9 @@ class EditProfile extends React.Component{
                                 value = {this.state.sex}
 
                                 >
-                            <MenuItem value={'M'}>Male</MenuItem>
-                            <MenuItem value={'F'}>Female</MenuItem>
-                            <MenuItem value={'O'}>Other</MenuItem>
+                            <MenuItem value={'Male'}>Male</MenuItem>
+                            <MenuItem value={'Female'}>Female</MenuItem>
+                            <MenuItem value={'Other'}>Other</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
@@ -450,7 +462,7 @@ class EditProfile extends React.Component{
                     </Grid>
 
                     <Grid item xs={12} sm={6} >
-                    <Typography component="div"  style={{paddingInline:'3%'}}> Have Car License?
+                    <Typography component="div"  style={{paddingInline:'3%'}}> Have Driver's License?
                         <Grid component="label" container alignItems="center" spacing={1}>
                           <Grid item>No</Grid>
                           <Grid item>
@@ -465,7 +477,39 @@ class EditProfile extends React.Component{
                         </Grid>
                       </Typography>
                     </Grid>
-                    
+                    <Grid item xs={12} sm={6} >
+                    <Typography component="div" style={{paddingInline:'3%'}}> Allergies?
+                        <Grid component="label" container alignItems="center" spacing={1}>
+                          <Grid item>No</Grid>
+                          <Grid item>
+                            <Switch 
+                            onChange={this.handleToggleChange} 
+                            name="allergy" 
+                            checked={this.state.allergy}
+                            color='primary'
+                            inputProps={{ 'aria-label': 'primary checkbox'}} />
+                          </Grid>
+                          <Grid item>Yes</Grid>
+                        </Grid>
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} >
+                    <Typography component="div"  style={{paddingInline:'3%'}}> Have a special dietary requirements?
+                        <Grid component="label" container alignItems="center" spacing={1}>
+                          <Grid item>No</Grid>
+                          <Grid item>
+                            <Switch 
+                            onChange={this.handleToggleChange} 
+                            name="diet" 
+                            checked={this.state.diet}
+                            color='primary'
+                            inputProps={{ 'aria-label': 'primary checkbox'}} />
+                          </Grid>
+                          <Grid item>Yes</Grid>
+                        </Grid>
+                      </Typography>
+                    </Grid>
                 </Grid>
                 <Grid style={{marginTop:'5%'}}>
                   <Button
@@ -504,8 +548,8 @@ class EditProfile extends React.Component{
                 <p style = {{color:'green', textAlign:'center'}}>
                 Profile successfully updated</p>)
             }
-
             </Container>
+            
             //https://codesandbox.io/s/ui788?file=/src/components/StepForm.js
         );
     }

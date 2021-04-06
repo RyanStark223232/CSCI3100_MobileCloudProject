@@ -4,7 +4,7 @@ import { render } from "react-dom";
 import AvatarEditor from "react-avatar-editor";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import Slider from '@material-ui/core/Slider';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SaveIcon from '@material-ui/icons/Save';
@@ -28,6 +28,12 @@ class PicUpload extends React.Component {
       croppedImg:
         this.props.img
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if(this.props.img != prevProps.img){
+      this.setState({croppedImg:this.props.img});
+    }
   }
 
   //For zoom sliders
@@ -90,7 +96,7 @@ class PicUpload extends React.Component {
     return (
       <MuiThemeProvider>
         <div style={{ height: 475, display:'block', textAlign: 'center'  }}>
-          <img src={this.state.croppedImg} style={{height:400, width: '50%',  marginLeft: 'auto', marginRight: 'auto' }}/>
+          <img src={this.state.croppedImg} style={{height:400, width: 400,  marginLeft: 'auto', marginRight: 'auto' }}/>
           <div
             style={{marginLeft: 'auto', marginRight: 'auto', paddingInline: '5%', marginTop:'2%' }}
           >
