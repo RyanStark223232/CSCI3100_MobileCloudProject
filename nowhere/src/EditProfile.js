@@ -269,7 +269,6 @@ export default function EditProfile() {
                 fullWidth
                 id="firstName"
                 label="First Name"
-                autoFocus
 
                 value={values.firstName}
                 onChange={handleChange}
@@ -315,7 +314,6 @@ export default function EditProfile() {
                   fullWidth
                   id="email"
                   label="Email"
-                  autoFocus
                   onChange={handleChange}
                   onBlur={handleBlur}
                   // helperText={errors.email}
@@ -364,7 +362,6 @@ export default function EditProfile() {
                     rows={4}
                     id="bio"
                     label="Description"
-                    autoFocus
                     fullWidth
                     onChange={handleChange}
                     onBlur={handleBlur}

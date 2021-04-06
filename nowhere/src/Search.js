@@ -1,9 +1,13 @@
 import React from "react";
-import SearchField from "react-search-field";
 import * as tf from '@tensorflow/tfjs';
 import FilteringTable from './FilteringTable.jsx';
-
-{/* Template Source: https://github.com/nutboltu/react-search-field */}
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import FormControl from '@material-ui/core/FormControl';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import SearchIcon from '@material-ui/icons/Search';
 
 class Search extends React.Component {
     constructor(props){
@@ -17,35 +21,51 @@ class Search extends React.Component {
             place:null,
             loaded:false,
         };
-        this.onChange = this.onChange.bind(this);
+        // props.location.state stores the data passed from Homepage
+        // if you go to search tab by clicking "Search" on top, props.location.state is undefined
+        // if you use the search function in Homepage, there will be data
+        this.props = props;
         this.loadImage = this.loadImage.bind(this);
+        this.loadImagePassIn = this.loadImagePassIn.bind(this);
         this.load = this.load.bind(this);
+        this.neuralInference = this.neuralInference.bind(this);
         const knnClassifier = require('@tensorflow-models/knn-classifier');
-        this.classifier = knnClassifier.create();
+        this.classifier = knnClassifier.create(); 
+        
+        // Default Input Options for Material UI
+        this.defaultPropsLocations = {
+            options: topLocations,
+            getOptionLabel: (option) => option.name,
+        };
+
+        this.defaultPropsSize = {
+            options: sampleSize,
+            getOptionLabel: (option) => option.size,
+        };
+
+        this.defaultPropsType = {
+            options: sampleType,
+            getOptionLabel: (option) => option.type,
+        };
+
+        this.defaultPropsPeriod = {
+            options: samplePeriod,
+            getOptionLabel: (option) => option.type,
+        };
     }
 
-    // Code for training, Commented out since it is useless now
-    /*
-    loadTrain = async(event) =>{
-        require('@tensorflow/tfjs-backend-webgl');
-        var url = URL.createObjectURL(event.target.files[0]);
-        this.setState({train:url});
-        const img = document.getElementById("train");
-        const label = document.getElementById("train_class").value;
-        const mobilenet = require('@tensorflow-models/mobilenet');
-        const model = await mobilenet.load();
-        const activation = await model.infer(img, true);
-        await this.classifier.addExample(activation, label);
-        console.log("Example Added");
+    componentDidMount(){
+        if (this.props.location.state != null){
+            console.log("Data Passed In", this.props.location.state);
+            if (this.props.location.state.image != null){
+                this.loadImagePassIn(this.props.location.state.image);
+                this.props.location.state.image = null;
+            }
+        }
     }
-    */
 
-    // Upon uploading an image, it perform neural network inference and find closest location
-    loadImage = async(event) =>{
-        require('@tensorflow/tfjs-backend-webgl');
-        if ((event.target.files[0]) == null){return};
-        var url = URL.createObjectURL(event.target.files[0]);
-        this.setState({image:url});
+    // Neural Inference
+    neuralInference = async() =>{
         const img = document.getElementById('image');
         const mobilenet = require('@tensorflow-models/mobilenet');
 
@@ -68,35 +88,24 @@ class Search extends React.Component {
             this.setState({place:result.label});
             console.log(result);
         }
+    }
+
+    // Upon uploading an image, it perform neural network inference and find closest location
+    loadImage = async(event) =>{
+        await this.load();
+        require('@tensorflow/tfjs-backend-webgl');
+        if ((event.target.files[0]) == null){return};
+        var url = URL.createObjectURL(event.target.files[0]);
+        await this.setState({image:url});
+        await this.neuralInference();
     };
 
-    onChange(value, event){
-        console.log(value);
-        console.log(event);
-    }
-
-    // Code for saving training, Commented out since it is useless now
-    /*
-    save() {
-        let dataset = this.classifier.getClassifierDataset()
-        var datasetObj = {}
-        Object.keys(dataset).forEach((key) => {
-          let data = dataset[key].dataSync();
-          // use Array.from() so when JSON.stringify() it covert to an array string e.g [0.1,-0.2...] 
-          // instead of object e.g {0:"0.1", 1:"-0.2"...}
-          datasetObj[key] = Array.from(data); 
-        });
-        let jsonStr = JSON.stringify(datasetObj)
-        //localStorage.setItem("myData", jsonStr);
-        const blob = new Blob([jsonStr], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = "myData.json";
-        link.href = url;
-        link.click();
-        console.log("Model Saved");
-    }
-    */
+    loadImagePassIn = async(url) =>{
+        await this.load();
+        require('@tensorflow/tfjs-backend-webgl');
+        await this.setState({image:url});
+        await this.neuralInference();
+    };
 
     load() {
         if (this.state.loaded){
@@ -105,46 +114,234 @@ class Search extends React.Component {
         }
         //can be change to other source
         require('@tensorflow/tfjs-backend-webgl');
-        var data = require('./myData.json')
-        console.log(data)
+        const data = require('./myData.json')
+        
         let tensorObj = data
         //covert back to tensor
-        Object.keys(tensorObj).forEach((key) => {
-            tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1024, 1024])
-        })
+        try {
+            Object.keys(tensorObj).forEach((key) => {
+                tensorObj[key] = tf.tensor(tensorObj[key], [tensorObj[key].length / 1024, 1024])
+            })
+        }
+        catch(err) {
+            console.log("Already Converted");
+        } 
         this.classifier.setClassifierDataset(tensorObj);
         console.log("Model Loaded");
         this.setState({loaded:true});
     }
 
     render(){
+        const {classes} = this.props;
         return (
             <header>
-                <SearchField
-                placeholder="Search..."
-                onChange={this.onChange}
-                searchText="This is initial search text"
-                classNames="test-class"
-                />
                 <div>
-                    <input type="file" id="input_image" onChange={this.loadImage}/>
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsLocations}
+                                id="Location"
+                                debug
+                                onChange={this.onChangeLocation}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Location" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangeLocation}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsSize}
+                                id="GroupSize"
+                                debug
+                                onChange={this.onChangeSize}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Group Size" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangeSize}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsType}
+                                id="Type"
+                                debug
+                                onChange={this.onChangeType}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Type" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangeType}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsPeriod}
+                                id="Period"
+                                debug
+                                onChange={this.onChangePeriod}
+                                renderInput={(params) => <TextField {...params} 
+                                    label="Period" 
+                                    variant="filled" 
+                                    margin="normal" 
+                                    onChange={this.onChangePeriod}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl className={classes.imageControl} >
+                        <input
+                            accept="image/*"
+                            className={classes.input}
+                            id="contained-button-file"
+                            multiple
+                            type="file"
+                            onChange={this.loadImage}
+                        />
+                        <label htmlFor="contained-button-file">
+                            <Button variant="contained"
+                                className={classes.upload_button} 
+                                component="span"
+                                startIcon={<CloudUploadIcon />}>
+                                Upload Image
+                            </Button>
+                        </label>
+                        <Button
+                            variant="contained"
+                            color="default"
+                            className={classes.search_button}
+                            startIcon={<SearchIcon />}>
+                            Search
+                        </Button>
+                    </FormControl>
                 </div>
-                <div>
-                    <button onClick={this.load} id="button2">Load</button>
-                </div>
-                <div>
-                    <img src={this.state.image} id="image" crossOrigin="anonymous" alt="test"></img>
-                </div>
-                <div>
-                    <h5>Similar 1st: {this.state.p1}</h5>
-                    <h5>Similar 2nd: {this.state.p2}</h5>
-                    <h5>Similar 3rd: {this.state.p3}</h5>
-                    <h1>Similar Location: {this.state.place}</h1>
-                </div>
-                <FilteringTable/>
+
+                <FilteringTable state={{state:this.state}}/>
             </header>
         );
     }
 }
 
-export default Search;
+// Constant Variable for class styling
+const useStyles = theme => ({
+    formControl: {
+      margin: theme.spacing(-1),
+      marginTop: theme.spacing(3),
+      minWidth: 200,
+      background: "white",
+      borderRadius: "10px",
+      
+    },
+    imageControl: {
+      margin: theme.spacing(2),
+      marginTop: theme.spacing(0),
+    },
+    input: {
+        display: 'none',
+    },
+    upload_button: {
+        marginTop: theme.spacing(4),
+        background:"white",
+        width: "200px",
+    },
+    search_button: {
+        marginTop: theme.spacing(0.5),
+        background:"white",
+        width: "200px",
+    },
+    search_bar: {
+        borderRadius: "25px",
+        marginTop: theme.spacing(0.5),
+        background:"white",
+        width: "200px",
+        display: 'flex',
+    },
+});
+
+export default withStyles(useStyles)(Search);
+
+// Options for each input field
+const topLocations = [
+    { name: 'Japan' },
+    { name: 'Britain' },
+    { name: 'Hong Kong' },
+    { name: 'United States' },
+    { name: 'Africa' },
+];
+
+const sampleSize = [
+    { size: '2-4' },
+    { size: '4-8' },
+    { size: '8+' },
+];
+
+const sampleType = [
+    { type: 'sporty' },
+    { type: 'shopping' },
+    { type: 'nature' },
+]
+
+const samplePeriod = [
+    { type: 'Day-Trip' },
+    { type: 'Weeks-Trip' },
+    { type: 'Months-Trip' },
+    { type: 'Exchange(student)'},
+]
+
+// Code for training, Commented out since it is useless now
+/*
+loadTrain = async(event) =>{
+    require('@tensorflow/tfjs-backend-webgl');
+    var url = URL.createObjectURL(event.target.files[0]);
+    this.setState({train:url});
+    const img = document.getElementById("train");
+    const label = document.getElementById("train_class").value;
+    const mobilenet = require('@tensorflow-models/mobilenet');
+    const model = await mobilenet.load();
+    const activation = await model.infer(img, true);
+    await this.classifier.addExample(activation, label);
+    console.log("Example Added");
+}
+*/
+
+// Code for saving training, Commented out since it is useless now
+/*
+save() {
+    let dataset = this.classifier.getClassifierDataset()
+    var datasetObj = {}
+    Object.keys(dataset).forEach((key) => {
+        let data = dataset[key].dataSync();
+        // use Array.from() so when JSON.stringify() it covert to an array string e.g [0.1,-0.2...] 
+        // instead of object e.g {0:"0.1", 1:"-0.2"...}
+        datasetObj[key] = Array.from(data); 
+    });
+    let jsonStr = JSON.stringify(datasetObj)
+    //localStorage.setItem("myData", jsonStr);
+    const blob = new Blob([jsonStr], {type: "application/json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = "myData.json";
+    link.href = url;
+    link.click();
+    console.log("Model Saved");
+}
+*/

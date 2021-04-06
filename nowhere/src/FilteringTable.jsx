@@ -4,7 +4,7 @@ import MOCK_DATA from './MOCK_DATA.json'
 import { COLUMNS } from './columns'
 //import './FilteringTable.css'
 
-export const FilteringTable = () => {
+export const FilteringTable = (props) => {
 
     const columns = useMemo(() => COLUMNS, [])
     const data = useMemo(() => MOCK_DATA, [])
@@ -24,8 +24,9 @@ export const FilteringTable = () => {
         prepareRow,
     } = tableInstance
 
-    return (
+    console.log(props.state.state);
 
+    return (
         <table {...getTableProps()}>
             <thead>
                 {headerGroups.map((headerGroup) => (
@@ -34,7 +35,7 @@ export const FilteringTable = () => {
                         headerGroup.headers.map((column) => (
                             <th {...column.getHeaderProps()}>
                                 {column.render('Header')}
-                                <div>{column.canFilter ? column.render('Filter') : null}</div>
+                                <div>{column.canFilter ? column.render('Filter') : "Japan"}</div>
                             </th>
                         ))}
                 </tr>
