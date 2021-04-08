@@ -48,6 +48,12 @@ li {
   display: inline;
 }
 
+
+.toHide
+{
+ display: none;
+}
+
 img {
   width: 12%;
   display: block;
