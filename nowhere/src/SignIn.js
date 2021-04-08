@@ -1,9 +1,4 @@
-/* hearder comment block 
-
-*/
-
-
-import React, { useRef } from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,14 +10,16 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
+import { withRouter } from "react-router";
 
 import auth from "./Firebase";
-import { Comment, Functions } from "@material-ui/icons";
-import { IconButton } from '@material-ui/core';
+// import { Comment, Functions } from "@material-ui/icons";
+// import { IconButton } from '@material-ui/core';
 import App, { setLogedIn } from './App';
 
 
@@ -46,16 +43,22 @@ const useStyles = theme => ({
   },
 });
 
+
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
-    // this.onChange = this.onChange.bind(this);
     this.emailRef = React.createRef();
     this.pwRef = React.createRef();
+    // this.state = {
+    //   logedIn: false      
+    // }
+    
   }
-
-
-
+  
+  onStateChange =()=>{
+    console.log("in onStateChange");
+    if(this.state.logedIn ===true) console.log("it is true!!");
+  }
 
   handleSignin = async (e) => {
     e.preventDefault()
@@ -63,6 +66,8 @@ class SignIn extends React.Component {
       await auth.signInWithEmailAndPassword(this.emailRef.current.value, this.pwRef.current.value).then(value => {
         if (auth.currentUser != null) {
           alert("sign in succeeded with email =" + this.emailRef.current.value)
+          setLogedIn();
+          this.props.history.push("/")
         } else {
           alert("login failed")
         }
@@ -84,16 +89,9 @@ class SignIn extends React.Component {
 
   };
 
-  //  logOut() {
-  //     console.log("in LogOut()")
-  //   auth.signOut()
-  //   setLogedIn();
-  // };
 
   render() {
-    // const { classes } = this.props;
     const classes = this.props.classes;
-    // console.log(classes);
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />

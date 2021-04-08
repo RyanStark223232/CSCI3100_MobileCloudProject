@@ -62,6 +62,19 @@ export default function AccountDetails() {
       alert(e)
     }
 
+    // f_database.ref("posts/" + unameRef.current.value).set({
+    //   post_id: 1,
+    //   owner: "potato",
+    //   waiting_list: {
+    //     1:"potato1",
+    //     2:"potato2",
+    //     3:"potato3",
+    //   },
+    //   participant: {
+    //     1:"potato",
+    //   },
+    // })
+
   }
   
   return (

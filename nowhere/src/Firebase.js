@@ -23,5 +23,17 @@ const f_database = firebase.database()
 export { app, auth,f_database}
 export default auth
 
-
+    // f_database.ref("posts/" + unameRef.current.value).set({
+    //   post_id: 1,
+    //   owner: "potato",
+    //   waiting_list: {
+    //     1:"potato1",
+    //     2:"potato2",
+    //     3:"potato3",
+    //   },
+    //   participant: {
+    //     1:"potato",
+    //   },
+    // })
+    
 // auth.createUserWithEmailAndPassword("potato@potato.com","potato1234")

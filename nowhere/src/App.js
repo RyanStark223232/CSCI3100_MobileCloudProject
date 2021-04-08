@@ -20,16 +20,17 @@ import CreatePost from "./CreatePost.js";
 import EditProfile from "./EditProfile.js";
 import Button from '@material-ui/core/Button';
 import nowhere from './Logo_Temp.jpg';
-import React from 'react';
+import React, { useState }from 'react';
 import auth from "./Firebase";
+// import { withRouter } from "react-router";
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory
 } from "react-router-dom";
-import { render } from '@testing-library/react';
 
 
 
@@ -47,21 +48,18 @@ export function setLogedOut() {
 }
 
 function App() {
-  // class App extends React.Component {
-  //   constructor(props) {
-  //     super(props);
-
-  //   }
-  //   render(){
+  const [logedIN, setLogedInState] = useState(false);
+  const onSet =()=>{setLogedInState(true)}
   return (
     <header>
       <Router>
         <div name="title">
           <Link to="/">
-            <img src={nowhere} alt="logo" class="logo"></img>
+            <img src={nowhere} alt="logo" className="logo"></img>
           </Link>
-          <div class="accountSetting">
-            <div id="afterAuth" class="toHide">
+          <div className="accountSetting">
+            <div className="toHide" id="afterAuth" >
+              <Link to="/accountdetails" onClick = {onSet}>Welcome, { auth.currentUser?auth.currentUser.email:"guest"  }</Link>
               <Link to="/accountdetails" >
                 <Button variant="contained" size="small" color="primary">
                   Accountdetails
@@ -85,7 +83,7 @@ function App() {
               </Button>
               </Link>
               <Link to="/signin" >
-                <Button variant="contained" size="small" color="primary" onClick={setLogedIn}>
+                <Button variant="contained" size="small" color="primary" >
                   Sign In
               </Button>
               </Link>

@@ -1,5 +1,5 @@
-import React, { Component, useRef } from 'react';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
+// import { Redirect } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,13 +11,13 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 import auth from "./Firebase.js";
-import App from "./App";
+import App, { setLogedIn } from './App';
 
 
 const useStyles = theme => ({
@@ -49,17 +49,22 @@ class SignUp extends React.Component {
 
   }
 
-  // SignUp =(e) => {
-
-  // App.bind(handleSignUp)
 
   handleSignUp = (e) => {
-    // console.log("inside handleSignUp")
     e.preventDefault()
-    // console.log(emailRef.current.value)
+    if(this.pwRef.current.value != this.pwVRef.current.value){
+      alert("the two passwords are different, please try again")
+      return
+    }
     try {
       auth.createUserWithEmailAndPassword(this.emailRef.current.value, this.pwRef.current.value).then((authData) => {
-        alert("Signed up successfully with email " + this.emailRef.current.value + "   uid = " + auth.currentUser.uid)
+        alert("Signed up successfully with email " + this.emailRef.current.value )
+        if (auth.currentUser != null) {
+          this.props.history.push("/")
+          setLogedIn();
+        } else {
+          alert("login failed")
+        }
       }).catch(function (error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -144,7 +149,6 @@ class SignUp extends React.Component {
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                {/*<Link href="/personal" variant="body2">*/}
                 <Link href="/signin" >
                   Already have an account? Sign in
                 </Link>
@@ -153,7 +157,6 @@ class SignUp extends React.Component {
           </form>
         </div>
         <Box mt={5}>
-          {/*<Copyright />*/}
         </Box>
       </Container>
     );
