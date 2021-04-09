@@ -1,9 +1,9 @@
-/* 
+/*
 CSCI3100 Project NowHere
 Group D2
 
 LIN Chuanfeng 1155110077
-name sid....
+CHIU ChiKeung 1155109788
 name sid....
 name sid....
 name sid....
@@ -17,6 +17,7 @@ import Home from './Home.js';
 import Search from './Search.js';
 import AccountDetails from "./AccountDetails.js";
 import CreatePost from "./CreatePost.js";
+import MyPost from "./MyPost.js";
 import EditProfile from "./EditProfile.js";
 import Button from '@material-ui/core/Button';
 import nowhere from './Logo_Temp.jpg';
@@ -104,8 +105,8 @@ function App() {
                 </Link>
               </li>
               <li>
-                <Link to="/createpost">
-                  <Button variant="outlined" size="large">Create Post</Button>
+                <Link to="/mypost">
+                  <Button variant="outlined" size="large">My Post</Button>
                 </Link>
               </li>
 
@@ -124,6 +125,9 @@ function App() {
             </Route>
 
             <Route path="/AccountDetails" component={AccountDetails}>
+            </Route>
+
+            <Route path="/mypost" component={MyPost}>
             </Route>
 
             <Route path="/createpost" component={CreatePost}>
@@ -148,4 +152,3 @@ function App() {
 // }
 
 export default App;
-

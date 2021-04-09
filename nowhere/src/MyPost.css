@@ -1,0 +1,69 @@
+.post-list{
+  display:flex;
+  flex-direction: column;
+}
+.my-post-header{
+  text-align: center;
+}
+
+
+.my-post-header button{
+  float:right;
+}
+
+.my-post-header button:hover{
+ color:#FFFF;
+ background-color:#00000;
+}
+
+.post-container {
+  height: 200px;
+  width: 100%;
+  background-color:#eee;
+  margin: 5px;
+  padding: 10px;
+  display:flex;
+}
+
+.post-container .left-column {
+  float:left;
+  width: 30%;
+  /* background-color:#aaa; */
+
+}
+
+.post-container .left-column img{
+  width:100%;
+  object-fit: contain;
+  max-height:100%;
+  max-width:100%;
+}
+.post-container .middle-column {
+  float:right;
+  width: 50%;
+  background-color:#ddd;
+}
+
+.post-title{
+  padding:5px;
+  font-size:30px;
+  font-weight: bold;
+}
+.post-location{
+  padding:10px 15px;
+}
+.post-style{
+  padding:10px 15px;
+}
+.post-size{
+  padding:10px 15px;
+}
+
+
+.post-container .right-column {
+  float:right;
+  width: 20%;
+  /* background-color:#ddd; */
+  text-align:center;
+  line-height:200px
+}
