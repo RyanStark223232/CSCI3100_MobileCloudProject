@@ -64,7 +64,7 @@ class MyPost extends React.Component{
                       <div className="my-post-size">Group size: {post.size}</div>
                     </div>
                     <div className="right-column">
-                      <a href={"./editpost/"+post.pid}>Read More &rarr;</a>
+                      <a href={"./post/"+post.pid}>Read More &rarr;</a>
                     </div>
                   </div>
                 )
