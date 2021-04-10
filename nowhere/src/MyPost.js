@@ -1,7 +1,7 @@
 import React from "react";
 import db from "./Firebase.js";
 import './MyPost.css';
-import PostList from './PostList.js';
+
 import {storage, f_database, auth} from "./Firebase.js";
 import cover_image from "./cover.jpeg";
 
@@ -66,7 +66,7 @@ class MyPost extends React.Component{
                       <div className="my-post-size">Group size: {post.size}</div>
                     </div>
                     <div className="right-column">
-                      <a href={"./post?="+post.pid}>Edit Post &rarr;</a>
+                      <a href={"./post/"+post.pid}>Read More &rarr;</a>
                     </div>
                   </div>
                 )

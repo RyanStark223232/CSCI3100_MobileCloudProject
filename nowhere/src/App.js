@@ -28,6 +28,7 @@ import auth from "./Firebase";
 import EditIcon from '@material-ui/icons/Edit';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useParams } from "react-router";
 // import { withRouter } from "react-router";
 
 import {
@@ -147,7 +148,7 @@ function App() {
             <Route path="/createpost" component={CreatePost}>
             </Route>
 
-            <Route path="/post" component={Post}>
+            <Route path="/post/:id" component={Post}>
             </Route>
 
             <Route path="/editprofile" component={EditProfile}>

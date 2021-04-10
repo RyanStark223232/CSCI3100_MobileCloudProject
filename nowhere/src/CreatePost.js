@@ -72,7 +72,7 @@ class CreatePost extends React.Component {
 
     var image_url;
     try{
-      
+
       var data =null;
       f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
         snapshot.forEach(snap=>{
@@ -118,6 +118,7 @@ class CreatePost extends React.Component {
               travel_style: this.state.travel_style,
               remark: this.state.remark,
               uid:  current_uid,
+              period: this.state.period,
               url: image_url,
               pid: this.state.pid
             });
