@@ -15,7 +15,7 @@ class Post extends React.Component{
   }
 
   componentDidMount() {
-    const id = parseInt(this.props.match.params.id)
+    const id = parseInt(this.props.match.params.id);
 
     var data = null;
     f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{

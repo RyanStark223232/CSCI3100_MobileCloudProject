@@ -17,6 +17,7 @@ import Home from './Home.js';
 import Search from './Search.js';
 import AccountDetails from "./AccountDetails.js";
 import CreatePost from "./CreatePost.js";
+import EditPost from "./EditPost.js";
 import MyPost from "./MyPost.js";
 import Post from "./Post.js"
 import EditProfile from "./EditProfile.js";
@@ -146,6 +147,9 @@ function App() {
             </Route>
 
             <Route path="/createpost" component={CreatePost}>
+            </Route>
+
+            <Route path="/editpost/:id" component={EditPost}>
             </Route>
 
             <Route path="/post/:id" component={Post}>
