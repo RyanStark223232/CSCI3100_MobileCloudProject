@@ -20,7 +20,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import CakeIcon from '@material-ui/icons/Cake';
 import WcIcon from '@material-ui/icons/Wc';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
-import EmailIcon from '@material-ui/icons/Email';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
 import DescriptionIcon from '@material-ui/icons/Description';
 import InfoIcon from '@material-ui/icons/Info';
@@ -56,7 +56,6 @@ class AccountDetails extends React.Component{
       this.state = {
           //Fields
           userName: '',
-          email: '',
           age: '',
           firstName: '',
           lastName: '',
@@ -67,15 +66,21 @@ class AccountDetails extends React.Component{
           phoneNum: '',
           smoker: false,
           car: false,
+          diet: false,
+          allergy: false,
 
           dbImported: false,
       };
 
   }
 
+  encodeUserEmail(userEmail) {
+    return userEmail.replace(".", ",");
+  }
+
   componentDidMount() {
-    //Fix later
-    let databaseRef = f_database.ref('users/' + 'asd');
+    let encoded_email = this.encodeUserEmail(auth.currentUser.email)
+    let databaseRef = f_database.ref('users/' + encoded_email);
    
     databaseRef.on('value', (snapshot) => {
       if (snapshot.exists()){
@@ -83,7 +88,6 @@ class AccountDetails extends React.Component{
         //let profilePic = f_storage.ref().refFromURL(data.img);
         this.setState({ 
           userName: data.username,
-          email: data.email,
           age: data.age,
           firstName: data.first_name,
           lastName: data.last_name,
@@ -101,7 +105,6 @@ class AccountDetails extends React.Component{
       } else {
         this.setState({ 
           userName: '',
-          email: '',
           age: '',
           firstName: '',
           lastName: '',
@@ -137,6 +140,20 @@ class AccountDetails extends React.Component{
                     <Grid item xs={12}>
                       <img src={this.state.img} 
                       style={{width:400,height:400, marginLeft: 'auto', marginRight: 'auto', marginBottom:'5%'}}/>  
+                    </Grid>
+                    <Grid item xs={12}  >
+                        <hr class="rounded"/>
+                        <Grid container direction="row" alignItems="center" wrap='wrap'>
+                          <AccountCircleIcon style={{ fontSize: '30'}} /> 
+                          <Typography component="h2" variant="h5" align='left' class={classes.wrapIcon}>
+                            Username
+                          </Typography>
+                          <Grid container direction="row" alignItems="center">
+                          <Typography  align='left'>
+                        {this.state.userName}
+                        </Typography>
+                          </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={12}  >
                         <hr class="rounded"/>
@@ -194,20 +211,7 @@ class AccountDetails extends React.Component{
                           </Grid>
                       </Grid>
                     </Grid>
-                    <Grid item xs={12}  >
-                        <hr class="rounded"/>
-                        <Grid container direction="row" alignItems="center" wrap='wrap'>
-                          <EmailIcon style={{ fontSize: '30'}} /> 
-                          <Typography component="h2" variant="h5" align='left' class={classes.wrapIcon}>
-                            Email
-                          </Typography>
-                          <Grid container direction="row" alignItems="center">
-                          <Typography  align='left'>
-                        {this.state.email}
-                        </Typography>
-                          </Grid>
-                        </Grid>
-                    </Grid>
+                    
                     <Grid item xs={12}  >
                         <hr class="rounded"/>
                         <Grid container direction="row" alignItems="center" wrap='wrap'>
@@ -273,8 +277,6 @@ class AccountDetails extends React.Component{
            </div>
 
             </Container>
-            
-            //https://codesandbox.io/s/ui788?file=/src/components/StepForm.js
         );
     }
 }

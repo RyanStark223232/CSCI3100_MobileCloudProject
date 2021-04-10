@@ -84,19 +84,23 @@ class EditProfile extends React.Component{
       this.handleImgChange = this.handleImgChange.bind(this);
       this.formValidate = this.formValidate.bind(this);
       this.handleToggleChange = this.handleToggleChange.bind(this)
+      this.encodeUserEmail = this.encodeUserEmail.bind(this);
+  }
+
+  encodeUserEmail(userEmail) {
+    return userEmail.replace(".", ",");
   }
 
   componentDidMount() {
-    //Fix later
-    let databaseRef = f_database.ref('users/' + 'asd');
+    //Retrieve information from firebase
+    let encoded_email = this.encodeUserEmail(auth.currentUser.email)
+    let databaseRef = f_database.ref('users/' + encoded_email);
    
     databaseRef.on('value', (snapshot) => {
       if (snapshot.exists()){
         const data = snapshot.val();
-        //let profilePic = f_storage.ref().refFromURL(data.img);
         this.setState({ 
           userName: data.username,
-          email: data.email,
           age: data.age,
           firstName: data.first_name,
           lastName: data.last_name,
@@ -112,9 +116,9 @@ class EditProfile extends React.Component{
           dbImported: true,
         });
       } else {
+        //Load default information if unavailable
         this.setState({ 
           userName: '',
-          email: '',
           age: '',
           firstName: '',
           lastName: '',
@@ -134,6 +138,8 @@ class EditProfile extends React.Component{
       
     });
   }
+
+
 
   formValidate = () => {
     //Check if all necessary fields are touched and that there are no errors in the form
@@ -155,7 +161,8 @@ class EditProfile extends React.Component{
     this.setState({submitSuccessful: true});
     //Update data according to the states
     try{
-        let userDB = f_database.ref("users/" + this.state.userName)
+        let encoded_email = this.encodeUserEmail(auth.currentUser.email)
+        let userDB = f_database.ref("users/" + encoded_email)
         userDB.set({
             username: this.state.userName,
             email: auth.currentUser.email,
@@ -171,13 +178,15 @@ class EditProfile extends React.Component{
             diet: this.state.diet,
             allergy: this.state.allergy,
         });
-        let img_upload = f_storage.ref('profile_pictures/'+this.state.userName).child(this.state.userName+'.jpg')
+        let img_upload = f_storage.ref('profile_pictures/'+encoded_email).child(encoded_email+'.jpg')
         img_upload.putString(this.state.img,'data_url',{contentType:'image/jpg'})
-        img_upload.getDownloadURL()
-        .then(url => {userDB.update({img:url})})
+        .then(data=> {data.ref.getDownloadURL()
+        .then(url =>{ userDB.update({img:url})
         .then((snapshot)=>{console.log('Image Uploaded!')})
+        });
+      });
         
-        alert("Submitted to database users/"+ this.state.userName)
+        alert("Submitted to database users/"+ encoded_email)
     } catch(e) {
       console.log(e)
       alert(e)
@@ -190,7 +199,6 @@ class EditProfile extends React.Component{
     e.target.reset();
     this.setState({
       userName: '',
-      email: '',
       age: -1,
       firstName: '',
       lastName: '',
@@ -366,22 +374,6 @@ class EditProfile extends React.Component{
                         error={this.state.touched.phoneNum && this.state.errors.phoneNum}
                     />
                     </Grid>
-                    <Grid item xs={12}>
-                    <TextField
-                        name="email"
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email"
-                        value = {this.state.email}
-                        onChange={this.handleChange}
-                        onBlur={this.handleBlur}
-                        helperText={this.state.errors.email}
-                        error={this.state.touched.email && this.state.errors.email}
-                    />
-                    
-                    </Grid>
                     <Grid item xs={12} sm={6}>
                         <FormControl className={classes.formControl} style={{minWidth: '30%', marginLeft:'2%'}} required>
                             <InputLabel id="demo-simple-select-label">Sex</InputLabel>
@@ -548,9 +540,7 @@ class EditProfile extends React.Component{
                 <p style = {{color:'green', textAlign:'center'}}>
                 Profile successfully updated</p>)
             }
-            </Container>
-            
-            //https://codesandbox.io/s/ui788?file=/src/components/StepForm.js
+            </Container>            
         );
     }
 }
