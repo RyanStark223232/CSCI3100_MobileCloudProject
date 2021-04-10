@@ -168,12 +168,6 @@ class CreatePost extends React.Component {
                 </div>
                 <div className="wrapper">
                   <div className="left-item"><span>Title:</span></div>
-                  <TextField
-                    label="Period"
-                    variant="filled"
-                    margin="normal"
-                    onChange={this.changeInput}
-                  />
                   <div className="right-item"><input size="60" type="text" placeholder="Enter something..." name="title" value={this.state.title} onChange={this.changeInput}></input></div>
                 </div>
                 <div className="wrapper">
