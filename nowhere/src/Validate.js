@@ -5,8 +5,8 @@ const nameValidation = (fieldName, fieldValue) => {
     if (/[^a-zA-Z -]/.test(fieldValue)) {
       return 'Invalid characters';
     }
-    if (fieldValue.trim().length < 3) {
-      return `${fieldName} needs to be at least three characters`;
+    if (fieldValue.trim().length < 2) {
+      return `${fieldName} needs to be at least two characters`;
     }
     return null;
   };
@@ -59,12 +59,29 @@ const sexValidation = sex =>{
 }
 
 const bioValidation = bio =>{
-    if(bio.trim() === ''){
+    if (bio.trim() === '') {
         return 'Your description cannot be empty';
+    }
+
+    if(bio.match(/(\w+)/g).length < 20){
+        return 'Your description must at least have 20 words';
     }
     return null;
 }
 
+const nationalityValidation = nationality =>{
+    if(nationality === null){
+        return 'Nationality is required';
+    }
+    return null;
+}
+
+const phoneNumValidation = phone =>{
+    if(/^[2-9][0-9]{7}$/.test(phone)){
+        return null;
+    }
+    return 'Please enter a valid phone number. i.e: xxxx-xxxx';
+}
 
 export const validate = {
 firstName: name => nameValidation('First Name', name),
@@ -73,6 +90,7 @@ userName: userNameValidation,
 email: emailValidation,
 age: ageValidation,
 sex: sexValidation,
-nationality: null,
+nationality: nationalityValidation,
 bio: bioValidation,
+phoneNum: phoneNumValidation,
 };
