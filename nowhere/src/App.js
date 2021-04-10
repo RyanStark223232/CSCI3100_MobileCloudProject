@@ -73,8 +73,8 @@ function App() {
           </Link>
           <div className="accountSetting">
             <div className="toHide" id="afterAuth" >
-              <Link to="/editprofile"  id = "displayName"></Link>
-              <Link to="/accountdetails" >
+              <Link to="/accountdetails"  id = "displayName"></Link>
+              <Link to="/accountdetails" style={{ textDecoration: 'none' }} >
                 <Button variant="contained" size="small" color="primary">
                    <AccountCircleIcon/> Account Details
             </Button>
