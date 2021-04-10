@@ -44,6 +44,7 @@ import {
 export function setLogedIn() {
   // console.log("in setloged in");
   document.getElementById("beforeAuth").style.display = "none";
+  document.getElementById("myPostButton").style.display = "inline";
   document.getElementById("displayName").innerHTML = "Welcome, "+ auth.currentUser.email;
   document.getElementById("afterAuth").style.display = "inline";
 }
@@ -51,6 +52,7 @@ export function setLogedIn() {
 export function setLogedOut() {
   // console.log("in setloged out");
   document.getElementById("beforeAuth").style.display = "inline";
+  document.getElementById("myPostButton").style.display = "none";
   document.getElementById("afterAuth").style.display = "none";
   auth.signOut();
 }
@@ -121,7 +123,7 @@ function App() {
               </li>
               <li>
                 <Link to="/mypost">
-                  <Button variant="outlined" size="large">My Post</Button>
+                  <Button variant="outlined" size="large" id="myPostButton">My Post</Button>
                 </Link>
               </li>
 
