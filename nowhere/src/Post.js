@@ -4,13 +4,15 @@ import {storage, f_database, auth} from "./Firebase.js";
 import "./Post.css";
 import cover_image from "./cover.jpeg";
 import { withRouter } from "react-router";
-
+import Button from '@material-ui/core/Button';
 
 class Post extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      post:null
+      post:null,
+      // I you can set disable_button to true if you want to gray-out the button when the members are full or something like that
+      disable_button:true,
     }
   }
 
@@ -55,6 +57,9 @@ class Post extends React.Component{
                <div className="post-period">Period: {this.state.post.period}</div>
                <div className="post-style">Travelling Style: {this.state.post.travel_style}</div>
                <div className="post-remark">Remark: {this.state.post.remark}</div>
+               <Button variant="contained" size="small" color="secondary" style={{margin: 10}} disabled={this.state.disable_button}>
+                  Request Join
+                </Button>
              </div>
            </div>
           </div>

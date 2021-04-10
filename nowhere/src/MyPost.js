@@ -1,10 +1,10 @@
 import React from "react";
 import db from "./Firebase.js";
 import './MyPost.css';
-
+import Button from '@material-ui/core/Button';
 import {storage, f_database, auth} from "./Firebase.js";
 import cover_image from "./cover.jpeg";
-
+import SentimentVeryDissatisfiedIcon from './sadFace.png';
 
 
 class MyPost extends React.Component{
@@ -51,8 +51,6 @@ class MyPost extends React.Component{
       return(
         <header>
           <div className="my-post-header">
-            <h1>My Posts</h1>
-            <button onClick={this.createPost}>Create New Post</button>
           </div>
           <div>
               {this.state.my_posts.map(post=>{
@@ -72,6 +70,11 @@ class MyPost extends React.Component{
                 )
             })}
           </div>
+          <div>            
+            <Button variant="contained" size="large" color="secondary" onClick={this.createPost}>
+              Create New Post
+            </Button>
+          </div>
         </header>
       )
     }else{
@@ -79,8 +82,13 @@ class MyPost extends React.Component{
       return(
         <header>
           <div className="my-post-header">
-            <h1>My Posts</h1>
-            <button onClick={this.createPost}>Create New Post</button>
+            <div>
+              <img src={SentimentVeryDissatisfiedIcon} alt="sadFace"></img>
+              Your Post List is Empty
+            </div>            
+            <Button variant="contained" size="large" color="secondary" onClick={this.createPost} style={{margin:20}}>
+              Create New Post
+            </Button>
           </div>
         </header>
       )

@@ -1,7 +1,10 @@
 import React from "react";
 import './CreatePost.css';
 import {storage, f_database, auth} from "./Firebase.js";
-
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class CreatePost extends React.Component {
 
@@ -28,11 +31,11 @@ class CreatePost extends React.Component {
 
 
 
-  changeInput=(event)=>{
-    this.setState({
+  changeInput=async(event)=>{
+    await this.setState({
       [event.target.name]: event.target.value
     });
-
+    console.log(this.state);
   }
 
   handleImage=(event)=>{
@@ -137,58 +140,112 @@ class CreatePost extends React.Component {
         return (
             <header className="container">
                 <h1>Create / Edit Post Page</h1>
+
                 <div className="wrapper">
                   <div className="left-item"><span>Cover Photo:</span></div>
-
                   <div className="right-item"><img src={this.state.temp_cover} id="image" /><input type="file" accept="image/*" onChange={this.handleImage}></input></div>
                 </div>
+
                 <div className="wrapper">
-                  <div className="left-item"><span>Title:</span></div>
-                  <div className="right-item"><input size="60" type="text" placeholder="Enter something..." name="title" value={this.state.title} onChange={this.changeInput}></input></div>
+                  <div className="left-item">
+                    <span>Title:</span>
+                  </div>
+                  <div className="right-item">
+                      <TextField
+                        name="title"
+                        label="Title"
+                        variant="filled"
+                        onChange={this.changeInput}
+                      />
+                  </div>     
                 </div>
+
+                <div className="wrapper">
+                  <div className="left-item">
+                    <span>Location:</span>
+                  </div>
+                  <div className="right-item">
+                      <TextField
+                        name="location"
+                        label="Location"
+                        variant="filled"
+                        onChange={this.changeInput}
+                      />
+                  </div>  
+                </div>
+
+                <div className="wrapper">
+                  <div className="left-item">
+                    <span>Group Size:</span>
+                  </div>
+                  <div className="right-item">
+                    <Select
+                      name="size"
+                      labelId="group size"
+                      id="group size"
+                      onChange={this.changeInput}
+                      variant="outlined"
+                      defaultValue={"2-4"}
+                    >
+                      <MenuItem value={"2-4"}>2-4</MenuItem>
+                      <MenuItem value={"5-8"}>5-8</MenuItem>
+                      <MenuItem value={"8+"}>8+</MenuItem>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="wrapper">
+                  <div className="left-item">
+                    <span>Period:</span>
+                  </div>
+                  <div className="right-item">
+                    <Select
+                      name="period"
+                      labelId="period"
+                      id="period"
+                      onChange={this.changeInput}
+                      variant="outlined"
+                      defaultValue={"Weeks-Trip"}
+                    >
+                      <MenuItem value={"Weeks-Trip"}>Weeks-Trip</MenuItem>
+                      <MenuItem value={"Day-Trip"}>Day-Trip</MenuItem>
+                      <MenuItem value={"Exchange(student)"}>Exchange(student)</MenuItem>
+                      <MenuItem value={"Long-Trip"}>Long-Trip</MenuItem>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="wrapper">
+                  <div className="left-item"><span>Travelling Style:</span></div>
+                  <div className="right-item">
+                    <Select
+                      name="travel-style"
+                      labelId="travel-style"
+                      id="travel-style"
+                      onChange={this.changeInput}
+                      variant="outlined"
+                      defaultValue={"Sporty"}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={"Sporty"}>Sporty</MenuItem>
+                      <MenuItem value={"Shopping"}>Shopping</MenuItem>
+                      <MenuItem value={"Cultural"}>Cultural</MenuItem>
+                    </Select>
+                  </div>
+                </div>
+
                 <div className="wrapper">
                   <div className="left-item"><span>Description:</span></div>
                   <div className="right-item"><textarea rows="5" placeholder="Enter something..." name="description" value={this.state.description} onChange={this.changeInput}></textarea></div>
                 </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Location:</span></div>
-                  <div className="right-item"><input type="text" placeholder="Enter something..." name="location" value={this.state.location} onChange={this.changeInput}></input></div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Group Size:</span></div>
-                  <div className="right-item">
-                    <select id="group-size" name="group size"onChange={this.changeInput}>
-                      <option value="2-4" >2-4</option>
-                      <option value="5-8">5-8</option>
-                      <option value="8+">8+</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Period:</span></div>
-                  <div className="right-item">
-                    <select id="period" name="period" onChange={this.changeInput}>
-                      <option value="Weeks-Trip" >Weeks-Trip</option>
-                      <option value="Day-Trip">Day-Trip</option>
-                      <option value="Exchange(student)">Exchange(student)</option>
-                      <option value="Long-Trip">Long-Trip</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Travelling Style:</span></div>
-                  <div className="right-item">
-                    <select id="travel-style" name="travel-style" onChange={this.changeInput}>
-                      <option value="Sporty" >Sporty</option>
-                      <option value="Shopping">Shopping</option>
-                      <option value="Cultural">Cultural</option>
-                    </select>
-                  </div>
-                </div>
+
                 <div className="wrapper">
                   <div className="left-item"><span>Remark:</span></div>
                   <div className="right-item"><textarea rows="3" placeholder="Enter something..." name="remark" value={this.state.remark} onChange={this.changeInput}></textarea></div>
                 </div>
+
                 <div id="save-btn"><button onClick={this.handlePost}>Save</button></div>
                 <button onClick={this.checking}>Testing</button>
             </header>

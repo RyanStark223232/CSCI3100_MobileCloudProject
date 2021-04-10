@@ -1,6 +1,8 @@
 import React from "react";
 import './CreatePost.css';
 import {storage, f_database, auth} from "./Firebase.js";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 
 class CreatePost extends React.Component {
@@ -52,8 +54,6 @@ class CreatePost extends React.Component {
 
   }
 
-
-
   changeInput=(event)=>{
     this.setState({
       [event.target.name]: event.target.value
@@ -88,10 +88,7 @@ class CreatePost extends React.Component {
       }
       console.log(this.state.pid);
     });
-
-
   }
-
 
   handlePost=()=>{
     console.log(this.state);
@@ -171,6 +168,12 @@ class CreatePost extends React.Component {
                 </div>
                 <div className="wrapper">
                   <div className="left-item"><span>Title:</span></div>
+                  <TextField
+                    label="Period"
+                    variant="filled"
+                    margin="normal"
+                    onChange={this.changeInput}
+                  />
                   <div className="right-item"><input size="60" type="text" placeholder="Enter something..." name="title" value={this.state.title} onChange={this.changeInput}></input></div>
                 </div>
                 <div className="wrapper">

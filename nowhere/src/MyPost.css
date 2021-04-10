@@ -8,12 +8,13 @@
 
 
 .my-post-header button{
-  float:right;
+  float:center;
 }
 
-.my-post-header button:hover{
- color:#FFFF;
- background-color:#00000;
+.my-post-header img{
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .my-post-container {

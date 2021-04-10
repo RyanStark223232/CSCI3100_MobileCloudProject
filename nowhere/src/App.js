@@ -5,8 +5,7 @@ Group D2
 LIN Chuanfeng 1155110077
 CHIU ChiKeung 1155109788
 HO Chak Sum Felix 1155114044
-name sid....
-name sid....
+WONG Hin 1155109054
 */
 
 
@@ -93,15 +92,15 @@ function App() {
               </Link>
             </div>
             <div id="beforeAuth" >
-              <Link to="/signup" style={{ textDecoration: 'none' }}>
+              <Link to="/signup" style={{ textDecoration: 'none', margin: 10}}>
                 <Button variant="contained" size="small" color="primary" >
                   Sign Up
-              </Button>
+                </Button>
               </Link>
-              <Link to="/signin" style={{ textDecoration: 'none' }}>
+              <Link to="/signin" style={{ textDecoration: 'none', margin: 10}}>
                 <Button variant="contained" size="small" color="primary" >
                   Sign In
-              </Button>
+                </Button>
               </Link>
             </div>
           </div>
