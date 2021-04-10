@@ -77,7 +77,7 @@ class Home extends React.Component{
         else {
             console.log(event.target.value);
             this.setState({group_size:event.target.value});
-        }        
+        }
     }
 
     // onChange for Type
@@ -89,7 +89,7 @@ class Home extends React.Component{
         else {
             console.log(event.target.value);
             this.setState({type:event.target.value});
-        }        
+        }
     }
 
     // onChange for Period
@@ -101,15 +101,15 @@ class Home extends React.Component{
         else {
             console.log(event.target.value);
             this.setState({period:event.target.value});
-        }        
+        }
     }
 
     render(){
         const {classes} = this.props;
         return (
             <header>
-                <div class="container">
-                    <img src={hk} alt="hk" class="hk"></img>
+                <div className="container">
+                    <img src={hk} alt="hk" className="hk"></img>
                     <div>
 
                         <FormControl  className={classes.formControl}>
@@ -120,10 +120,10 @@ class Home extends React.Component{
                                     id="Location"
                                     debug
                                     onChange={this.onChangeLocation}
-                                    renderInput={(params) => <TextField {...params} 
-                                        label="Location" 
-                                        variant="filled" 
-                                        margin="normal" 
+                                    renderInput={(params) => <TextField {...params}
+                                        label="Location"
+                                        variant="filled"
+                                        margin="normal"
                                         onChange={this.onChangeLocation}
                                     />}
                                 />
@@ -138,10 +138,10 @@ class Home extends React.Component{
                                     id="GroupSize"
                                     debug
                                     onChange={this.onChangeSize}
-                                    renderInput={(params) => <TextField {...params} 
-                                        label="Group Size" 
-                                        variant="filled" 
-                                        margin="normal" 
+                                    renderInput={(params) => <TextField {...params}
+                                        label="Group Size"
+                                        variant="filled"
+                                        margin="normal"
                                         onChange={this.onChangeSize}
                                     />}
                                 />
@@ -156,10 +156,10 @@ class Home extends React.Component{
                                     id="Type"
                                     debug
                                     onChange={this.onChangeType}
-                                    renderInput={(params) => <TextField {...params} 
-                                        label="Type" 
-                                        variant="filled" 
-                                        margin="normal" 
+                                    renderInput={(params) => <TextField {...params}
+                                        label="Type"
+                                        variant="filled"
+                                        margin="normal"
                                         onChange={this.onChangeType}
                                     />}
                                 />
@@ -174,10 +174,10 @@ class Home extends React.Component{
                                     id="Period"
                                     debug
                                     onChange={this.onChangePeriod}
-                                    renderInput={(params) => <TextField {...params} 
-                                        label="Period" 
-                                        variant="filled" 
-                                        margin="normal" 
+                                    renderInput={(params) => <TextField {...params}
+                                        label="Period"
+                                        variant="filled"
+                                        margin="normal"
                                         onChange={this.onChangePeriod}
                                     />}
                                 />
@@ -195,7 +195,7 @@ class Home extends React.Component{
                             />
                             <label htmlFor="contained-button-file">
                                 <Button variant="contained"
-                                    className={classes.upload_button} 
+                                    className={classes.upload_button}
                                     component="span"
                                     startIcon={<CloudUploadIcon />}>
                                     Upload Image
@@ -226,7 +226,7 @@ const useStyles = theme => ({
       minWidth: 200,
       background: "white",
       borderRadius: "10px",
-      
+
     },
     imageControl: {
       margin: theme.spacing(2),

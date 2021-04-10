@@ -1,4 +1,4 @@
-.post-list{
+.my-post-list{
   display:flex;
   flex-direction: column;
 }
@@ -16,7 +16,7 @@
  background-color:#00000;
 }
 
-.post-container {
+.my-post-container {
   height: 200px;
   width: 100%;
   background-color:#eee;
@@ -25,42 +25,42 @@
   display:flex;
 }
 
-.post-container .left-column {
+.my-post-container .left-column {
   float:left;
   width: 30%;
   /* background-color:#aaa; */
 
 }
 
-.post-container .left-column img{
+.my-post-container .left-column img{
   width:100%;
   object-fit: contain;
   max-height:100%;
   max-width:100%;
 }
-.post-container .middle-column {
+.my-post-container .middle-column {
   float:right;
   width: 50%;
   background-color:#ddd;
 }
 
-.post-title{
+.my-post-title{
   padding:5px;
   font-size:30px;
   font-weight: bold;
 }
-.post-location{
+.my-post-location{
   padding:10px 15px;
 }
-.post-style{
+.my-post-style{
   padding:10px 15px;
 }
-.post-size{
+.my-post-size{
   padding:10px 15px;
 }
 
 
-.post-container .right-column {
+.my-post-container .right-column {
   float:right;
   width: 20%;
   /* background-color:#ddd; */

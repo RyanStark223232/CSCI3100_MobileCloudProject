@@ -18,11 +18,14 @@ import Search from './Search.js';
 import AccountDetails from "./AccountDetails.js";
 import CreatePost from "./CreatePost.js";
 import MyPost from "./MyPost.js";
+import Post from "./Post.js"
 import EditProfile from "./EditProfile.js";
 import Button from '@material-ui/core/Button';
 import nowhere from './Logo_Temp.jpg';
 import React, { useState }from 'react';
+import ReactDOM from "react-dom";
 import auth from "./Firebase";
+
 // import { withRouter } from "react-router";
 
 import {
@@ -131,6 +134,9 @@ function App() {
             </Route>
 
             <Route path="/createpost" component={CreatePost}>
+            </Route>
+
+            <Route path="/post" component={Post}>
             </Route>
 
             <Route path="/editprofile" component={EditProfile}>

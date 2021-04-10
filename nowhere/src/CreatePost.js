@@ -1,6 +1,5 @@
 import React from "react";
 import './CreatePost.css';
-import db from "./Firebase.js";
 import {storage, f_database, auth} from "./Firebase.js";
 
 
@@ -19,7 +18,8 @@ class CreatePost extends React.Component {
       post_id:null,
       cover:null,
       temp_cover:null,
-      url:'123'
+      url:null,
+      pid:null
     };
 
     this.changeInput = this.changeInput.bind(this);
@@ -45,54 +45,92 @@ class CreatePost extends React.Component {
   }
 
   checking=()=>{
-    console.log(this.state);
-    var uid = auth.currentUser.uid;
-    console.log(uid);
+    var data =null;
+    f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
+      snapshot.forEach(snap=>{
+        data=snap.val()
+      });
+      console.log(data);
+      if(data.pid != null){
+        this.setState({
+          pid:data.pid+1
+        });
+      }else{
+        this.setState({
+          pid: 0
+        })
+      }
+      console.log(this.state.pid);
+    });
+
+
   }
 
 
   handlePost=()=>{
     console.log(this.state);
+
+    var image_url;
     try{
+      
+      var data =null;
+      f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
+        snapshot.forEach(snap=>{
+          data=snap.val()
+        });
+        console.log(data);
+        if(data.pid != null){
+          this.setState({
+            pid:data.pid+1
+          });
+        }else{
+          this.setState({
+            pid: 0
+          })
+        }
+        console.log(this.state.pid);
+      });
+
       const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
       uploadImage.on(
-        "state_changed",snapshot=>{},
+        'state_changed',(snapshot)=>{},
         error=>{
           console.log(error);
         },
         ()=>{
           storage.ref("cover_images").child(this.state.cover.name).getDownloadURL().
             then(url=>{
-              console.log(url)
+              image_url=url;
               this.setState({
-                url: url
-              });
-              console.log("error?");
-            })
-        }
-      );
-      console.log(this.state);
+                url:image_url
+              })
+              console.log(typeof image_url);
+            }
+          ).then(()=>{
+            console.log(image_url);
+            var current_uid = auth.currentUser.uid;
 
+            f_database.ref("posts/" + this.state.title).set({
+              title: this.state.title,
+              description: this.state.description,
+              location: this.state.location,
+              size: this.state.size,
+              travel_style: this.state.travel_style,
+              remark: this.state.remark,
+              uid:  current_uid,
+              url: image_url,
+              pid: this.state.pid
+            });
 
-      var current_uid = auth.currentUser.uid;
-
-      f_database.ref("posts/" + this.state.title).set({
-        url: this.state.url,
-        title: this.state.title,
-        description: this.state.description,
-        location: this.state.location,
-        size: this.state.size,
-        travel_style: this.state.travel_style,
-        remark: this.state.remark,
-        uid:current_uid
-      });
-
-      alert("Submitted to database title/"+ this.state.title)
+            alert("Submitted to database title/"+ this.state.title);
+          })
+        });
     } catch(e) {
-      console.log(e)
-      alert(e)
+      console.log(e);
+      alert(e);
     }
   }
+
 
     render(){
         return (

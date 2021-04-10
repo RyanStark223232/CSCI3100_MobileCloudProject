@@ -1,0 +1,33 @@
+.post-header {
+  padding: 30px;
+  font-size: 40px;
+  text-align: center;
+  background: #D8D8D8;
+}
+
+.row{
+  display: flex;
+}
+
+.leftcolumn{
+  flex:40%;
+}
+
+.leftcolumn img{
+  width:100%;
+  object-fit: contain;
+  max-height:100%;
+  max-width:100%;
+}
+
+.rightcolumn{
+  flex:60%;
+}
+
+.rightcolumn div{
+  padding:3px 10px
+}
+.rightcolumn .post-title{
+  padding-left:5px !important;
+  padding-top: 0px !important;
+}
