@@ -92,7 +92,7 @@ class EditProfile extends React.Component{
   }
 
   componentDidMount() {
-    //Retrieve information from firebase
+    setTimeout(()=>{
     let encoded_email = this.encodeUserEmail(auth.currentUser.email)
     let databaseRef = f_database.ref('users/' + encoded_email);
    
@@ -116,7 +116,6 @@ class EditProfile extends React.Component{
           dbImported: true,
         });
       } else {
-        //Load default information if unavailable
         this.setState({ 
           userName: '',
           age: '',
@@ -135,8 +134,8 @@ class EditProfile extends React.Component{
           dbImported: false,
         });
       } 
-      
     });
+    },1000); 
   }
 
 

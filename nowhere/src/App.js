@@ -72,19 +72,19 @@ function App() {
           <div className="accountSetting">
             <div className="toHide" id="afterAuth" >
               <Link to="/editprofile"  id = "displayName"></Link>
-              {/* <Link to="/accountdetails" >
+              <Link to="/accountdetails" >
                 <Button variant="contained" size="small" color="primary">
-                  Accountdetails
+                   <AccountCircleIcon/> Account Details
             </Button>
-              </Link> */}
+              </Link> 
               <Link to="/editprofile" style={{ textDecoration: 'none' }}>
                 <Button variant="contained" size="small" color="primary">
-                  Edit Profile
+                <EditIcon/> Edit Profile
             </Button>
               </Link>
               <Link to="/" style={{ textDecoration: 'none' }}>
                 <Button variant="contained" size="small" color="secondary" onClick={setLogedOut}>
-                  Log Out
+                  <ExitToAppIcon/> Log Out
             </Button>
               </Link>
             </div>

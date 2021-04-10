@@ -78,6 +78,7 @@ class AccountDetails extends React.Component{
   }
 
   componentDidMount() {
+    setTimeout(()=>{
     let encoded_email = this.encodeUserEmail(auth.currentUser.email)
     let databaseRef = f_database.ref('users/' + encoded_email);
    
@@ -119,8 +120,8 @@ class AccountDetails extends React.Component{
           dbImported: false,
         });
       } 
-      
     });
+    },1000); 
   }
 
 
