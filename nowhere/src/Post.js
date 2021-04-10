@@ -3,7 +3,7 @@ import db from "./Firebase.js";
 import {storage, f_database, auth} from "./Firebase.js";
 import "./Post.css";
 import cover_image from "./cover.jpeg";
-
+import { withRouter } from "react-router";
 
 
 class Post extends React.Component{
@@ -14,41 +14,58 @@ class Post extends React.Component{
     }
   }
 
-  componentDidMount(){
-    console.log(this.props);
+  componentDidMount() {
+    const id = parseInt(this.props.match.params.id);
 
+    var data = null;
+    f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
+      snapshot.forEach(snap=>{
+        data=snap.val()
+      });
+      this.setState({
+        post:data
+      },()=>{
+        console.log(this.state.post);
+      })
+    });
   }
+
+
   render(){
-    return(
+    if(this.state.post){
+      return(
 
-      <header>
-        <div className="post-header">
-          <h2>NowHere</h2>
-        </div>
-
-        <div className="row">
-
-          <div className="leftcolumn">
-            <img src={cover_image} />
+        <header>
+          <div className="post-header">
+            <h2>NowHere</h2>
           </div>
 
-          <div className="rightcolumn">
-            <div className="card">
-             <div className="post-title"><h2>Post Title</h2></div>
-             <div className="post-description">Title description, Dec 7, 2017</div>
-             <div className="post-location">Location</div>
-             <div className="post-groupsize">Group Size:</div>
-             <div className="post-period">Period</div>
-             <div className="post-style">Travelling Style</div>
-             <div className="post-remark">Remark:</div>
+          <div className="row">
+
+            <div className="leftcolumn">
+              <img src={cover_image} />
+            </div>
+
+            <div className="rightcolumn">
+              <div className="card">
+               <div className="post-title"><h2>Title: {this.state.post.title}</h2></div>
+               <div className="post-description">Description: {this.state.post.description}</div>
+               <div className="post-location">{this.state.post.location}</div>
+               <div className="post-groupsize">Group Size:{this.state.post.size}</div>
+               <div className="post-period">Period: {this.state.post.period}</div>
+               <div className="post-style">Travelling Style: {this.state.post.travel_style}</div>
+               <div className="post-remark">Remark: {this.state.post.remark}</div>
+             </div>
            </div>
-         </div>
-        </div>
+          </div>
 
-
-
-      </header>
-    );
+        </header>
+      );
+    }else{
+      return(
+        <header></header>
+      )
+    }
   }
 }
 

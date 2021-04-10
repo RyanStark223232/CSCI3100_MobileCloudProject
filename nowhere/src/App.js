@@ -17,6 +17,7 @@ import Home from './Home.js';
 import Search from './Search.js';
 import AccountDetails from "./AccountDetails.js";
 import CreatePost from "./CreatePost.js";
+import EditPost from "./EditPost.js";
 import MyPost from "./MyPost.js";
 import Post from "./Post.js"
 import EditProfile from "./EditProfile.js";
@@ -28,6 +29,7 @@ import auth from "./Firebase";
 import EditIcon from '@material-ui/icons/Edit';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useParams } from "react-router";
 // import { withRouter } from "react-router";
 
 import {
@@ -147,7 +149,10 @@ function App() {
             <Route path="/createpost" component={CreatePost}>
             </Route>
 
-            <Route path="/post" component={Post}>
+            <Route path="/editpost/:id" component={EditPost}>
+            </Route>
+
+            <Route path="/post/:id" component={Post}>
             </Route>
 
             <Route path="/editprofile" component={EditProfile}>

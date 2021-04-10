@@ -11,9 +11,9 @@ class CreatePost extends React.Component {
       title:null,
       description:null,
       location:null,
-      size:'2-4',
-      period:'Weeks-Trip',
-      travel_style:'Sporty',
+      size:null,
+      period:null,
+      travel_style:null,
       remark:null,
       post_id:null,
       cover:null,
@@ -25,6 +25,32 @@ class CreatePost extends React.Component {
     this.changeInput = this.changeInput.bind(this);
   }
 
+  componentDidMount() {
+    const id = parseInt(this.props.match.params.id);
+    var data = null;
+    f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
+      snapshot.forEach(snap=>{
+        data=snap.val()
+      });
+      this.setState({
+        post:data
+      },()=>{
+        console.log(this.state.post);
+        this.setState({
+          title:this.state.post.title,
+          description:this.state.post.description,
+          location:this.state.post.location,
+          size:this.state.post.size,
+          period:this.state.post.period,
+          travel_style:this.state.post.travel_style,
+          remark:this.state.post.remark,
+          post_id:this.state.post.post_id,
+          url:this.state.post.url
+        })
+      })
+    });
+
+  }
 
 
 
@@ -134,13 +160,14 @@ class CreatePost extends React.Component {
 
 
     render(){
+      if(this.state.post){
         return (
             <header className="container">
                 <h1>Create / Edit Post Page</h1>
                 <div className="wrapper">
                   <div className="left-item"><span>Cover Photo:</span></div>
 
-                  <div className="right-item"><img src={this.state.temp_cover} id="image" /><input type="file" accept="image/*" onChange={this.handleImage}></input></div>
+                  <div className="right-item"><img src={this.state.temp_cover?this.state.temp_cover:this.state.url} id="image" /><input type="file" accept="image/*" onChange={this.handleImage}></input></div>
                 </div>
                 <div className="wrapper">
                   <div className="left-item"><span>Title:</span></div>
@@ -157,8 +184,8 @@ class CreatePost extends React.Component {
                 <div className="wrapper">
                   <div className="left-item"><span>Group Size:</span></div>
                   <div className="right-item">
-                    <select id="group-size" name="group size"onChange={this.changeInput}>
-                      <option value="2-4" >2-4</option>
+                    <select id="group-size" name="group size" onChange={this.changeInput}>
+                      <option value="2-4">2-4</option>
                       <option value="5-8">5-8</option>
                       <option value="8+">8+</option>
                     </select>
@@ -193,7 +220,13 @@ class CreatePost extends React.Component {
                 <button onClick={this.checking}>Testing</button>
             </header>
         );
+    }else{
+      return(
+        <header></header>
+      )
     }
+  }
+
 }
 
 export default CreatePost;
