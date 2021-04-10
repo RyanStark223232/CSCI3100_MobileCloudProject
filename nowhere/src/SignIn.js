@@ -65,7 +65,7 @@ class SignIn extends React.Component {
     try {
       await auth.signInWithEmailAndPassword(this.emailRef.current.value, this.pwRef.current.value).then(value => {
         if (auth.currentUser != null) {
-          alert("sign in succeeded with email =" + this.emailRef.current.value)
+          // alert("Sign in succeeded with email =" + this.emailRef.current.value)
           setLogedIn();
           this.props.history.push("/")
         } else {

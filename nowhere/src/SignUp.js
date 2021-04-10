@@ -58,9 +58,9 @@ class SignUp extends React.Component {
     }
     try {
       auth.createUserWithEmailAndPassword(this.emailRef.current.value, this.pwRef.current.value).then((authData) => {
-        alert("Signed up successfully with email " + this.emailRef.current.value )
+        alert("Signed up successfully with email " + this.emailRef.current.value +"\n Please fill in more information about you.")
         if (auth.currentUser != null) {
-          this.props.history.push("/")
+          this.props.history.push("/editprofile")
           setLogedIn();
         } else {
           alert("login failed")

@@ -4,7 +4,7 @@ Group D2
 
 LIN Chuanfeng 1155110077
 CHIU ChiKeung 1155109788
-name sid....
+HO Chak Sum Felix 1155114044
 name sid....
 name sid....
 */
@@ -25,7 +25,9 @@ import nowhere from './Logo_Temp.jpg';
 import React, { useState }from 'react';
 import ReactDOM from "react-dom";
 import auth from "./Firebase";
-
+import EditIcon from '@material-ui/icons/Edit';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // import { withRouter } from "react-router";
 
 import {
@@ -33,27 +35,35 @@ import {
   Switch,
   Route,
   Link,
-  useHistory
 } from "react-router-dom";
 
 
 
 export function setLogedIn() {
-  console.log("in setloged in");
+  // console.log("in setloged in");
   document.getElementById("beforeAuth").style.display = "none";
+  document.getElementById("displayName").innerHTML = "Welcome, "+ auth.currentUser.email;
   document.getElementById("afterAuth").style.display = "inline";
 }
 
 export function setLogedOut() {
-  console.log("in setloged out");
+  // console.log("in setloged out");
   document.getElementById("beforeAuth").style.display = "inline";
   document.getElementById("afterAuth").style.display = "none";
   auth.signOut();
 }
 
+
+function onAuthStateChanged(){
+  if (auth.currentUser)
+    setLogedIn()
+
+  else setLogedOut()
+}
+
+
+
 function App() {
-  const [logedIN, setLogedInState] = useState(false);
-  const onSet =()=>{setLogedInState(true)}
   return (
     <header>
       <Router>
@@ -63,30 +73,30 @@ function App() {
           </Link>
           <div className="accountSetting">
             <div className="toHide" id="afterAuth" >
-              <Link to="/accountdetails" onClick = {onSet}>Welcome, { auth.currentUser?auth.currentUser.email:"guest"  }</Link>
+              <Link to="/editprofile"  id = "displayName"></Link>
               <Link to="/accountdetails" >
                 <Button variant="contained" size="small" color="primary">
-                  Accountdetails
+                   <AccountCircleIcon/> Account Details
             </Button>
               </Link>
-              <Link to="/editprofile" >
+              <Link to="/editprofile" style={{ textDecoration: 'none' }}>
                 <Button variant="contained" size="small" color="primary">
-                  Edit Profile
+                <EditIcon/> Edit Profile
             </Button>
               </Link>
-              <Link to="/">
-                <Button variant="contained" size="small" color="primary" onClick={setLogedOut}>
-                  Log Out
+              <Link to="/" style={{ textDecoration: 'none' }}>
+                <Button variant="contained" size="small" color="secondary" onClick={setLogedOut}>
+                  <ExitToAppIcon/> Log Out
             </Button>
               </Link>
             </div>
             <div id="beforeAuth" >
-              <Link to="/signup" >
+              <Link to="/signup" style={{ textDecoration: 'none' }}>
                 <Button variant="contained" size="small" color="primary" >
                   Sign Up
               </Button>
               </Link>
-              <Link to="/signin" >
+              <Link to="/signin" style={{ textDecoration: 'none' }}>
                 <Button variant="contained" size="small" color="primary" >
                   Sign In
               </Button>
@@ -115,6 +125,7 @@ function App() {
 
             </ul>
           </nav>
+          <script>{ auth.onAuthStateChanged(onAuthStateChanged)}</script>
 
           <Switch>
 
