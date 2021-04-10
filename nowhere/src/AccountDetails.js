@@ -25,7 +25,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import DescriptionIcon from '@material-ui/icons/Description';
 import InfoIcon from '@material-ui/icons/Info';
 
-import auth,{f_database,f_storage} from "./Firebase.js";
+import auth,{f_database,storage} from "./Firebase.js";
 
 
 const useStyles =  (theme) => ({
@@ -85,7 +85,6 @@ class AccountDetails extends React.Component{
     databaseRef.on('value', (snapshot) => {
       if (snapshot.exists()){
         const data = snapshot.val();
-        //let profilePic = f_storage.ref().refFromURL(data.img);
         this.setState({ 
           userName: data.username,
           age: data.age,

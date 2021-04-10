@@ -4,7 +4,7 @@ Group D2
 
 LIN Chuanfeng 1155110077
 CHIU ChiKeung 1155109788
-name sid....
+HO Chak Sum Felix 1155114044
 name sid....
 name sid....
 */
@@ -23,6 +23,9 @@ import Button from '@material-ui/core/Button';
 import nowhere from './Logo_Temp.jpg';
 import React, { useState }from 'react';
 import auth from "./Firebase";
+import EditIcon from '@material-ui/icons/Edit';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 // import { withRouter } from "react-router";
 
 import {
@@ -62,18 +65,18 @@ function App() {
             <div className="toHide" id="afterAuth" >
               <Link to="/accountdetails" onClick = {onSet}>Welcome, { auth.currentUser?auth.currentUser.email:"guest"  }</Link>
               <Link to="/accountdetails" >
-                <Button variant="contained" size="small" color="primary">
-                  Accountdetails
+                <Button variant="contained" size="small" color="primary" >
+                <AccountCircleIcon/> Account Details
             </Button>
               </Link>
               <Link to="/editprofile" >
-                <Button variant="contained" size="small" color="primary">
-                  Edit Profile
+                <Button variant="contained" size="small" color="primary" >
+                  <EditIcon/> Edit Profile
             </Button>
               </Link>
               <Link to="/">
                 <Button variant="contained" size="small" color="primary" onClick={setLogedOut}>
-                  Log Out
+                  <ExitToAppIcon/> Log Out
             </Button>
               </Link>
             </div>

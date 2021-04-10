@@ -22,7 +22,7 @@ import PicUpload from "./ImageUpload.js";
 import defaultPic from './man-user.png'
 
 
-import auth,{f_database,f_storage} from "./Firebase.js";
+import auth,{f_database,storage} from "./Firebase.js";
 import {nationData} from './NationList.js';
 import {validate} from './Validate.js';
 
@@ -178,7 +178,7 @@ class EditProfile extends React.Component{
             diet: this.state.diet,
             allergy: this.state.allergy,
         });
-        let img_upload = f_storage.ref('profile_pictures/'+encoded_email).child(encoded_email+'.jpg')
+        let img_upload = storage.ref('profile_pictures/'+encoded_email).child(encoded_email+'.jpg')
         img_upload.putString(this.state.img,'data_url',{contentType:'image/jpg'})
         .then(data=> {data.ref.getDownloadURL()
         .then(url =>{ userDB.update({img:url})
