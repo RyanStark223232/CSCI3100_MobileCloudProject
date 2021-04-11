@@ -16,6 +16,7 @@ class MyPost extends React.Component{
     }
 
   }
+
   componentDidMount(){
     if(auth.currentUser!=null){
       var data = [];
@@ -70,7 +71,7 @@ class MyPost extends React.Component{
                 )
             })}
           </div>
-          <div>            
+          <div>
             <Button variant="contained" size="large" color="secondary" onClick={this.createPost}>
               Create New Post
             </Button>
@@ -78,14 +79,13 @@ class MyPost extends React.Component{
         </header>
       )
     }else{
-
       return(
         <header>
           <div className="my-post-header">
             <div>
               <img src={SentimentVeryDissatisfiedIcon} alt="sadFace"></img>
               Your Post List is Empty
-            </div>            
+            </div>
             <Button variant="contained" size="large" color="secondary" onClick={this.createPost} style={{margin:20}}>
               Create New Post
             </Button>

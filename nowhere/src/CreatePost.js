@@ -12,13 +12,11 @@ class CreatePost extends React.Component {
     super();
     this.state = {
       title:null,
-      description:null,
       location:null,
       size:'2-4',
       period:'Weeks-Trip',
       travel_style:'Sporty',
       remark:null,
-      post_id:null,
       cover:null,
       temp_cover:null,
       url:null,
@@ -78,57 +76,34 @@ class CreatePost extends React.Component {
 
       var data =null;
       f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
-        snapshot.forEach(snap=>{
-          data=snap.val()
-        });
-        console.log(data);
-        if(data.pid != null){
-          this.setState({
-            pid:data.pid+1
-          });
-        }else{
-          this.setState({
-            pid: 0
-          })
-        }
+        snapshot.forEach(snap=>{data=snap.val()});
+        data.pid !=null ? this.setState({pid:data.pid+1}) : this.setState({pid: 0});
         console.log(this.state.pid);
       });
 
-      const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
-      uploadImage.on(
-        'state_changed',(snapshot)=>{},
-        error=>{
-          console.log(error);
-        },
-        ()=>{
-          storage.ref("cover_images").child(this.state.cover.name).getDownloadURL().
-            then(url=>{
-              image_url=url;
-              this.setState({
-                url:image_url
-              })
-              console.log(typeof image_url);
-            }
-          ).then(()=>{
-            console.log(image_url);
-            var current_uid = auth.currentUser.uid;
+      var current_uid = auth.currentUser.uid;
 
-            f_database.ref("posts/" + this.state.title).set({
-              title: this.state.title,
-              description: this.state.description,
-              location: this.state.location,
-              size: this.state.size,
-              travel_style: this.state.travel_style,
-              remark: this.state.remark,
-              uid:  current_uid,
-              period: this.state.period,
-              url: image_url,
-              pid: this.state.pid
-            });
-
-            alert("Submitted to database title/"+ this.state.title);
-          })
+      var postdb = f_database.ref("posts/" + this.state.title);
+      postdb.set({
+        title: this.state.title,
+        location: this.state.location,
+        size: this.state.size,
+        travel_style: this.state.travel_style,
+        uid:  current_uid,
+        period: this.state.period,
+        pid: this.state.pid
+      });
+      if(this.state.remark) {postdb.update({remark: this.state.remark})}
+      if (this.state.cover){
+        const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
+        uploadImage.on('state_changed',(snapshot)=>{},
+        error=>{console.log(error);},
+        ()=>{storage.ref("cover_images").child(this.state.cover.name)
+            .getDownloadURL()
+            .then(i_url=>{postdb.update({url:i_url})})
         });
+      }
+      alert("Submitted to database title/"+ this.state.title);
     } catch(e) {
       console.log(e);
       alert(e);
@@ -157,7 +132,7 @@ class CreatePost extends React.Component {
                         variant="filled"
                         onChange={this.changeInput}
                       />
-                  </div>     
+                  </div>
                 </div>
 
                 <div className="wrapper">
@@ -171,7 +146,7 @@ class CreatePost extends React.Component {
                         variant="filled"
                         onChange={this.changeInput}
                       />
-                  </div>  
+                  </div>
                 </div>
 
                 <div className="wrapper">
@@ -234,11 +209,6 @@ class CreatePost extends React.Component {
                       <MenuItem value={"Cultural"}>Cultural</MenuItem>
                     </Select>
                   </div>
-                </div>
-
-                <div className="wrapper">
-                  <div className="left-item"><span>Description:</span></div>
-                  <div className="right-item"><textarea rows="5" placeholder="Enter something..." name="description" value={this.state.description} onChange={this.changeInput}></textarea></div>
                 </div>
 
                 <div className="wrapper">
