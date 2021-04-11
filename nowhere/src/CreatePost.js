@@ -201,9 +201,6 @@ class CreatePost extends React.Component {
                       variant="outlined"
                       defaultValue={"Sporty"}
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
                       <MenuItem value={"Sporty"}>Sporty</MenuItem>
                       <MenuItem value={"Shopping"}>Shopping</MenuItem>
                       <MenuItem value={"Cultural"}>Cultural</MenuItem>

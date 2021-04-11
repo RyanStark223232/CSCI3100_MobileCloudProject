@@ -80,17 +80,17 @@ function App() {
               <Link to="/accountdetails" style={{ textDecoration: 'none' }} >
                 <Button variant="contained" size="small" color="primary">
                    <AccountCircleIcon/> Account Details
-            </Button>
+                </Button>
               </Link>
               <Link to="/editprofile" style={{ textDecoration: 'none' }}>
                 <Button variant="contained" size="small" color="primary">
-                <EditIcon/> Edit Profile
-            </Button>
+                  <EditIcon/> Edit Profile
+                </Button>
               </Link>
               <Link to="/" style={{ textDecoration: 'none' }}>
                 <Button variant="contained" size="small" color="secondary" onClick={setLogedOut}>
                   <ExitToAppIcon/> Log Out
-            </Button>
+                </Button>
               </Link>
             </div>
             <div id="beforeAuth" >
@@ -122,7 +122,7 @@ function App() {
               </li>
               <li>
                 <Link to="/mypost">
-                  <Button variant="outlined" size="large" id="myPostButton">My Post</Button>
+                  <Button variant="outlined" size="large">My Post</Button>
                 </Link>
               </li>
 
