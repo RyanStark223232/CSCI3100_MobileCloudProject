@@ -26,6 +26,17 @@ class CreatePost extends React.Component {
     this.changeInput = this.changeInput.bind(this);
   }
 
+  componentDidMount(){
+    var post_ref = f_database.ref("posts/");
+    var data=null;
+    post_ref.orderByChild('pid').limitToLast(1).on("value",
+     snapshot=>{
+      snapshot.forEach(snap=>{data=snap.val()});
+      this.setState({pid:data.pid+1});
+
+    });
+  }
+
 
 
 
@@ -45,45 +56,26 @@ class CreatePost extends React.Component {
     });
   }
 
-  checking=()=>{
-    var data =null;
-    f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
-      snapshot.forEach(snap=>{
-        data=snap.val()
-      });
-      console.log(data);
-      if(data.pid != null){
-        this.setState({
-          pid:data.pid+1
-        });
-      }else{
-        this.setState({
-          pid: 0
-        })
-      }
-      console.log(this.state.pid);
-    });
-
-
-  }
-
 
   handlePost=()=>{
+
+
     console.log(this.state);
 
-    var image_url;
     try{
-
-      var data =null;
-      f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
-        snapshot.forEach(snap=>{data=snap.val()});
-        data.pid !=null ? this.setState({pid:data.pid+1}) : this.setState({pid: 0});
-        console.log(this.state.pid);
-      });
-
       var current_uid = auth.currentUser.uid;
 
-      var postdb = f_database.ref("posts/" + this.state.title);
+      var post_ref = f_database.ref("posts/");
+      var data=null;
+      post_ref.orderByChild('pid').limitToLast(1).on("value",
+       snapshot=>{
+        snapshot.forEach(snap=>{
+          data=snap.val()
+          this.setState({pid:data.pid});
+        });
+      });
+
+      var postdb = post_ref.child(this.state.title);
       postdb.set({
         title: this.state.title,
         location: this.state.location,
@@ -103,11 +95,16 @@ class CreatePost extends React.Component {
             .then(i_url=>{postdb.update({url:i_url})})
         });
       }
+
+
+
+
       alert("Submitted to database title/"+ this.state.title);
     } catch(e) {
       console.log(e);
       alert(e);
     }
+
   }
 
 
@@ -214,7 +211,6 @@ class CreatePost extends React.Component {
                 </div>
 
                 <div id="save-btn"><button onClick={this.handlePost}>Save</button></div>
-                <button onClick={this.checking}>Testing</button>
             </header>
         );
     }

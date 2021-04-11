@@ -53,7 +53,6 @@ class CreatePost extends React.Component {
           url: this.state.post.url,
           pid: id
         })
-        console.log(this.state.post.period + " " + this.state.post.title);
       })
     });
 
@@ -104,10 +103,12 @@ class CreatePost extends React.Component {
 
     var image_url;
     console.log(this.state);
+    this.uploadImage();
     try{
-      this.uploadImage();
+
       if(this.state.post.title == this.state.title){
-        f_database.ref("posts/" + this.state.post.title).update({
+        post_ref = f_database.ref("posts/"+this.state.post.title);
+        post_ref.update({
           title: this.state.title,
           location: this.state.location,
           size: this.state.size,
@@ -115,6 +116,15 @@ class CreatePost extends React.Component {
           remark: this.state.remark,
           period: this.state.period
         });
+        if (this.state.cover){
+          const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
+          uploadImage.on('state_changed',(snapshot)=>{},
+            error=>{console.log(error);},
+            ()=>{storage.ref("cover_images").child(this.state.cover.name)
+                .getDownloadURL()
+                .then(i_url=>{post_ref.update({url:i_url})})
+          });
+        }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
       }else{
         var old_post=f_database.ref("posts/"+this.state.post.title).remove();
         var post_ref=f_database.ref("posts/").child(this.state.title);
@@ -140,11 +150,12 @@ class CreatePost extends React.Component {
         }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
       }
 
-            alert("Submitted to database title/"+ this.state.title);
+        alert("Submitted to database title/"+ this.state.title);
     } catch(e) {
       console.log(e);
       alert(e);
     }
+
   }
 
 

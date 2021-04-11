@@ -40,12 +40,6 @@ class MyPost extends React.Component{
     window.location = url;
   }
 
-  checking=()=>{
-    console.log(this.state.isLoggedIn.uid);
-    console.log(this.state.my_posts);
-  }
-
-
 
   render(){
     if(this.state.my_posts){
