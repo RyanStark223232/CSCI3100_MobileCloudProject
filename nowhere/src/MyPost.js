@@ -16,6 +16,7 @@ class MyPost extends React.Component{
     }
 
   }
+
   componentDidMount(){
     if(auth.currentUser!=null){
       var data = [];
@@ -39,12 +40,6 @@ class MyPost extends React.Component{
     window.location = url;
   }
 
-  checking=()=>{
-    console.log(this.state.isLoggedIn.uid);
-    console.log(this.state.my_posts);
-  }
-
-
 
   render(){
     if(this.state.my_posts){
@@ -64,13 +59,13 @@ class MyPost extends React.Component{
                       <div className="my-post-size">Group size: {post.size}</div>
                     </div>
                     <div className="right-column">
-                      <a href={"./post/"+post.pid}>Read More &rarr;</a>
+                      <a href={"./editpost/"+post.pid}>Edit Post &rarr;</a>
                     </div>
                   </div>
                 )
             })}
           </div>
-          <div>            
+          <div>
             <Button variant="contained" size="large" color="secondary" onClick={this.createPost}>
               Create New Post
             </Button>
@@ -78,14 +73,13 @@ class MyPost extends React.Component{
         </header>
       )
     }else{
-
       return(
         <header>
           <div className="my-post-header">
             <div>
               <img src={SentimentVeryDissatisfiedIcon} alt="sadFace"></img>
               Your Post List is Empty
-            </div>            
+            </div>
             <Button variant="contained" size="large" color="secondary" onClick={this.createPost} style={{margin:20}}>
               Create New Post
             </Button>

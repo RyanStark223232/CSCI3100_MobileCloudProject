@@ -5,6 +5,8 @@ import "./Post.css";
 import cover_image from "./cover.jpeg";
 import { withRouter } from "react-router";
 import Button from '@material-ui/core/Button';
+import banner from './banner.jpeg';
+import SentimentVeryDissatisfiedIcon from './sadFace.png';
 
 
 
@@ -21,17 +23,12 @@ class Post extends React.Component{
 
   componentDidMount() {
     const id = parseInt(this.props.match.params.id);
-
     var data = null;
     f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
-      snapshot.forEach(snap=>{
-        data=snap.val()
-      });
-      this.setState({
-        post:data
-      },()=>{
-        console.log(this.state.post);
-      })
+      snapshot.forEach(snap=>{data=snap.val()});
+      this.setState({post:data}
+        ,()=>{console.log(this.state.post);}
+      )
     });
   }
 
@@ -53,7 +50,7 @@ class Post extends React.Component{
 
         <header>
           <div className="post-header">
-            <h2>NowHere</h2>
+            <img src={banner} />
           </div>
 
           <div className="row">
@@ -68,6 +65,7 @@ class Post extends React.Component{
                <div className="post-creator">Creator: {this.state.post.owner}</div>
                <div className="post-description">Description: {this.state.post.description}</div>
                <div className="post-location">{this.state.post.location}</div>
+               <div className="post-location">Location: {this.state.post.location}</div>
                <div className="post-groupsize">Group Size:{this.state.post.size}</div>
                <div className="post-period">Period: {this.state.post.period}</div>
                <div className="post-style">Travelling Style: {this.state.post.travel_style}</div>
@@ -95,7 +93,11 @@ class Post extends React.Component{
       );
     }else{
       return(
-        <header></header>
+        <header>
+          <div className="post-header">
+            The Post is Empty
+          </div>
+        </header>
       )
     }
   }

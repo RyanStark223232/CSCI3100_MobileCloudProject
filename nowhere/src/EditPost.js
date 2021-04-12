@@ -3,6 +3,8 @@ import './CreatePost.css';
 import {storage, f_database, auth} from "./Firebase.js";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 class CreatePost extends React.Component {
@@ -10,14 +12,12 @@ class CreatePost extends React.Component {
   constructor(){
     super();
     this.state = {
-      title:null,
-      description:null,
-      location:null,
-      size:null,
-      period:null,
-      travel_style:null,
-      remark:null,
-      post_id:null,
+      title:' ',
+      location:' ',
+      size:' ',
+      period:' ',
+      travel_style:' ',
+      remark:' ',
       cover:null,
       temp_cover:null,
       url:null,
@@ -27,7 +27,12 @@ class CreatePost extends React.Component {
     this.changeInput = this.changeInput.bind(this);
   }
 
+
+
+
   componentDidMount() {
+
+
     const id = parseInt(this.props.match.params.id);
     var data = null;
     f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
@@ -40,17 +45,17 @@ class CreatePost extends React.Component {
         console.log(this.state.post);
         this.setState({
           title:this.state.post.title,
-          description:this.state.post.description,
           location:this.state.post.location,
           size:this.state.post.size,
           period:this.state.post.period,
           travel_style:this.state.post.travel_style,
           remark:this.state.post.remark,
-          post_id:this.state.post.post_id,
-          url:this.state.post.url
+          url: this.state.post.url,
+          pid: id
         })
       })
     });
+
 
   }
 
@@ -58,6 +63,7 @@ class CreatePost extends React.Component {
     this.setState({
       [event.target.name]: event.target.value
     });
+
 
   }
 
@@ -70,50 +76,9 @@ class CreatePost extends React.Component {
     });
   }
 
-  checking=()=>{
-    var data =null;
-    f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
-      snapshot.forEach(snap=>{
-        data=snap.val()
-      });
-      console.log(data);
-      if(data.pid != null){
-        this.setState({
-          pid:data.pid+1
-        });
-      }else{
-        this.setState({
-          pid: 0
-        })
-      }
-      console.log(this.state.pid);
-    });
-  }
-
-  handlePost=()=>{
-    console.log(this.state);
-
-    var image_url;
-    try{
-
-      var data =null;
-      f_database.ref("posts").orderByChild('pid').limitToLast(1).on("value", snapshot=>{
-        snapshot.forEach(snap=>{
-          data=snap.val()
-        });
-        console.log(data);
-        if(data.pid != null){
-          this.setState({
-            pid:data.pid+1
-          });
-        }else{
-          this.setState({
-            pid: 0
-          })
-        }
-        console.log(this.state.pid);
-      });
-
+  uploadImage =()=>{
+    var image_url
+    if(this.state.cover){
       const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
       uploadImage.on(
         'state_changed',(snapshot)=>{},
@@ -122,38 +87,78 @@ class CreatePost extends React.Component {
         },
         ()=>{
           storage.ref("cover_images").child(this.state.cover.name).getDownloadURL().
-            then(url=>{
-              image_url=url;
+            then(i_url=>{
+              image_url=i_url;
               this.setState({
                 url:image_url
               })
-              console.log(typeof image_url);
             }
-          ).then(()=>{
-            console.log(image_url);
-            var current_uid = auth.currentUser.uid;
+          )
+        }
+      );
+    }
+  }
 
-            f_database.ref("posts/" + this.state.title).set({
-              title: this.state.title,
-              description: this.state.description,
-              location: this.state.location,
-              size: this.state.size,
-              travel_style: this.state.travel_style,
-              remark: this.state.remark,
-              uid:  current_uid,
-              period: this.state.period,
-              url: image_url,
-              pid: this.state.pid
-            });
+  handlePost=()=>{
 
-            alert("Submitted to database title/"+ this.state.title);
-          })
+    var image_url;
+    console.log(this.state);
+    this.uploadImage();
+    try{
+
+      if(this.state.post.title == this.state.title){
+        post_ref = f_database.ref("posts/"+this.state.post.title);
+        post_ref.update({
+          title: this.state.title,
+          location: this.state.location,
+          size: this.state.size,
+          travel_style: this.state.travel_style,
+          remark: this.state.remark,
+          period: this.state.period
         });
+        if (this.state.cover){
+          const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
+          uploadImage.on('state_changed',(snapshot)=>{},
+            error=>{console.log(error);},
+            ()=>{storage.ref("cover_images").child(this.state.cover.name)
+                .getDownloadURL()
+                .then(i_url=>{post_ref.update({url:i_url})})
+          });
+        }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
+      }else{
+        var old_post=f_database.ref("posts/"+this.state.post.title).remove();
+        var post_ref=f_database.ref("posts/").child(this.state.title);
+        post_ref.set({
+          title: this.state.title,
+          location: this.state.location,
+          size: this.state.size,
+          travel_style: this.state.travel_style,
+          remark: this.state.remark,
+          period: this.state.period,
+          pid: this.state.pid,
+          uid: auth.currentUser.uid
+        })
+        if(this.state.remark) {post_ref.update({remark: this.state.remark})}
+        if (this.state.cover){
+          const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
+          uploadImage.on('state_changed',(snapshot)=>{},
+            error=>{console.log(error);},
+            ()=>{storage.ref("cover_images").child(this.state.cover.name)
+                .getDownloadURL()
+                .then(i_url=>{post_ref.update({url:i_url})})
+          });
+        }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
+      }
+
+        alert("Submitted to database title/"+ this.state.title);
     } catch(e) {
       console.log(e);
       alert(e);
     }
+
   }
+
+
 
 
     render(){
@@ -161,60 +166,111 @@ class CreatePost extends React.Component {
         return (
             <header className="container">
                 <h1>Create / Edit Post Page</h1>
-                <div className="wrapper">
-                  <div className="left-item"><span>Cover Photo:</span></div>
+                  <div className="wrapper">
+                    <div className="left-item"><span>Cover Photo:</span></div>
+                    <div className="right-item"><img src={this.state.temp_cover?this.state.temp_cover:this.state.url} id="image" />
+                      <input type="file" accept="image/*" onChange={this.handleImage}></input>
+                    </div>
+                  </div>
 
-                  <div className="right-item"><img src={this.state.temp_cover?this.state.temp_cover:this.state.url} id="image" /><input type="file" accept="image/*" onChange={this.handleImage}></input></div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Title:</span></div>
-                  <div className="right-item"><input size="60" type="text" placeholder="Enter something..." name="title" value={this.state.title} onChange={this.changeInput}></input></div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Description:</span></div>
-                  <div className="right-item"><textarea rows="5" placeholder="Enter something..." name="description" value={this.state.description} onChange={this.changeInput}></textarea></div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Location:</span></div>
-                  <div className="right-item"><input type="text" placeholder="Enter something..." name="location" value={this.state.location} onChange={this.changeInput}></input></div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Group Size:</span></div>
-                  <div className="right-item">
-                    <select id="group-size" name="group size" onChange={this.changeInput}>
-                      <option value="2-4">2-4</option>
-                      <option value="5-8">5-8</option>
-                      <option value="8+">8+</option>
-                    </select>
+                  <div className="wrapper">
+                    <div className="left-item">
+                      <span>Title:</span>
+                    </div>
+                    <div className="right-item">
+                        <TextField
+                          name="title"
+                          label="Title"
+                          variant="filled"
+                          value={this.state.title}
+                          onChange={this.changeInput}
+                        />
+                    </div>
                   </div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Period:</span></div>
-                  <div className="right-item">
-                    <select id="period" name="period" onChange={this.changeInput}>
-                      <option value="Weeks-Trip" >Weeks-Trip</option>
-                      <option value="Day-Trip">Day-Trip</option>
-                      <option value="Exchange(student)">Exchange(student)</option>
-                      <option value="Long-Trip">Long-Trip</option>
-                    </select>
+
+                  <div className="wrapper">
+                    <div className="left-item">
+                      <span>Location:</span>
+                    </div>
+                    <div className="right-item">
+                        <TextField
+                          name="location"
+                          label="Location"
+                          variant="filled"
+                          value={this.state.location}
+                          onChange={this.changeInput}
+                        />
+                    </div>
                   </div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Travelling Style:</span></div>
-                  <div className="right-item">
-                    <select id="travel-style" name="travel-style" onChange={this.changeInput}>
-                      <option value="Sporty" >Sporty</option>
-                      <option value="Shopping">Shopping</option>
-                      <option value="Cultural">Cultural</option>
-                    </select>
+
+                  <div className="wrapper">
+                    <div className="left-item">
+                      <span>Group Size:</span>
+                    </div>
+                    <div className="right-item">
+                      <Select
+                        name="size"
+                        labelId="group size"
+                        id="group size"
+                        onChange={this.changeInput}
+                        variant="outlined"
+                        value={this.state.size}
+                      >
+                        <MenuItem value={"2-4"}>2-4</MenuItem>
+                        <MenuItem value={"5-8"}>5-8</MenuItem>
+                        <MenuItem value={"8+"}>8+</MenuItem>
+                      </Select>
+                    </div>
                   </div>
-                </div>
-                <div className="wrapper">
-                  <div className="left-item"><span>Remark:</span></div>
-                  <div className="right-item"><textarea rows="3" placeholder="Enter something..." name="remark" value={this.state.remark} onChange={this.changeInput}></textarea></div>
-                </div>
+
+                  <div className="wrapper">
+                    <div className="left-item">
+                      <span>Period:</span>
+                    </div>
+                    <div className="right-item">
+                      <Select
+                        name="period"
+                        labelId="period"
+                        id="period"
+                        onChange={this.changeInput}
+                        variant="outlined"
+                        value={this.state.period}
+                      >
+                        <MenuItem value={"Weeks-Trip"}>Weeks-Trip</MenuItem>
+                        <MenuItem value={"Day-Trip"}>Day-Trip</MenuItem>
+                        <MenuItem value={"Exchange(student)"}>Exchange(student)</MenuItem>
+                        <MenuItem value={"Long-Trip"}>Long-Trip</MenuItem>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="wrapper">
+                    <div className="left-item"><span>Travelling Style:</span></div>
+                    <div className="right-item">
+                      <Select
+                        name="travel-style"
+                        labelId="travel-style"
+                        id="travel-style"
+                        onChange={this.changeInput}
+                        variant="outlined"
+                        value={this.state.travel_style}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"Sporty"}>Sporty</MenuItem>
+                        <MenuItem value={"Shopping"}>Shopping</MenuItem>
+                        <MenuItem value={"Cultural"}>Cultural</MenuItem>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="wrapper">
+                    <div className="left-item"><span>Remark:</span></div>
+                    <div className="right-item"><textarea rows="3" placeholder="Enter something..." name="remark" value={this.state.remark} onChange={this.changeInput}></textarea></div>
+                  </div>
+
                 <div id="save-btn"><button onClick={this.handlePost}>Save</button></div>
-                <button onClick={this.checking}>Testing</button>
             </header>
         );
     }else{
