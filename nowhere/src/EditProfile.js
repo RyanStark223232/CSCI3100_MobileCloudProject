@@ -289,7 +289,7 @@ class EditProfile extends React.Component{
             <div className={classes.paper}>
 
                 <Typography component="h1" variant="h5">
-                Edit Profile
+                Edit Profile 
                 </Typography>
                 <form onSubmit={this.handleSubmit} onReset={this.handleClear} id='editForm' noValidate>                
                 <Grid container spacing={2} style={{marginTop:1}}>

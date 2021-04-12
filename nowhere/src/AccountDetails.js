@@ -16,6 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import defaultPic from './man-user.png'
 
+import EditIcon from '@material-ui/icons/Edit';
 import PersonIcon from '@material-ui/icons/Person';
 import CakeIcon from '@material-ui/icons/Cake';
 import WcIcon from '@material-ui/icons/Wc';
@@ -26,6 +27,12 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import InfoIcon from '@material-ui/icons/Info';
 
 import auth,{f_database,storage} from "./Firebase.js";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+} from "react-router-dom";
 
 
 const useStyles =  (theme) => ({
@@ -43,6 +50,15 @@ const useStyles =  (theme) => ({
      },
      removeBottomPadding: {
       paddingBottom: "0px"
+    },
+    editButton: {
+      color: "white",
+      backgroundColor: "blue",
+      top: "50%",
+      height: 30,
+      float: "right",
+      position: "relative",
+      transform: "translateY(-50%)"
     },
     
   });
@@ -131,9 +147,11 @@ class AccountDetails extends React.Component{
             <Container component="main" maxWidth="md">
             <CssBaseline />
             <div className={classes.paper}>
-
-                <Typography component="h1" variant="h5" style={{bold:true}}>
+                <Typography component="h1" variant="h5" style={{bold:true, marginLeft:'20%'}}>
                 {this.state.firstName + " " + this.state.lastName}'s Profile
+                <Link to="/editprofile" style={{ textDecoration: 'none' }} >
+                  <Button variant="outlined" size="small" style={{float:'right'}}><EditIcon/>Edit Profile</Button>
+                </Link>
                 </Typography>
                 <Grid container spacing={2} style={{marginTop:'1%'}}>
                     <Grid item xs={12}>
