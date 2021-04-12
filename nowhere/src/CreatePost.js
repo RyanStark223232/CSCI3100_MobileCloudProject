@@ -83,7 +83,8 @@ class CreatePost extends React.Component {
         travel_style: this.state.travel_style,
         uid:  current_uid,
         period: this.state.period,
-        pid: this.state.pid
+        pid: this.state.pid,
+        owner: auth.currentUser.email,
       });
       if(this.state.remark) {postdb.update({remark: this.state.remark})}
       if (this.state.cover){
@@ -99,7 +100,7 @@ class CreatePost extends React.Component {
 
 
 
-      alert("Submitted to database title/"+ this.state.title);
+      alert("Submitted to database posts/"+ this.state.title);
     } catch(e) {
       console.log(e);
       alert(e);

@@ -28,8 +28,9 @@ import auth from "./Firebase";
 import EditIcon from '@material-ui/icons/Edit';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { useParams } from "react-router";
-// import { withRouter } from "react-router";
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import Typography from '@material-ui/core/Typography';
+import Badge from '@material-ui/core/Badge';
 
 import {
   BrowserRouter as Router,
@@ -40,18 +41,19 @@ import {
 
 
 
+
 export function setLogedIn() {
   // console.log("in setloged in");
   document.getElementById("beforeAuth").style.display = "none";
-  document.getElementById("myPostButton").style.display = "inline";
-  document.getElementById("displayName").innerHTML = "Welcome, "+ auth.currentUser.email;
+  // document.getElementById("myPostButton").style.display = "inline";
+  // document.getElementById("displayName").innerHTML = "Welcome, "+ auth.currentUser.email;
   document.getElementById("afterAuth").style.display = "inline";
 }
 
 export function setLogedOut() {
   // console.log("in setloged out");
   document.getElementById("beforeAuth").style.display = "inline";
-  document.getElementById("myPostButton").style.display = "none";
+  // document.getElementById("myPostButton").style.display = "none";
   document.getElementById("afterAuth").style.display = "none";
   auth.signOut();
 }
@@ -76,30 +78,36 @@ function App() {
           </Link>
           <div className="accountSetting">
             <div className="toHide" id="afterAuth" >
-              <Link to="/accountdetails"  id = "displayName"></Link>
-              <Link to="/accountdetails" style={{ textDecoration: 'none' }} >
+            <Link to="/mypost" style={{ textDecoration: 'none' , margin: 5}} >
+            <Badge badgeContent="" color="secondary" >
+            <Button variant="contained" size="small" color="primary">
+            <AssignmentTurnedInIcon/>My Posts
+                </Button>
+                </Badge>
+                </Link>
+              <Link to="/accountdetails" style={{ textDecoration: 'none' , margin: 5}} >
                 <Button variant="contained" size="small" color="primary">
-                   <AccountCircleIcon/> Account Details
+                   <AccountCircleIcon/> My Profile
                 </Button>
               </Link>
-              <Link to="/editprofile" style={{ textDecoration: 'none' }}>
+              {/* <Link to="/editprofile" style={{ textDecoration: 'none' , margin: 5}}>
                 <Button variant="contained" size="small" color="primary">
                   <EditIcon/> Edit Profile
                 </Button>
-              </Link>
-              <Link to="/" style={{ textDecoration: 'none' }}>
+              </Link> */}
+              <Link to="/" style={{ textDecoration: 'none' , margin: 5}}>
                 <Button variant="contained" size="small" color="secondary" onClick={setLogedOut}>
                   <ExitToAppIcon/> Log Out
                 </Button>
               </Link>
             </div>
             <div id="beforeAuth" >
-              <Link to="/signup" style={{ textDecoration: 'none', margin: 10}}>
+              <Link to="/signup" style={{ textDecoration: 'none', margin: 5}}>
                 <Button variant="contained" size="small" color="primary" >
                   Sign Up
                 </Button>
               </Link>
-              <Link to="/signin" style={{ textDecoration: 'none', margin: 10}}>
+              <Link to="/signin" style={{ textDecoration: 'none', margin: 5}}>
                 <Button variant="contained" size="small" color="primary" >
                   Sign In
                 </Button>
@@ -111,20 +119,20 @@ function App() {
           <nav>
             <ul>
               <li>
-                <Link to="/">
+                <Link to="/" style={{ textDecoration: 'none' }}>
                   <Button variant="outlined" size="large">Home</Button>
                 </Link>
               </li>
               <li>
-                <Link to="/search">
+                <Link to="/search" style={{ textDecoration: 'none' }}>
                   <Button variant="outlined" size="large">Search Post</Button>
                 </Link>
               </li>
-              <li>
-                <Link to="/mypost">
-                  <Button variant="outlined" size="large">My Post</Button>
+              {/* <li>
+                <Link to="/mypost" style={{ textDecoration: 'none' }}>
+                  <Button variant="outlined" size="large" id="myPostButton">My Post</Button>
                 </Link>
-              </li>
+              </li> */}
 
             </ul>
           </nav>
