@@ -25,7 +25,6 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
 import DescriptionIcon from '@material-ui/icons/Description';
 import InfoIcon from '@material-ui/icons/Info';
-import EditIcon from '@material-ui/icons/Edit';
 
 import auth,{f_database,storage} from "./Firebase.js";
 import {
