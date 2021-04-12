@@ -1,5 +1,6 @@
 import React from "react";
 import './CreatePost.css';
+import Button from '@material-ui/core/Button';
 import {storage, f_database, auth} from "./Firebase.js";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -17,7 +18,7 @@ class CreatePost extends React.Component {
       size:' ',
       period:' ',
       travel_style:' ',
-      remark:' ',
+      remark:'',
       cover:null,
       temp_cover:null,
       url:null,
@@ -106,51 +107,26 @@ class CreatePost extends React.Component {
     this.uploadImage();
     try{
 
-      if(this.state.post.title == this.state.title){
-        post_ref = f_database.ref("posts/"+this.state.post.title);
-        post_ref.update({
-          title: this.state.title,
-          location: this.state.location,
-          size: this.state.size,
-          travel_style: this.state.travel_style,
-          remark: this.state.remark,
-          period: this.state.period
+      var post_ref = f_database.ref("posts/"+this.state.post.pid);
+      post_ref.update({
+        title: this.state.title,
+        location: this.state.location,
+        size: this.state.size,
+        travel_style: this.state.travel_style,
+        period: this.state.period
+      });
+      if(this.state.cover){
+        const uploadImage = storage.ref('cover_images/' +this.state.post.pid+"/" +this.state.cover.name).put(this.state.cover);
+        uploadImage.on('state_changed',(snapshot)=>{},
+          error=>{console.log(error);},
+          ()=>{storage.ref("cover_images").child(this.state.cover.name)
+              .getDownloadURL()
+              .then(i_url=>{post_ref.update({url:i_url})})
         });
-        if (this.state.cover){
-          const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
-          uploadImage.on('state_changed',(snapshot)=>{},
-            error=>{console.log(error);},
-            ()=>{storage.ref("cover_images").child(this.state.cover.name)
-                .getDownloadURL()
-                .then(i_url=>{post_ref.update({url:i_url})})
-          });
-        }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
-      }else{
-        var old_post=f_database.ref("posts/"+this.state.post.title).remove();
-        var post_ref=f_database.ref("posts/").child(this.state.title);
-        post_ref.set({
-          title: this.state.title,
-          location: this.state.location,
-          size: this.state.size,
-          travel_style: this.state.travel_style,
-          remark: this.state.remark,
-          period: this.state.period,
-          pid: this.state.pid,
-          uid: auth.currentUser.uid
-        })
-        if(this.state.remark) {post_ref.update({remark: this.state.remark})}
-        if (this.state.cover){
-          const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
-          uploadImage.on('state_changed',(snapshot)=>{},
-            error=>{console.log(error);},
-            ()=>{storage.ref("cover_images").child(this.state.cover.name)
-                .getDownloadURL()
-                .then(i_url=>{post_ref.update({url:i_url})})
-          });
-        }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
-      }
+      }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
+      if(this.state.remark){ post_ref.update({remark:this.state.remark})}
 
-        alert("Submitted to database title/"+ this.state.title);
+      alert("Submitted to database title/"+ this.state.post.pid);
     } catch(e) {
       console.log(e);
       alert(e);
@@ -255,9 +231,7 @@ class CreatePost extends React.Component {
                         variant="outlined"
                         value={this.state.travel_style}
                       >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
+                        <MenuItem value={"None"}>None</MenuItem>
                         <MenuItem value={"Sporty"}>Sporty</MenuItem>
                         <MenuItem value={"Shopping"}>Shopping</MenuItem>
                         <MenuItem value={"Cultural"}>Cultural</MenuItem>
@@ -267,10 +241,25 @@ class CreatePost extends React.Component {
 
                   <div className="wrapper">
                     <div className="left-item"><span>Remark:</span></div>
-                    <div className="right-item"><textarea rows="3" placeholder="Enter something..." name="remark" value={this.state.remark} onChange={this.changeInput}></textarea></div>
+                    <div className="right-item">
+                      <textarea rows="3" placeholder="Enter something..."
+                        name="remark" value={this.state.remark}
+                        onChange={this.changeInput}>
+                      </textarea></div>
                   </div>
 
-                <div id="save-btn"><button onClick={this.handlePost}>Save</button></div>
+
+                  <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      mx='auto'
+                      style = {{width:'30%', marginInline:'10%'}}
+                      onClick={this.handlePost}
+                  >
+                      SAVE CHANGES
+                  </Button>
+
             </header>
         );
     }else{

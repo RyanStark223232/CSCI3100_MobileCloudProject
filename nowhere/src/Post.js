@@ -2,7 +2,6 @@ import React from "react";
 import db from "./Firebase.js";
 import {storage, f_database, auth} from "./Firebase.js";
 import "./Post.css";
-import cover_image from "./cover.jpeg";
 import { withRouter } from "react-router";
 import Button from '@material-ui/core/Button';
 import banner from './banner.jpeg';
@@ -32,16 +31,6 @@ class Post extends React.Component{
     });
   }
 
-  RequestJoin(){
-    const id = parseInt(this.props.match.params.id);
-    f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
-      snapshot.forEach(snap=>{
-        snap.ref.update({
-          waiting_list: {1: auth.currentUser.email, 2: "hh@hh.com", 3:"33333"}
-        }).then(()=>{console.log("add to waiting list success")})
-      });
-    });
-  }
 
 
   render(){
@@ -56,7 +45,7 @@ class Post extends React.Component{
           <div className="row">
 
             <div className="leftcolumn">
-              <img src={cover_image} />
+              <img src={this.state.post.url} />
             </div>
 
             <div className="rightcolumn">
@@ -70,9 +59,17 @@ class Post extends React.Component{
                <div className="post-period">Period: {this.state.post.period}</div>
                <div className="post-style">Travelling Style: {this.state.post.travel_style}</div>
                <div className="post-remark">Remark: {this.state.post.remark}</div>
-               <Button onClick={this.RequestJoin()} variant="contained" size="small" color="secondary" style={{margin: 10}} disabled={this.state.disable_button} id = "requestButton" >
+               <div>
+               <Button onClick={this.RequestJoin}
+                 variant="contained"
+                 size="small"
+                 color="secondary"
+                 style={{margin: 10}}
+                 disabled={this.state.disable_button}
+                 id = "requestButton" >
                   Request Join
                 </Button>
+                </div>
              </div>
            </div>
           </div>

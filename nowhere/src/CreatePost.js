@@ -1,10 +1,13 @@
 import React from "react";
 import './CreatePost.css';
+import Button from '@material-ui/core/Button';
 import {storage, f_database, auth} from "./Firebase.js";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+
+
 
 class CreatePost extends React.Component {
 
@@ -33,7 +36,7 @@ class CreatePost extends React.Component {
      snapshot=>{
       snapshot.forEach(snap=>{data=snap.val()});
       this.setState({pid:data.pid+1});
-
+      data!=null ? this.setState({pid:data.pid+1}) : this.setState({pid: 0});
     });
   }
 
@@ -75,7 +78,8 @@ class CreatePost extends React.Component {
         });
       });
 
-      var postdb = post_ref.child(this.state.title);
+
+      var postdb = post_ref.child(this.state.pid);
       postdb.set({
         title: this.state.title,
         location: this.state.location,
@@ -88,7 +92,7 @@ class CreatePost extends React.Component {
       });
       if(this.state.remark) {postdb.update({remark: this.state.remark})}
       if (this.state.cover){
-        const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
+        const uploadImage = storage.ref('cover_images/' +this.state.pid + "/" + this.state.cover.name).put(this.state.cover);
         uploadImage.on('state_changed',(snapshot)=>{},
         error=>{console.log(error);},
         ()=>{storage.ref("cover_images").child(this.state.cover.name)
@@ -97,10 +101,7 @@ class CreatePost extends React.Component {
         });
       }
 
-
-
-
-      alert("Submitted to database posts/"+ this.state.title);
+      alert("Submitted to database posts/"+ this.state.pid);
     } catch(e) {
       console.log(e);
       alert(e);
@@ -211,7 +212,16 @@ class CreatePost extends React.Component {
                   <div className="right-item"><textarea rows="3" placeholder="Enter something..." name="remark" value={this.state.remark} onChange={this.changeInput}></textarea></div>
                 </div>
 
-                <div id="save-btn"><button onClick={this.handlePost}>Save</button></div>
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    mx='auto'
+                    style = {{width:'30%', marginInline:'10%'}}
+                    onClick={this.handlePost}
+                >
+                    Create Post
+                </Button>
             </header>
         );
     }
