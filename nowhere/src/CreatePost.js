@@ -123,10 +123,11 @@ class CreatePost extends React.Component {
               uid:  current_uid,
               period: this.state.period,
               url: image_url,
-              pid: this.state.pid
+              pid: this.state.pid,
+              owner: auth.currentUser.email,
             });
 
-            alert("Submitted to database title/"+ this.state.title);
+            alert("Submitted to database posts/"+ this.state.title);
           })
         });
     } catch(e) {

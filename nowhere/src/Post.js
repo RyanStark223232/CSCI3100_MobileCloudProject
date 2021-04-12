@@ -6,14 +6,17 @@ import cover_image from "./cover.jpeg";
 import { withRouter } from "react-router";
 import Button from '@material-ui/core/Button';
 
+
+
 class Post extends React.Component{
   constructor(props){
     super(props);
     this.state={
       post:null,
       // I you can set disable_button to true if you want to gray-out the button when the members are full or something like that
-      disable_button:true,
+      disable_button:false,
     }
+
   }
 
   componentDidMount() {
@@ -29,6 +32,17 @@ class Post extends React.Component{
       },()=>{
         console.log(this.state.post);
       })
+    });
+  }
+
+  RequestJoin(){
+    const id = parseInt(this.props.match.params.id);
+    f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
+      snapshot.forEach(snap=>{
+        snap.ref.update({
+          waiting_list: {1: auth.currentUser.email, 2: "hh@hh.com", 3:"33333"}
+        }).then(()=>{console.log("add to waiting list success")})
+      });
     });
   }
 
@@ -51,15 +65,28 @@ class Post extends React.Component{
             <div className="rightcolumn">
               <div className="card">
                <div className="post-title"><h2>Title: {this.state.post.title}</h2></div>
+               <div className="post-creator">Creator: {this.state.post.owner}</div>
                <div className="post-description">Description: {this.state.post.description}</div>
                <div className="post-location">{this.state.post.location}</div>
                <div className="post-groupsize">Group Size:{this.state.post.size}</div>
                <div className="post-period">Period: {this.state.post.period}</div>
                <div className="post-style">Travelling Style: {this.state.post.travel_style}</div>
                <div className="post-remark">Remark: {this.state.post.remark}</div>
-               <Button variant="contained" size="small" color="secondary" style={{margin: 10}} disabled={this.state.disable_button}>
+               <Button onClick={this.RequestJoin()} variant="contained" size="small" color="secondary" style={{margin: 10}} disabled={this.state.disable_button} id = "requestButton" >
                   Request Join
                 </Button>
+             </div>
+           </div>
+          </div>
+          <div className="row">
+
+            <div className="leftcolumn">
+              Participant: {this.state.post.participant}
+            </div>
+
+            <div className="rightcolumn">
+              <div className="card">
+               Waiting List: {this.state.post.waiting_list}
              </div>
            </div>
           </div>

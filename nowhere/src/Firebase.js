@@ -18,25 +18,13 @@ const app = firebase.initializeApp(firebaseConfig)
 const auth = app.auth()
 const f_database = firebase.database()
 const storage = firebase.storage();
-// f_database.set({
-//    username: "potato",
-//    email: "email@email.com",
-//    age: "10"
-// })
+
+// const getProPic = ()=>{
+
+// }
+
 export { app, storage, auth, f_database}
 export default auth
 
-    // f_database.ref("posts/" + unameRef.current.value).set({
-    //   post_id: 1,
-    //   owner: "potato",
-    //   waiting_list: {
-    //     1:"potato1",
-    //     2:"potato2",
-    //     3:"potato3",
-    //   },
-    //   participant: {
-    //     1:"potato",
-    //   },
-    // })
 
-// auth.createUserWithEmailAndPassword("potato@potato.com","potato1234")
+
