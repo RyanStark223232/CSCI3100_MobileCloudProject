@@ -1,5 +1,5 @@
 import { Container, Form, Grid, Segment, Button, Input, Table, Header, Icon } from "semantic-ui-react"
-import firebase from "./firebase";
+import firebase from "./firebaseleon";
 import React, {useState, useEffect} from "react";
 
 const FirebaseCrud = () => {
@@ -10,7 +10,7 @@ const FirebaseCrud = () => {
   const [userData,setUserData] = useState([])
 
   const handleAddUser = () => {
-    const firestore = firebase.database().ref('/UserInfo');
+    const firestore = firebase.database().ref('/posts');
     let data = {
       Location: aLocation,
       Tstyle: aTstyle,
@@ -20,16 +20,16 @@ const FirebaseCrud = () => {
   }
 
   useEffect(()=>{
-    const firestore = firebase.database().ref('/UserInfo');
+    const firestore = firebase.database().ref('/posts');
     firestore.on('value', (response)=>{
       const data = response.val();
       let userInfo = [];
       for(let id in data){
         userInfo.push({
           id:id,
-          Location:data[id].Location,
-          Tstyle: data[id].Tstyle,
-          Period:data[id].Period,
+          Location:data[id].location,
+          Tstyle: data[id].travel_style,
+          Period:data[id].period,
         });
       }
 
@@ -44,14 +44,14 @@ const FirebaseCrud = () => {
 
 
   function getUserArray(){
-    const firestore = firebase.database().ref('/UserInfo');
+    const firestore = firebase.database().ref('/posts');
     firestore.on('value', (response)=>{
       const data = response.val();
       for(let id in data){
         userArray.push({
-          Location:data[id].Location,
-          Tstyle: data[id].Tstyle,
-          Period:data[id].Period,
+          Location:data[id].location,
+          Tstyle: data[id].travel_style,
+          Period:data[id].period,
         });
       }
 
@@ -84,7 +84,7 @@ const FirebaseCrud = () => {
   getFilteredArray()
 
   const handleFilter = () => {
-    const firestore = firebase.database().ref('/UserInfo');
+    const firestore = firebase.database().ref('/posts');
     firestore.orderByChild('Location').equalTo(aLocation).on('value',function(snapshot){
       //console.log(snapshot.val())
     })
