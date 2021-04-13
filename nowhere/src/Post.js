@@ -18,7 +18,7 @@ class Post extends React.Component{
       disable_button:false,
       w_list:null,
     }
-
+    this.tempFunc = this.tempFunc.bind(this);
   }
 
 
@@ -94,6 +94,28 @@ class Post extends React.Component{
     })
   }
 
+  tempFunc = () =>{
+    if (this.state.post.waiting_list == null){
+      return [];
+    }
+    var temp_list = [];
+    var i;
+    for (i = 0; i < 10; i++){
+      if (this.state.post.waiting_list[i] == null) {
+        continue;
+      }
+      temp_list = [...temp_list, this.state.post.waiting_list[i]]
+      console.log("TEMPLIST:", temp_list);
+    }
+    var temp = temp_list.filter((e) => {
+      console.log("E:",e);
+      console.log(this.state.post.waiting_list);
+      return e != null;                  
+    })
+    console.log("Temp:", temp);
+    return temp;
+  }
+
 
 
   render(){
@@ -162,16 +184,16 @@ class Post extends React.Component{
               <div className="card">
                Waiting List: 
                {this.state.post.waiting_list? //console.log(typeof this.state.post.waiting_list)
-               this.state.post.waiting_list.map((item) => 
-               <div> 
-                 {item} 
-                 <Button size="small" color="primary" onClick = {() =>{
-                   console.log("clickeddd!")
-                   this.AcceptJoin(item)
-                  //  f_database.ref("posts").child(this.state.post.pid).child("participant").update({1:item});
-                  }}>
+                this.tempFunc().map((item) => 
+                  <div> 
+                    {item} 
+                      <Button size="small" color="primary" onClick = {() =>{
+                        console.log("clickeddd!")
+                        this.AcceptJoin(item)
+                      //  f_database.ref("posts").child(this.state.post.pid).child("participant").update({1:item});
+                      }}>
                     Accept</Button>
-                 </div> )
+                  </div> )
                  :"None"}
              </div>
            </div>
