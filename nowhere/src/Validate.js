@@ -63,8 +63,8 @@ const bioValidation = bio =>{
         return 'Your description cannot be empty';
     }
 
-    if(bio.match(/(\w+)/g).length < 20){
-        return 'Your description must at least have 20 words';
+    if(bio.match(/(\w+)/g).length < 2){
+        return 'Your description must at least have 2 words';
     }
     return null;
 }
