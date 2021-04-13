@@ -230,7 +230,7 @@ class CreatePost extends React.Component {
                         onChange={this.changeInput}
                         variant="outlined"
                         value={this.state.travel_style}
-                      >
+                        >
                         <MenuItem value={"None"}>None</MenuItem>
                         <MenuItem value={"Sporty"}>Sporty</MenuItem>
                         <MenuItem value={"Shopping"}>Shopping</MenuItem>

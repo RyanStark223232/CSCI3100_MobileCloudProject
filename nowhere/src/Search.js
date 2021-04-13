@@ -30,8 +30,8 @@ class Search extends React.Component {
         this.load = this.load.bind(this);
         this.neuralInference = this.neuralInference.bind(this);
         const knnClassifier = require('@tensorflow-models/knn-classifier');
-        this.classifier = knnClassifier.create(); 
-        
+        this.classifier = knnClassifier.create();
+
         // Default Input Options for Material UI
         this.defaultPropsLocations = {
             options: topLocations,
@@ -70,7 +70,7 @@ class Search extends React.Component {
         const mobilenet = require('@tensorflow-models/mobilenet');
 
         const model = await mobilenet.load();
-        const predictions = await model.classify(img);      
+        const predictions = await model.classify(img);
 
         console.log('Predictions: ');
         console.log(predictions);
@@ -115,7 +115,7 @@ class Search extends React.Component {
         //can be change to other source
         require('@tensorflow/tfjs-backend-webgl');
         const data = require('./myData2.json')
-        
+
         let tensorObj = data
         //covert back to tensor
         try {
@@ -125,7 +125,7 @@ class Search extends React.Component {
         }
         catch(err) {
             console.log("Already Converted");
-        } 
+        }
         this.classifier.setClassifierDataset(tensorObj);
         console.log("Model Loaded");
         this.setState({loaded:true});
@@ -145,10 +145,10 @@ class Search extends React.Component {
                                 id="Location"
                                 debug
                                 onChange={this.onChangeLocation}
-                                renderInput={(params) => <TextField {...params} 
-                                    label="Location" 
-                                    variant="filled" 
-                                    margin="normal" 
+                                renderInput={(params) => <TextField {...params}
+                                    label="Location"
+                                    variant="filled"
+                                    margin="normal"
                                     onChange={this.onChangeLocation}
                                 />}
                             />
@@ -163,10 +163,10 @@ class Search extends React.Component {
                                 id="GroupSize"
                                 debug
                                 onChange={this.onChangeSize}
-                                renderInput={(params) => <TextField {...params} 
-                                    label="Group Size" 
-                                    variant="filled" 
-                                    margin="normal" 
+                                renderInput={(params) => <TextField {...params}
+                                    label="Group Size"
+                                    variant="filled"
+                                    margin="normal"
                                     onChange={this.onChangeSize}
                                 />}
                             />
@@ -181,10 +181,10 @@ class Search extends React.Component {
                                 id="Type"
                                 debug
                                 onChange={this.onChangeType}
-                                renderInput={(params) => <TextField {...params} 
-                                    label="Type" 
-                                    variant="filled" 
-                                    margin="normal" 
+                                renderInput={(params) => <TextField {...params}
+                                    label="Type"
+                                    variant="filled"
+                                    margin="normal"
                                     onChange={this.onChangeType}
                                 />}
                             />
@@ -199,10 +199,10 @@ class Search extends React.Component {
                                 id="Period"
                                 debug
                                 onChange={this.onChangePeriod}
-                                renderInput={(params) => <TextField {...params} 
-                                    label="Period" 
-                                    variant="filled" 
-                                    margin="normal" 
+                                renderInput={(params) => <TextField {...params}
+                                    label="Period"
+                                    variant="filled"
+                                    margin="normal"
                                     onChange={this.onChangePeriod}
                                 />}
                             />
@@ -220,7 +220,7 @@ class Search extends React.Component {
                         />
                         <label htmlFor="contained-button-file">
                             <Button variant="contained"
-                                className={classes.upload_button} 
+                                className={classes.upload_button}
                                 component="span"
                                 startIcon={<CloudUploadIcon />}>
                                 Upload Image
@@ -250,7 +250,7 @@ const useStyles = theme => ({
       minWidth: 200,
       background: "white",
       borderRadius: "10px",
-      
+
     },
     imageControl: {
       margin: theme.spacing(2),
@@ -331,9 +331,9 @@ save() {
     var datasetObj = {}
     Object.keys(dataset).forEach((key) => {
         let data = dataset[key].dataSync();
-        // use Array.from() so when JSON.stringify() it covert to an array string e.g [0.1,-0.2...] 
+        // use Array.from() so when JSON.stringify() it covert to an array string e.g [0.1,-0.2...]
         // instead of object e.g {0:"0.1", 1:"-0.2"...}
-        datasetObj[key] = Array.from(data); 
+        datasetObj[key] = Array.from(data);
     });
     let jsonStr = JSON.stringify(datasetObj)
     //localStorage.setItem("myData", jsonStr);
