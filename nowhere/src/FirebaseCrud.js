@@ -1,5 +1,6 @@
 import { Container, Form, Grid, Segment, Button, Input, Table, Header, Icon } from "semantic-ui-react"
-import firebase from "./firebaseleon";
+
+import {f_database, firebase} from "./Firebase.js";
 import React, {useState, useEffect} from "react";
 
 const FirebaseCrud = () => {
@@ -20,7 +21,7 @@ const FirebaseCrud = () => {
   }
 
   useEffect(()=>{
-    const firestore = firebase.database().ref('/posts');
+    const firestore = f_database.ref('/posts');
     firestore.on('value', (response)=>{
       const data = response.val();
       let userInfo = [];
@@ -63,24 +64,19 @@ const FirebaseCrud = () => {
   getUserArray()
 
   function getFilteredArray(){
+
     for (let l = 0; l < userArray.length; l++){
       if (aLocation == userArray[l].Location || aLocation == ""){
-        filteredArray.push(userArray[l])
-        for (let t = 0; t < filteredArray.length; t++){
-          if (aTstyle == filteredArray[t].Tstyle || aTstyle == ""){
-            filteredArrayl.push(filteredArray[t])
-            for (let p = 0; p < filteredArrayl.length; p++){
-              if(aPeriod == filteredArrayl[p].Period || aPeriod == ""){
-                filteredArraylt.push(filteredArrayl[p])
-              }
+        if (aTstyle == userArray[l].Tstyle || aTstyle == ""){
+            if(aPeriod == userArray[l].Period || aPeriod == ""){
+              filteredArraylt.push(userArray[l])
             }
           }
-         }
       }
     }
     console.log(filteredArraylt)
   }
-  
+
   getFilteredArray()
 
   const handleFilter = () => {
@@ -89,39 +85,13 @@ const FirebaseCrud = () => {
       //console.log(snapshot.val())
     })
   }
-    
+
 
     return <div className ="ui hidden divider">
       <Container>
         <Grid>
-
-
           <Grid.Row columns="2">
-            <Grid.Column>
-              <Segment padded="very">
-                <Form>
-                  <Form.Field>
-                    <label>Location</label>
-                    <Input placeholder="Location" focus value = {aLocation} onChange={(e) => setALocation(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Travel Style</label>
-                    <Input placeholder="Travel Style" focus value = {aTstyle} onChange={(e) => setATstyle(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Period</label>
-                    <Input placeholder="Period" focus value = {aPeriod} onChange={(e) => setAPeriod(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <Button onClick={()=>handleAddUser()} positive>
-                      {" "}
-                      Add User</Button>
-                  </Form.Field>
-                </Form>
-              </Segment>
-            </Grid.Column>
-
-
+            
             <Grid.Column>
               <Segment padded="very">
                 <Form>
@@ -193,9 +163,8 @@ const FirebaseCrud = () => {
           </Grid.Row>
         </Grid>
       </Container>
-      
+
     </div>;
   };
 
 export default FirebaseCrud;
- 
