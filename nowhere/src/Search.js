@@ -84,7 +84,7 @@ class Search extends React.Component {
             // Get the activation from mobilenet from the webcam.
             const inf_activation = model.infer(img, 'conv_preds');
             // Get the most likely class and confidence from the classifier module.
-            const result = await this.classifier.predictClass(inf_activation, 1);
+            const result = await this.classifier.predictClass(inf_activation, 3);
             this.setState({place:result.label});
             console.log(result);
         }
@@ -114,7 +114,7 @@ class Search extends React.Component {
         }
         //can be change to other source
         require('@tensorflow/tfjs-backend-webgl');
-        const data = require('./myData.json')
+        const data = require('./myData2.json')
         
         let tensorObj = data
         //covert back to tensor
@@ -136,6 +136,7 @@ class Search extends React.Component {
         return (
             <header>
                 <div>
+                    <img src={this.state.image} id="image" crossOrigin="anonymous" alt="test" style={{display: "none"}}></img>
                     <FormControl  className={classes.formControl}>
                         <div>
                             <Autocomplete
