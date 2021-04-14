@@ -40,6 +40,7 @@ class Post extends React.Component{
       data = snapshot.val()
       this.setState({post:data}, ()=>this.onAuthStateChanged())
       // console.log(this.state.post)
+      
     })
   }
 
@@ -58,19 +59,23 @@ class Post extends React.Component{
                     var key = snap.key;
                     id=  parseInt(key, 10)+1
                   })
+                  // console.log(snapshot.numChildren());
+                  // id = snapshot.numChildren() +1
                   if(flag!==0){
                     f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:auth.currentUser.email})
+                    // this.setState({disable_button:true})
                   } else{
+                    // this.setState({disable_button:true})
                     alert("You're already in the waiting list!")
                     document.getElementById("requestButton").style.display = "none";
                     // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
                   }
                 })
     
+    // if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("waiting_list").push(auth.currentUser.email)
 
   }
 
-  //add dummpy applicants in waiting list
   RequestJoin_dev=()=>{
     let id = 1;
     f_database.ref("posts").child(this.state.post.pid)
@@ -100,36 +105,47 @@ class Post extends React.Component{
                     var key = snap.key;
                     id=  parseInt(key, 10)+1
                   })
+                  // id = snapshot.numChildren() +1
                   
                 })
     // console.log(id);
     // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"})
     // id = Date.now()-1618326164000
     if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("participant").update({[id]:email})
+    // console.log(email);
     f_database.ref("posts").child(this.state.post.pid).child("waiting_list").orderByKey()
     .once("value",snapshot=>{  snapshot.forEach(snap=> {
+      // console.log(snap.val())
       if (email=== snap.val()) snap.ref.remove()
     })
+      // console.log(snapshot.val());
+      // console.log(typeof snapshot.val());
+      // snapshot.setValue(null)
     })
   }
 
   RejectJoin=(email)=>{
     f_database.ref("posts").child(this.state.post.pid).child("waiting_list")
     .once("value",snapshot=>{  snapshot.forEach(snap=> {
+      // console.log(snap.val())
       if (email=== snap.val()) snap.ref.remove()
     })
+      // console.log(snapshot.val());
+      // snapshot.setValue(null)
     })
   }
 
   RemoveParticipant=(email)=>{
     f_database.ref("posts").child(this.state.post.pid).child("participant")
     .once("value",snapshot=>{  snapshot.forEach(snap=> {
+      // console.log(snap.val())
       if (email=== snap.val()) snap.ref.remove()
     })
+      // console.log(snapshot.val());
+      // snapshot.setValue(null)
     })
   }
 
-  //for rendering waiting list
   tempFunc = () =>{
     if (this.state.post.waiting_list == null){
       return [];
@@ -152,7 +168,6 @@ class Post extends React.Component{
     return temp;
   }
 
-  //for rendering participant list
   tempFunc_parti = () =>{
     if (this.state.post.participant == null){
       return [];
@@ -164,10 +179,14 @@ class Post extends React.Component{
         continue;
       }
       temp_list = [...temp_list, this.state.post.participant[i]]
+      // console.log("TEMPLIST:", temp_list);
     }
     var temp = temp_list.filter((e) => {
+      // console.log("E:",e);
+      // console.log(this.state.post.participant);
       return e != null;                  
     })
+    // console.log("Temp:", temp);
     return temp;
   }
 
