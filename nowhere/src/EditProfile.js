@@ -145,8 +145,6 @@ class EditProfile extends React.Component{
     },1000); 
   }
 
-
-
   formValidate = () => {
     //Check if all necessary fields are touched and that there are no errors in the form
     let noError = !Object.values(this.state.errors).some(x => (x !== null && x !== '' && x!= undefined ));
@@ -163,7 +161,6 @@ class EditProfile extends React.Component{
       return
     } 
     
-    alert("Updating "+this.state.userName+"'s Profile")
     this.setState({submitSuccessful: true});
     //Update data according to the states
     try{
@@ -197,10 +194,10 @@ class EditProfile extends React.Component{
         } else {
             userDB.update({img:this.state.img});
         };
-        alert("Submitted to database users/"+ encoded_email)
+        console.log("Submitted to database users/"+ encoded_email)
     } catch(e) {
       console.log(e)
-      alert(e)
+      //alert(e)
     }
   }
 
@@ -211,13 +208,15 @@ class EditProfile extends React.Component{
     e.target.reset();
     this.setState({
       userName: '',
-      age: -1,
+      age: '',
       firstName: '',
       lastName: '',
       sex: '',
       bio: '',
       nationality: '',
       phoneNum: '',
+      submitError: false,
+      submitSuccessful: false,
     })
   }
 
@@ -552,7 +551,7 @@ class EditProfile extends React.Component{
                 ||
               (this.state.submitSuccessful && 
                 <p style = {{color:'green', textAlign:'center'}}>
-                Profile successfully updated</p>)
+                Successfully updated {this.state.userName}'s Profile!</p>)
             }
             </Container>            
         );
