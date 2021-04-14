@@ -57,11 +57,11 @@ class MyPost extends React.Component{
 
 
   render(){
-    if(this.state.my_posts){
+    if(this.state.my_posts && this.state.my_posts.length != 0){
+      {console.log("meesage", this.state.my_posts)}
       return(
         <header>
-          <div className="my-post-header">
-          </div>
+
           <div>
               {this.state.my_posts.map(post=>{
                 return(
@@ -81,11 +81,11 @@ class MyPost extends React.Component{
                 )
             })}
           </div>
-          <div>
-            <Button variant="contained" size="large" color="secondary" onClick={this.createPost}>
-              Create New Post
-            </Button>
-          </div>
+
+          <Button variant="contained" size="large" color="secondary" onClick={this.createPost} style={{justifyContent:'center'}}>
+            Create New Post
+          </Button>
+
         </header>
       )
     }else if(auth.currentUser){
@@ -96,7 +96,7 @@ class MyPost extends React.Component{
               <img src={SentimentVeryDissatisfiedIcon} alt="sadFace"></img>
               Your Post List is Empty
             </div>
-            <Button variant="contained" size="large" color="secondary" onClick={this.createPost} style={{margin:20}}>
+            <Button variant="contained" size="large" color="secondary" onClick={this.createPost} style={{justifyContent:'center'}}>
               Create New Post
             </Button>
           </div>
