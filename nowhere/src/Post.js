@@ -223,7 +223,7 @@ class Post extends React.Component{
                <Button onClick={this.RequestJoin}
                  variant="contained"
                  size="small"
-                 color="secondary"
+                 color="primary"
                  style={{margin: 10}}
                  disabled={this.state.disable_button}
                  id = "requestButton" >
