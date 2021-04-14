@@ -81,13 +81,13 @@ function App() {
           
           <div className="accountSetting">
             <div className="toHide" id="afterAuth" >
-            <Link to="/accountdetails" style={{ textDecoration: 'none' , margin: 5}} ><Fab variant="extended"  id="displayName" style={{backgroundColor: blue[200]}} ></Fab></Link>
+            <Link to="/accountdetails" style={{ textDecoration: 'none' , margin: 5}} ><Fab size="small" variant="extended"  id="displayName" style={{backgroundColor: blue[200]}} ></Fab></Link>
             <Link to="/mypost" style={{ textDecoration: 'none' , margin: 5}} >
-            <Badge badgeContent="" color="secondary" >
+            {/* <Badge badgeContent="" color="secondary" > */}
             <Button variant="contained" size="small" color="primary">
             <AssignmentTurnedInIcon/>My Posts
                 </Button>
-                </Badge>
+                {/* </Badge> */}
                 </Link>
               <Link to="/accountdetails" style={{ textDecoration: 'none' , margin: 5}} >
                 <Button variant="contained" size="small" color="primary">
