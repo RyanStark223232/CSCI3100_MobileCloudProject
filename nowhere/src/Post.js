@@ -89,8 +89,11 @@ class Post extends React.Component{
                     if (snap.val() === email){ 
                       flag =0
                     }
+                    var key = snap.key;
+                    id=  parseInt(key, 10)+1
                   })
-                  id = snapshot.numChildren() +1
+                  // id = snapshot.numChildren() +1
+                  
                 })
     // console.log(id);
     // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"})
