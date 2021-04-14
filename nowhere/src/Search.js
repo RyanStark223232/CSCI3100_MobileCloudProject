@@ -18,7 +18,7 @@ class Search extends React.Component {
             p1:null,
             p2:null,
             p3:null,
-            place:null,
+            autocompletePlace:"Stark",
             loaded:false,
 
             location:'',
@@ -144,8 +144,8 @@ class Search extends React.Component {
             // Get the activation from mobilenet from the webcam.
             const inf_activation = model.infer(img, 'conv_preds');
             // Get the most likely class and confidence from the classifier module.
-            const result = await this.classifier.predictClass(inf_activation, 3);
-            this.setState({location: result.label});
+            const result = await this.classifier.predictClass(inf_activation, 5);
+            this.setState({location: result.label,});
             console.log("NN INFERENCE:", result);
         }
     }
@@ -203,6 +203,7 @@ class Search extends React.Component {
                                 className={classes.search_bar}
                                 {...this.defaultPropsLocations}
                                 id="Location"
+                                value={{name:this.state.location}}
                                 debug
                                 defaultValue={{ name: (this.props.location.state == null)?'': this.props.location.state.location}}
                                 onChange={this.onChangeLocation}
