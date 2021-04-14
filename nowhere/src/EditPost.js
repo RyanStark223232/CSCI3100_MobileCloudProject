@@ -201,8 +201,8 @@ class EditPost extends React.Component {
                     <div className="left-item"><span>Travelling Style:</span></div>
                     <div className="right-item">
                       <Select
-                        name="travel_style"
-                        labelId="travel_style"
+                        name="travel-style"
+                        labelId="travel-style"
                         id="travel-style"
                         onChange={this.changeInput}
                         variant="outlined"

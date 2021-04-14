@@ -66,8 +66,5 @@
   width: 20%;
   /* background-color:#ddd; */
   text-align:center;
-  display:flex;
-  flex-direction: column;
-  margin-top: auto;
-  margin-bottom: auto;
+  line-height:200px
 }
