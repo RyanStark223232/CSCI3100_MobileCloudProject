@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SearchIcon from '@material-ui/icons/Search';
+import "./Search.css";
 
 class Search extends React.Component {
     constructor(props){
@@ -24,7 +25,7 @@ class Search extends React.Component {
             location:'',
             type:'',
             period:'',
-            group_size:'',            
+            group_size:'',
         };
         // props.location.state stores the data passed from Homepage
         // if you go to search tab by clicking "Search" on top, props.location.state is undefined
@@ -66,13 +67,13 @@ class Search extends React.Component {
 
     componentDidMount(){
         if (this.props.location.state != null){
-            this.updateStates();     
+            this.updateStates();
             if (this.props.location.state.image != null){
                 this.loadImagePassIn(this.props.location.state.image);
                 this.props.location.state.image = null;
             }
         }
-        
+
     }
 
     updateStates = async() =>{
@@ -91,7 +92,7 @@ class Search extends React.Component {
             temp_location = values.name;
         }
         else {
-            temp_location = event.target.value            
+            temp_location = event.target.value
         }
 
         if (temp_location){
@@ -125,7 +126,7 @@ class Search extends React.Component {
             this.setState({period:event.target.value});
         }
     }
-    
+
     // onChange for Size
     onChangeSize (event, values){
         if (values != null){
@@ -154,7 +155,7 @@ class Search extends React.Component {
                        p3:predictions[2].className
         })
 
-        if (this.classifier.getNumClasses() > 0) {      
+        if (this.classifier.getNumClasses() > 0) {
             // Get the activation from mobilenet from the webcam.
             const inf_activation = model.infer(img, 'conv_preds');
             // Get the most likely class and confidence from the classifier module.
