@@ -9,6 +9,7 @@ const FirebaseCrud = () => {
   const [aTstyle,setATstyle] = useState('')
   const [aPeriod,setAPeriod] = useState('')
   const [userData,setUserData] = useState([])
+  const [stylePath, setStylePath] = useState('semantic-ui-css/semantic.css')
 
   const handleAddUser = () => {
     const firestore = firebase.database().ref('/posts');
