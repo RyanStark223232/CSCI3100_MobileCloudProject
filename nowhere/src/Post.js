@@ -66,13 +66,14 @@ class Post extends React.Component{
                 })
     // id = Date.now() -1618326164000
     // console.log(id);
-    f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
+    
     if(flag!==0){
       f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:auth.currentUser.email})
       // this.setState({disable_button:true})
-    } {
+    } else{
       // this.setState({disable_button:true})
       // alert("You're already in the waiting list!")
+      f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
     }
     // if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("waiting_list").push(auth.currentUser.email)
 
