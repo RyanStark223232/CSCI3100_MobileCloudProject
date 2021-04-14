@@ -75,6 +75,7 @@ class EditProfile extends React.Component{
           submitError: false,
           submitSuccessful: false,
           dbImported: false,
+          imgUploaded: false,
       };
       //Binding Methods
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -99,6 +100,7 @@ class EditProfile extends React.Component{
     databaseRef.on('value', (snapshot) => {
       if (snapshot.exists()){
         const data = snapshot.val();
+
         this.setState({ 
           userName: data.username,
           age: data.age,
@@ -115,6 +117,11 @@ class EditProfile extends React.Component{
           allergy: data.allergy,
           dbImported: true,
         });
+
+        if (this.state.img === undefined){
+          this.setState({img:defaultPic});
+        }
+
       } else {
         this.setState({ 
           userName: '',
@@ -177,14 +184,19 @@ class EditProfile extends React.Component{
             diet: this.state.diet,
             allergy: this.state.allergy,
         });
-        let img_upload = storage.ref('profile_pictures/'+encoded_email).child(encoded_email+'.jpg')
+        if (this.state.imgUploaded || this.state.img == defaultPic){
+          let img_upload = storage.ref('profile_pictures/'+encoded_email).child(encoded_email+'.jpg')
         img_upload.putString(this.state.img,'data_url',{contentType:'image/jpg'})
-        .then(data=> {data.ref.getDownloadURL()
+        .then((data,e)=> { if (e){console.log('Sad'); return};
+        data.ref.getDownloadURL()
         .then(url =>{ userDB.update({img:url})
-        .then((snapshot)=>{console.log('Image Uploaded!')})
+        .then((snapshot)=>{console.log('Image Uploaded!');
+                            this.setState({imgUploaded:false});})
         });
       });
-        
+        } else {
+            userDB.update({img:this.state.img});
+        };
         alert("Submitted to database users/"+ encoded_email)
     } catch(e) {
       console.log(e)
@@ -192,6 +204,7 @@ class EditProfile extends React.Component{
     }
   }
 
+   
 
   handleClear = (e) =>{
     //Reset Fields
@@ -277,7 +290,9 @@ class EditProfile extends React.Component{
 
   handleImgChange = (im) =>{
     //For use in PicUpload components to update img in the EditProfile Class
-    this.setState({img: im})
+    this.setState({img: im,
+                    imgUploaded: true,
+    });
   }
   
 

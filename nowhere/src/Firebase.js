@@ -19,12 +19,10 @@ const auth = app.auth()
 const f_database = firebase.database()
 const storage = firebase.storage();
 
+
 // const getProPic = ()=>{
 
 // }
 
-export { app, storage, auth, f_database}
+export { app, storage, auth, f_database, firebase}
 export default auth
-
-
-
