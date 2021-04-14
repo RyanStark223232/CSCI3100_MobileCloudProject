@@ -246,6 +246,7 @@ const topLocations = [
     { name: 'Hong Kong' },
     { name: 'United States' },
     { name: 'Africa' },
+    { name: 'India' },
 ];
 
 const sampleSize = [

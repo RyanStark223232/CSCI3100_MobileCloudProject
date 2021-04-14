@@ -336,21 +336,25 @@ const topLocations = [
     { name: 'Hong Kong' },
     { name: 'United States' },
     { name: 'Africa' },
+    { name: 'India' },
 ];
 
 const sampleSize = [
+    { size: ''},
     { size: '2-4' },
     { size: '4-8' },
     { size: '8+' },
 ];
 
 const sampleType = [
+    { type: ''},
     { type: 'Sporty' },
     { type: 'Shopping' },
     { type: 'Nature' },
 ]
 
 const samplePeriod = [
+    { type: ''},
     { type: 'Day-Trip' },
     { type: 'Weeks-Trip' },
     { type: 'Months-Trip' },
