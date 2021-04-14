@@ -45,6 +45,10 @@ class Post extends React.Component{
   }
 
   RequestJoin=()=>{
+    if(auth.currentUser === null) {
+      alert("please sign in first")
+      return
+    }
     let id = 1;
     let flag =1;
     f_database.ref("posts").child(this.state.post.pid)
