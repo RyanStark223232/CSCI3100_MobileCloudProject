@@ -74,8 +74,12 @@ class MyPost extends React.Component{
                       <div className="my-post-size">Group size: {post.size}</div>
                     </div>
                     <div className="right-column">
-                      <a href={"./editpost/"+post.pid}>Edit Post &rarr;  </a>
-                      <a href={"./post/"+post.pid}>View Post &rarr;</a>
+                      <Button variant="contained" size="small" color="primary" onClick={()=>{window.location="./editpost/"+post.pid}}>
+                        Edit Post &rarr;
+                      </Button>
+                      <Button variant="contained" size="small" color="primary" onClick={()=>{window.location="./post/"+post.pid}}>
+                        View Post &rarr;
+                      </Button>
                     </div>
                   </div>
                 )
