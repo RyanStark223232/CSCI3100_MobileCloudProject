@@ -24,7 +24,7 @@ class Search extends React.Component {
             location:'',
             type:'',
             period:'',
-            
+            group_size:'',            
         };
         // props.location.state stores the data passed from Homepage
         // if you go to search tab by clicking "Search" on top, props.location.state is undefined
@@ -39,6 +39,7 @@ class Search extends React.Component {
         this.onChangeLocation = this.onChangeLocation.bind(this);
         this.onChangeType = this.onChangeType.bind(this);
         this.onChangePeriod = this.onChangePeriod.bind(this);
+        this.onChangeSize = this.onChangeSize.bind(this);
         this.updateStates = this.updateStates.bind(this);
 
         // Default Input Options for Material UI
@@ -77,7 +78,8 @@ class Search extends React.Component {
     updateStates = async() =>{
         await this.setState({   location:this.props.location.state.location,
                                 type:this.props.location.state.type,
-                                period:this.props.location.state.period });
+                                period:this.props.location.state.period,
+                                group_size:this.props.location.state.group_size });
         console.log(this.props.location.state.location, this.props.location.state.type, this.props.location.state.period);
         console.log(this.state);
     }
@@ -121,6 +123,18 @@ class Search extends React.Component {
         else {
             console.log(event.target.value);
             this.setState({period:event.target.value});
+        }
+    }
+    
+    // onChange for Size
+    onChangeSize (event, values){
+        if (values != null){
+            console.log(values.size)
+            this.setState({group_size:values.size});
+        }
+        else {
+            console.log(event.target.value);
+            this.setState({group_size:event.target.value});
         }
     }
 
@@ -197,6 +211,7 @@ class Search extends React.Component {
             <header>
                 <div>
                     <img src={this.state.image} id="image" crossOrigin="anonymous" alt="test" style={{display: "none"}}></img>
+
                     <FormControl  className={classes.formControl}>
                         <div>
                             <Autocomplete
@@ -212,6 +227,25 @@ class Search extends React.Component {
                                     variant="filled"
                                     margin="normal"
                                     onChange={this.onChangeLocation}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsSize}
+                                id="Size"
+                                debug
+                                onChange={this.onChangeSize}
+                                defaultValue={{ size: (this.props.location.state == null)?'': this.props.location.state.group_size}}
+                                renderInput={(params) => <TextField {...params}
+                                    label="Size"
+                                    variant="filled"
+                                    margin="normal"
+                                    onChange={this.onChangeSize}
                                 />}
                             />
                         </div>
@@ -342,7 +376,7 @@ const topLocations = [
 const sampleSize = [
     { size: ''},
     { size: '2-4' },
-    { size: '4-8' },
+    { size: '5-8' },
     { size: '8+' },
 ];
 
