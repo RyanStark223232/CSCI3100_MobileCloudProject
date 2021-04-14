@@ -25,7 +25,6 @@ class CreatePost extends React.Component {
       url:null,
       pid:null
     };
-
     this.changeInput = this.changeInput.bind(this);
   }
 
