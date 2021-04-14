@@ -31,12 +31,10 @@ class CreatePost extends React.Component {
 
 
 
-  componentDidMount() {
-
-
+  componentWillMount() {
     const id = parseInt(this.props.match.params.id);
     var data = null;
-    f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
+    f_database.ref("posts").orderByChild('pid').equalTo(id).once("value", snapshot=>{
       snapshot.forEach(snap=>{
         data=snap.val()
       });

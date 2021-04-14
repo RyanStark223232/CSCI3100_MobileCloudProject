@@ -29,7 +29,7 @@ class CreatePost extends React.Component {
     this.changeInput = this.changeInput.bind(this);
   }
 
-  componentDidMount(){
+  componentWillMount(){
     var post_ref = f_database.ref("posts/");
     var data=null;
     post_ref.orderByChild('pid').limitToLast(1).on("value",

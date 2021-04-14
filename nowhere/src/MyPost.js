@@ -17,10 +17,10 @@ class MyPost extends React.Component{
 
   }
 
-  componentDidMount(){
+  componentWillMount(){
     if(auth.currentUser!=null){
       var data = [];
-      f_database.ref("posts").orderByChild('uid').equalTo(this.state.isLoggedIn.uid).on("value", snapshot=>{
+      f_database.ref("posts").orderByChild('uid').equalTo(this.state.isLoggedIn.uid).once("value", snapshot=>{
         snapshot.forEach(snap=>{
           data.push(snap.val());
         });
@@ -60,7 +60,7 @@ class MyPost extends React.Component{
                     </div>
                     <div className="right-column">
                       <a href={"./editpost/"+post.pid}>Edit Post &rarr;  </a>
-                      <a href={"./post/"+post.pid}>   View Post &rarr;</a>
+                      <a href={"./post/"+post.pid}>View Post &rarr;</a>
                     </div>
                   </div>
                 )
