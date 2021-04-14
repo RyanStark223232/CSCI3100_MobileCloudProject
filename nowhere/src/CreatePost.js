@@ -34,9 +34,9 @@ class CreatePost extends React.Component {
     post_ref.orderByChild('pid').limitToLast(1).once("value",
      snapshot=>{
       snapshot.forEach(snap=>{data=snap.val()});
-      this.setState({pid:data.pid+1});
       data!=null ? this.setState({pid:data.pid+1}) : this.setState({pid: 0});
     });
+
   }
 
 
@@ -65,6 +65,7 @@ class CreatePost extends React.Component {
 
 
     console.log(this.state);
+    if(this.state.pid ==null) this.setState({pid: 0});
 
     try{
       var current_uid = auth.currentUser.uid;
@@ -93,10 +94,10 @@ class CreatePost extends React.Component {
       });
       if(this.state.remark) {postdb.update({remark: this.state.remark})}
       if (this.state.cover){
-        const uploadImage = storage.ref('cover_images/' +this.state.pid + "/" + this.state.cover.name).put(this.state.cover);
+        const uploadImage = storage.ref("cover_images/" +this.state.pid + "/" + this.state.cover.name).put(this.state.cover);
         uploadImage.on('state_changed',(snapshot)=>{},
         error=>{console.log(error);},
-        ()=>{storage.ref("cover_images").child(this.state.cover.name)
+        ()=>{storage.ref("cover_images/"+this.state.pid+"/").child(this.state.cover.name)
             .getDownloadURL()
             .then(i_url=>{postdb.update({url:i_url})})
         });
