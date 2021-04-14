@@ -50,10 +50,10 @@ class MyPost extends React.Component{
 
 
   createPost=()=>{
-    var url = window.location.protocol+"//"+window.location.hostname+(window.location.port ?':'+window.location.port:'')+"/createpost";
-    console.log(url);
-    window.location = url;
+    window.location = "./createpost";
   }
+
+
 
 
   render(){
