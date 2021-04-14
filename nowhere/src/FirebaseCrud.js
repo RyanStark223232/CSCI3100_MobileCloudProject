@@ -6,12 +6,13 @@ import './FirebaseCrud.css'
 const FirebaseCrud = (props) => {
   console.log("Pass IN:", props.state.state.location);
 
-  const [aLocation,setALocation] = useState('');
-  const [aTstyle,setATstyle] = useState('');
-  const [aPeriod,setAPeriod] = useState('');
+  //const [aLocation,setALocation] = useState('');
+  //const [aTstyle,setATstyle] = useState('');
+  //const [aPeriod,setAPeriod] = useState('');
+  //const [aSize,setASize] = useState('');
   const [userData,setUserData] = useState([])
 
-  console.log("Search Debug", aLocation, aTstyle, aPeriod);
+  //console.log("Search Debug", aLocation, aTstyle, aPeriod);
 
   useEffect(()=>{
     const firestore = f_database.ref('/posts');
@@ -24,6 +25,7 @@ const FirebaseCrud = (props) => {
           Location:data[id].location,
           Tstyle: data[id].travel_style,
           Period:data[id].period,
+          Size: data[id].size,
           Url: data[id].url
         });
       }
@@ -42,9 +44,10 @@ const FirebaseCrud = (props) => {
       const data = response.val();
       for(let id in data){
         userArray.push({
-          Location:data[id].location,
+          Location: data[id].location,
           Tstyle: data[id].travel_style,
-          Period:data[id].period,
+          Period: data[id].period,
+          Size: data[id].size,
           Url: data[id].url,
           Pid: data[id].pid
         });
@@ -64,7 +67,9 @@ const FirebaseCrud = (props) => {
       if (props.state.state.location == userArray[l].Location || props.state.state.location == "" || props.state.state.location == null){
         if (props.state.state.type == userArray[l].Tstyle || props.state.state.type == "" || props.state.state.type == null){
             if(props.state.state.period == userArray[l].Period || props.state.state.period == "" || props.state.state.period == null){
+              if(props.state.state.size == userArray[l].Size || props.state.state.size == "" || props.state.state.size == null){
               filteredArraylt.push(userArray[l])
+              }
             }
           }
       }
@@ -74,12 +79,12 @@ const FirebaseCrud = (props) => {
 
   getFilteredArray()
 
-  const handleFilter = () => {
+ /* const handleFilter = () => {
     const firestore = firebase.database().ref('/posts');
     firestore.orderByChild('Location').equalTo(aLocation).on('value',function(snapshot){
       //console.log(snapshot.val())
     })
-  }
+  }*/
 
 
 
@@ -106,6 +111,7 @@ const FirebaseCrud = (props) => {
                           <th className = "table-th"> Location </th>
                           <th className = "table-th"> Travel Style </th>
                           <th className = "table-th"> Period </th>
+                          <th className = "table-th"> Size </th>
                           <th className = "table-th"> </th>
                       </tr>
                       {
@@ -115,6 +121,7 @@ const FirebaseCrud = (props) => {
                             <td className = "table-td">{data.Location}</td>
                             <td className = "table-td">{data.Tstyle}</td>
                             <td className = "table-td">{data.Period}</td>
+                            <td className = "table-td">{data.Size}</td>
                             <td className = "table-td">
                               <Button primary onClick={()=>{window.location = "./post/"+data.Pid}}>
                                 <Icon name = "edit" primary></Icon>
