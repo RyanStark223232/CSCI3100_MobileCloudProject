@@ -1,14 +1,16 @@
 import { Container, Form, Grid, Segment, Button, Input, Table, Header, Icon } from "semantic-ui-react"
-
 import {f_database, firebase} from "./Firebase.js";
 import React, {useState, useEffect} from "react";
 
-const FirebaseCrud = () => {
+const FirebaseCrud = (props) => {
+  console.log("Pass IN:", props.state.state.location);
 
-  const [aLocation,setALocation] = useState('')
-  const [aTstyle,setATstyle] = useState('')
-  const [aPeriod,setAPeriod] = useState('')
+  const [aLocation,setALocation] = useState('');
+  const [aTstyle,setATstyle] = useState('');
+  const [aPeriod,setAPeriod] = useState('');
   const [userData,setUserData] = useState([])
+
+  console.log("Search Debug", aLocation, aTstyle, aPeriod);
 
   const handleAddUser = () => {
     const firestore = firebase.database().ref('/posts');
@@ -64,11 +66,12 @@ const FirebaseCrud = () => {
   getUserArray()
 
   function getFilteredArray(){
+    
 
     for (let l = 0; l < userArray.length; l++){
-      if (aLocation == userArray[l].Location || aLocation == ""){
-        if (aTstyle == userArray[l].Tstyle || aTstyle == ""){
-            if(aPeriod == userArray[l].Period || aPeriod == ""){
+      if (props.state.state.location == userArray[l].Location || props.state.state.location == "" || props.state.state.location == null){
+        if (props.state.state.type == userArray[l].Tstyle || props.state.state.type == "" || props.state.state.type == null){
+            if(props.state.state.period == userArray[l].Period || props.state.state.period == "" || props.state.state.period == null){
               filteredArraylt.push(userArray[l])
             }
           }
