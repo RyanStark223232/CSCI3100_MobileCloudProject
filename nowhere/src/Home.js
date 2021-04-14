@@ -135,6 +135,24 @@ class Home extends React.Component{
                             <div>
                                 <Autocomplete
                                     className={classes.search_bar}
+                                    {...this.defaultPropsSize}
+                                    id="Size"
+                                    debug
+                                    onChange={this.onChangeSize}
+                                    renderInput={(params) => <TextField {...params}
+                                        label="Size"
+                                        variant="filled"
+                                        margin="normal"
+                                        onChange={this.onChangeSize}
+                                    />}
+                                />
+                            </div>
+                        </FormControl>
+
+                        <FormControl  className={classes.formControl}>
+                            <div>
+                                <Autocomplete
+                                    className={classes.search_bar}
                                     {...this.defaultPropsType}
                                     id="Type"
                                     debug
@@ -251,7 +269,7 @@ const topLocations = [
 
 const sampleSize = [
     { size: '2-4' },
-    { size: '4-8' },
+    { size: '5-8' },
     { size: '8+' },
 ];
 

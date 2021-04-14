@@ -4,7 +4,7 @@ import React, {useState, useEffect} from "react";
 import './FirebaseCrud.css'
 
 const FirebaseCrud = (props) => {
-  console.log("Pass IN:", props.state.state.location);
+  console.log("Pass IN:", props.state.state);
 
   //const [aLocation,setALocation] = useState('');
   //const [aTstyle,setATstyle] = useState('');
@@ -66,12 +66,12 @@ const FirebaseCrud = (props) => {
     for (let l = 0; l < userArray.length; l++){
       if (props.state.state.location == userArray[l].Location || props.state.state.location == "" || props.state.state.location == null){
         if (props.state.state.type == userArray[l].Tstyle || props.state.state.type == "" || props.state.state.type == null){
-            if(props.state.state.period == userArray[l].Period || props.state.state.period == "" || props.state.state.period == null){
-              if(props.state.state.size == userArray[l].Size || props.state.state.size == "" || props.state.state.size == null){
+          if(props.state.state.period == userArray[l].Period || props.state.state.period == "" || props.state.state.period == null){
+            if(props.state.state.group_size == userArray[l].Size || props.state.state.group_size == "" || props.state.state.group_size == null){
               filteredArraylt.push(userArray[l])
-              }
             }
           }
+        }
       }
     }
     console.log(filteredArraylt)
