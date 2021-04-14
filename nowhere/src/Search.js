@@ -18,7 +18,7 @@ class Search extends React.Component {
             p1:null,
             p2:null,
             p3:null,
-            place:null,
+            autocompletePlace:"Stark",
             loaded:false,
 
             location:'',
@@ -144,9 +144,9 @@ class Search extends React.Component {
             // Get the activation from mobilenet from the webcam.
             const inf_activation = model.infer(img, 'conv_preds');
             // Get the most likely class and confidence from the classifier module.
-            const result = await this.classifier.predictClass(inf_activation, 3);
-            this.setState({place:result.label});
-            console.log(result);
+            const result = await this.classifier.predictClass(inf_activation, 5);
+            this.setState({location: result.label,});
+            console.log("NN INFERENCE:", result);
         }
     }
 
@@ -203,7 +203,9 @@ class Search extends React.Component {
                                 className={classes.search_bar}
                                 {...this.defaultPropsLocations}
                                 id="Location"
+                                value={{name:this.state.location}}
                                 debug
+                                defaultValue={{ name: (this.props.location.state == null)?'': this.props.location.state.location}}
                                 onChange={this.onChangeLocation}
                                 renderInput={(params) => <TextField {...params}
                                     label="Location"
@@ -219,32 +221,16 @@ class Search extends React.Component {
                         <div>
                             <Autocomplete
                                 className={classes.search_bar}
-                                {...this.defaultPropsSize}
-                                id="GroupSize"
-                                debug
-                                onChange={this.onChangeSize}
-                                renderInput={(params) => <TextField {...params}
-                                    label="Group Size"
-                                    variant="filled"
-                                    margin="normal"
-                                    onChange={this.onChangeSize}
-                                />}
-                            />
-                        </div>
-                    </FormControl>
-
-                    <FormControl  className={classes.formControl}>
-                        <div>
-                            <Autocomplete
-                                className={classes.search_bar}
                                 {...this.defaultPropsType}
                                 id="Type"
                                 debug
+                                defaultValue={{ type: (this.props.location.state == null)?'': this.props.location.state.type}}
                                 onChange={this.onChangeType}
                                 renderInput={(params) => <TextField {...params}
                                     label="Type"
                                     variant="filled"
                                     margin="normal"
+                                    value={this.state.type}
                                     onChange={this.onChangeType}
                                 />}
                             />
@@ -258,11 +244,13 @@ class Search extends React.Component {
                                 {...this.defaultPropsPeriod}
                                 id="Period"
                                 debug
+                                defaultValue={{ type: (this.props.location.state == null)?'': this.props.location.state.period}}
                                 onChange={this.onChangePeriod}
                                 renderInput={(params) => <TextField {...params}
                                     label="Period"
                                     variant="filled"
                                     margin="normal"
+                                    value={this.state.period}
                                     onChange={this.onChangePeriod}
                                 />}
                             />
@@ -342,6 +330,7 @@ export default withStyles(useStyles)(Search);
 
 // Options for each input field
 const topLocations = [
+    { name: ''},
     { name: 'Japan' },
     { name: 'Britain' },
     { name: 'Hong Kong' },

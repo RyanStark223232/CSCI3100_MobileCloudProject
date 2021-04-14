@@ -85,6 +85,7 @@ const FirebaseCrud = (props) => {
     return <div className ="ui hidden divider">
       <Container>
         <Grid>
+
           <Grid.Row column="1">
             <Grid.Column>
               {
