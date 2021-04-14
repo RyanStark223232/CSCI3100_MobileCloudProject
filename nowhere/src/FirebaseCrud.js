@@ -88,10 +88,11 @@ const FirebaseCrud = () => {
 
 
     return <div className ="ui hidden divider">
+      <link rel="stylesheet" type="text/css" href={stylePath} />
       <Container>
         <Grid>
           <Grid.Row columns="2">
-            
+
             <Grid.Column>
               <Segment padded="very">
                 <Form>
