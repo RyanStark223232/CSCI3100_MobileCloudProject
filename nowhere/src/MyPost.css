@@ -66,5 +66,8 @@
   width: 20%;
   /* background-color:#ddd; */
   text-align:center;
-  line-height:200px
+  display:flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
 }
