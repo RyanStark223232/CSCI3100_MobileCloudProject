@@ -75,34 +75,10 @@ class EditPost extends React.Component {
     });
   }
 
-  uploadImage =()=>{
-    var image_url
-    if(this.state.cover){
-      const uploadImage = storage.ref('cover_images/' + this.state.cover.name).put(this.state.cover);
-      uploadImage.on(
-        'state_changed',(snapshot)=>{},
-        error=>{
-          console.log(error);
-        },
-        ()=>{
-          storage.ref("cover_images").child(this.state.cover.name).getDownloadURL().
-            then(i_url=>{
-              image_url=i_url;
-              this.setState({
-                url:image_url
-              })
-            }
-          )
-        }
-      );
-    }
-  }
 
   handlePost=()=>{
-
     var image_url;
     console.log(this.state);
-    this.uploadImage();
     try{
 
       var post_ref = f_database.ref("posts/"+this.state.post.pid);
@@ -114,10 +90,10 @@ class EditPost extends React.Component {
         period: this.state.period
       });
       if(this.state.cover){
-        const uploadImage = storage.ref('cover_images/' +this.state.post.pid+"/" +this.state.cover.name).put(this.state.cover);
+        const uploadImage = storage.ref('cover_images/'+this.state.post.pid+"/" +this.state.cover.name).put(this.state.cover);
         uploadImage.on('state_changed',(snapshot)=>{},
           error=>{console.log(error);},
-          ()=>{storage.ref("cover_images").child(this.state.cover.name)
+          ()=>{storage.ref("cover_images/"+this.state.post.pid+"/").child(this.state.cover.name)
               .getDownloadURL()
               .then(i_url=>{post_ref.update({url:i_url})})
         });
@@ -126,7 +102,7 @@ class EditPost extends React.Component {
 
       setTimeout(()=>{
          alert("Submitted to database posts/"+ this.state.post.pid);
-      } , 2500);
+      } , 3000);
 
     } catch(e) {
       console.log(e);
