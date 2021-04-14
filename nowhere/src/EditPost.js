@@ -100,13 +100,13 @@ class EditPost extends React.Component {
       }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
       if(this.state.remark){ post_ref.update({remark:this.state.remark})}
 
-      setTimeout(()=>{
-         alert("Submitted to database posts/"+ this.state.post.pid);
-      } , 3000);
+      // setTimeout(()=>{
+      //    alert("Submitted to database posts/"+ this.state.post.pid);
+      // } , 3000);
 
     } catch(e) {
       console.log(e);
-      alert(e);
+      // alert(e);
     }
 
   }

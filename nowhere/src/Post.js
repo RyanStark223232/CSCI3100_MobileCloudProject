@@ -36,7 +36,7 @@ class Post extends React.Component{
   componentWillMount() {
     const id = parseInt(this.props.match.params.id);
     var data = null;
-    f_database.ref("posts").child(id).once("value", snapshot=>{
+    f_database.ref("posts").child(id).on("value", snapshot=>{
       data = snapshot.val()
       this.setState({post:data}, ()=>this.onAuthStateChanged())
       // console.log(this.state.post)
@@ -215,7 +215,6 @@ class Post extends React.Component{
               <div className="card">
                <div className="post-title"><h2>Title: {this.state.post.title}</h2></div>
                <div className="post-creator">Creator: {this.state.post.owner}</div>
-               <div className="post-description">Description: {this.state.post.description}</div>
                <div className="post-location">Location: {this.state.post.location}</div>
                <div className="post-groupsize">Group Size:{this.state.post.size}</div>
                <div className="post-period">Period: {this.state.post.period}</div>

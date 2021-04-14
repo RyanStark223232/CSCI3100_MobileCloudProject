@@ -101,15 +101,15 @@ class CreatePost extends React.Component {
             .getDownloadURL()
             .then(i_url=>{postdb.update({url:i_url})})
         });
-        setTimeout(()=>{
-           alert("Submitted to database posts/"+ this.state.pid);
-        } , 3000);
+        // setTimeout(()=>{
+        //   //  alert("Submitted to database posts/"+ this.state.pid);
+        // } , 3000);
       }
 
 
     } catch(e) {
       console.log(e);
-      alert(e);
+      // alert(e);
     }
   }
 
