@@ -31,6 +31,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
+import Fab from '@material-ui/core/fab'
+import { blue } from '@material-ui/core/colors';
 
 import {
   BrowserRouter as Router,
@@ -46,7 +48,7 @@ export function setLogedIn() {
   // console.log("in setloged in");
   document.getElementById("beforeAuth").style.display = "none";
   // document.getElementById("myPostButton").style.display = "inline";
-  // document.getElementById("displayName").innerHTML = "Welcome, "+ auth.currentUser.email;
+  document.getElementById("displayName").innerHTML =  auth.currentUser.email;
   document.getElementById("afterAuth").style.display = "inline";
 }
 
@@ -76,8 +78,10 @@ function App() {
           <Link to="/">
             <img src={nowhere} alt="logo" className="logo"></img>
           </Link>
+          
           <div className="accountSetting">
             <div className="toHide" id="afterAuth" >
+            <Link to="/accountdetails" style={{ textDecoration: 'none' , margin: 5}} ><Fab variant="extended"  id="displayName" style={{backgroundColor: blue[200]}} ></Fab></Link>
             <Link to="/mypost" style={{ textDecoration: 'none' , margin: 5}} >
             <Badge badgeContent="" color="secondary" >
             <Button variant="contained" size="small" color="primary">

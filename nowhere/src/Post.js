@@ -17,8 +17,25 @@ class Post extends React.Component{
       // I you can set disable_button to true if you want to gray-out the button when the members are full or something like that
       disable_button:false,
       w_list:null,
+      isOwner:false,
     }
     this.tempFunc = this.tempFunc.bind(this);
+  }
+
+  onAuthStateChanged = ()=>{
+    if (auth.currentUser && typeof this.state.post != "undefined" && auth.currentUser.email === this.state.post.owner){
+      this.setState({isOwner:true})
+      // this.setState({disable_button:true})
+      document.getElementById("requestButton").style.display = "none";
+    }
+        
+  
+    else {
+      this.setState({isOwner:false})
+      // document.getElementsByClassName("PostAdminButton").style.display = "none"
+    }
+
+    console.log(this.state.isOwner);
   }
 
 
@@ -29,6 +46,7 @@ class Post extends React.Component{
       data = snapshot.val()
       this.setState({post:data})
       // console.log(this.state.post)
+      this.onAuthStateChanged()
     })
   }
 
@@ -48,9 +66,16 @@ class Post extends React.Component{
                   // console.log(snapshot.numChildren());
                   id = snapshot.numChildren() +1
                 })
+    // id = Date.now() -1618326164000
     // console.log(id);
-    f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
-    if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:auth.currentUser.email})
+    // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
+    if(flag!==0){
+      f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:auth.currentUser.email})
+      // this.setState({disable_button:true})
+    } {
+      // this.setState({disable_button:true})
+      // alert("You're already in the waiting list!")
+    }
     // if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("waiting_list").push(auth.currentUser.email)
 
   }
@@ -70,15 +95,27 @@ class Post extends React.Component{
                 })
     // console.log(id);
     // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"})
+    // id = Date.now()-1618326164000
     if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("participant").update({[id]:email})
-    console.log(email);
+    // console.log(email);
     f_database.ref("posts").child(this.state.post.pid).child("waiting_list").orderByKey()
     .on("value",snapshot=>{  snapshot.forEach(snap=> {
-      console.log(snap.val())
+      // console.log(snap.val())
       if (email=== snap.val()) snap.ref.remove()
     })
-      console.log(snapshot.val());
-      console.log(typeof snapshot.val());
+      // console.log(snapshot.val());
+      // console.log(typeof snapshot.val());
+      // snapshot.setValue(null)
+    })
+  }
+
+  RejectJoin=(email)=>{
+    f_database.ref("posts").child(this.state.post.pid).child("waiting_list")
+    .on("value",snapshot=>{  snapshot.forEach(snap=> {
+      // console.log(snap.val())
+      if (email=== snap.val()) snap.ref.remove()
+    })
+      // console.log(snapshot.val());
       // snapshot.setValue(null)
     })
   }
@@ -86,10 +123,10 @@ class Post extends React.Component{
   RemoveParticipant=(email)=>{
     f_database.ref("posts").child(this.state.post.pid).child("participant")
     .on("value",snapshot=>{  snapshot.forEach(snap=> {
-      console.log(snap.val())
+      // console.log(snap.val())
       if (email=== snap.val()) snap.ref.remove()
     })
-      console.log(snapshot.val());
+      // console.log(snapshot.val());
       // snapshot.setValue(null)
     })
   }
@@ -105,14 +142,36 @@ class Post extends React.Component{
         continue;
       }
       temp_list = [...temp_list, this.state.post.waiting_list[i]]
-      console.log("TEMPLIST:", temp_list);
+      // console.log("TEMPLIST:", temp_list);
     }
     var temp = temp_list.filter((e) => {
-      console.log("E:",e);
-      console.log(this.state.post.waiting_list);
+      // console.log("E:",e);
+      // console.log(this.state.post.waiting_list);
       return e != null;                  
     })
-    console.log("Temp:", temp);
+    // console.log("Temp:", temp);
+    return temp;
+  }
+
+  tempFunc_parti = () =>{
+    if (this.state.post.participant == null){
+      return [];
+    }
+    var temp_list = [];
+    var i;
+    for (i = 0; i < 10; i++){
+      if (this.state.post.participant[i] == null) {
+        continue;
+      }
+      temp_list = [...temp_list, this.state.post.participant[i]]
+      // console.log("TEMPLIST:", temp_list);
+    }
+    var temp = temp_list.filter((e) => {
+      // console.log("E:",e);
+      // console.log(this.state.post.participant);
+      return e != null;                  
+    })
+    // console.log("Temp:", temp);
     return temp;
   }
 
@@ -120,10 +179,6 @@ class Post extends React.Component{
 
   render(){
     
-    // let addedList = this.state.w_list.map((item) => 
-    // <div> {item}</div> 
-    // ) 
-
     if(this.state.post){
       return(
 
@@ -137,6 +192,7 @@ class Post extends React.Component{
             <div className="leftcolumn">
               <img src={this.state.post.url} />
             </div>
+            
 
             <div className="rightcolumn">
               <div className="card">
@@ -162,18 +218,16 @@ class Post extends React.Component{
              </div>
            </div>
           </div>
-          <div className="row">
+          <div className="row" id="owner_panel">
 
             <div className="leftcolumn">
               Participant: 
               {this.state.post.participant? 
-              this.state.post.participant.map((item) => 
+              this.tempFunc_parti().map((item) => 
                <div> 
                  {item} 
-                 <Button size="small" color="secondary" onClick = {() =>{
-                   console.log("clickeddd!")
+                 <Button size="small" color="secondary" style={{display: this.state.isOwner?"inline":"none"}} onClick = {() =>{
                    this.RemoveParticipant(item)
-                  //  f_database.ref("posts").child(this.state.post.pid).child("participant").update({1:item});
                   }}>
                     Remove</Button>
                  </div> )
@@ -187,12 +241,15 @@ class Post extends React.Component{
                 this.tempFunc().map((item) => 
                   <div> 
                     {item} 
-                      <Button size="small" color="primary" onClick = {() =>{
-                        console.log("clickeddd!")
+                    
+                      <Button size="small" color="primary" style={{display: this.state.isOwner?"inline":"none"}} onClick = {() =>{
                         this.AcceptJoin(item)
-                      //  f_database.ref("posts").child(this.state.post.pid).child("participant").update({1:item});
                       }}>
                     Accept</Button>
+                    <Button size="small" color="secondary" style={{display: this.state.isOwner?"inline":"none"}} onClick = {() =>{
+                        this.RejectJoin(item)
+                      }}>
+                    Reject</Button>
                   </div> )
                  :"None"}
              </div>
