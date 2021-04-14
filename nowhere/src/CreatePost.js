@@ -60,6 +60,8 @@ class CreatePost extends React.Component {
   }
 
 
+
+
   handlePost=()=>{
 
 
@@ -99,21 +101,26 @@ class CreatePost extends React.Component {
             .getDownloadURL()
             .then(i_url=>{postdb.update({url:i_url})})
         });
+        setTimeout(()=>{
+           alert("Submitted to database posts/"+ this.state.pid);
+        } , 2500);
       }
 
-      alert("Submitted to database posts/"+ this.state.pid);
+
     } catch(e) {
       console.log(e);
       alert(e);
     }
-
   }
+
+
+
 
 
     render(){
         return (
             <header className="container">
-                <h1>Create / Edit Post Page</h1>
+                <h1>Create Post</h1>
 
                 <div className="wrapper">
                   <div className="left-item"><span>Cover Photo:</span></div>
