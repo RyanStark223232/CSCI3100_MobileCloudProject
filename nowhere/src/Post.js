@@ -25,7 +25,6 @@ class Post extends React.Component{
   onAuthStateChanged = ()=>{
     if (auth.currentUser && auth.currentUser.email === this.state.post.owner){
       this.setState({isOwner:true})
-      // this.setState({disable_button:true})
       document.getElementById("requestButton").style.display = "none";
     }   
     else {
@@ -39,11 +38,10 @@ class Post extends React.Component{
     var data = null;
     f_database.ref("posts").child(id).on("value", snapshot=>{
       data = snapshot.val()
-      this.setState({post:data})
+      this.setState({post:data}, ()=>this.onAuthStateChanged())
       // console.log(this.state.post)
-      this.onAuthStateChanged()
+      
     })
-    // this.onAuthStateChanged()
   }
 
   RequestJoin=()=>{
@@ -63,19 +61,34 @@ class Post extends React.Component{
                   })
                   // console.log(snapshot.numChildren());
                   // id = snapshot.numChildren() +1
+                  if(flag!==0){
+                    f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:auth.currentUser.email})
+                    // this.setState({disable_button:true})
+                  } else{
+                    // this.setState({disable_button:true})
+                    alert("You're already in the waiting list!")
+                    document.getElementById("requestButton").style.display = "none";
+                    // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
+                  }
                 })
-    // id = Date.now() -1618326164000
-    // console.log(id);
     
-    if(flag!==0){
-      f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:auth.currentUser.email})
-      // this.setState({disable_button:true})
-    } else{
-      // this.setState({disable_button:true})
-      // alert("You're already in the waiting list!")
-      f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
-    }
     // if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("waiting_list").push(auth.currentUser.email)
+
+  }
+
+  RequestJoin_dev=()=>{
+    let id = 1;
+    f_database.ref("posts").child(this.state.post.pid)
+                .child("waiting_list")
+                // .orderByKey().limitToLast(1)
+                .once("value", snapshot =>{
+                  snapshot.forEach(snap => {
+                    var key = snap.key;
+                    id=  parseInt(key, 10)+1
+                  })
+                  f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id}) 
+                  
+                })
 
   }
 
@@ -215,6 +228,15 @@ class Post extends React.Component{
                  disabled={this.state.disable_button}
                  id = "requestButton" >
                   Request Join
+                </Button>
+                <Button onClick={this.RequestJoin_dev}
+                 variant="contained"
+                 size="small"
+                 color="secondary"
+                 style={{margin: 10}}
+                 disabled={this.state.disable_button}
+                 id = "requestButton_dev" >
+                  Random Request(for dev)
                 </Button>
                 </div>
              </div>
