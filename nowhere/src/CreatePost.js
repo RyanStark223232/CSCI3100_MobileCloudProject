@@ -103,7 +103,7 @@ class CreatePost extends React.Component {
         });
         setTimeout(()=>{
            alert("Submitted to database posts/"+ this.state.pid);
-        } , 2500);
+        } , 3000);
       }
 
 
