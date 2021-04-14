@@ -1,16 +1,15 @@
 import { Container, Form, Grid, Segment, Button, Input, Table, Header, Icon } from "semantic-ui-react"
+
 import {f_database, firebase} from "./Firebase.js";
 import React, {useState, useEffect} from "react";
 
-const FirebaseCrud = (props) => {
-  console.log("Pass IN:", props.state.state.location);
+const FirebaseCrud = () => {
 
-  const [aLocation,setALocation] = useState('');
-  const [aTstyle,setATstyle] = useState('');
-  const [aPeriod,setAPeriod] = useState('');
+  const [aLocation,setALocation] = useState('')
+  const [aTstyle,setATstyle] = useState('')
+  const [aPeriod,setAPeriod] = useState('')
   const [userData,setUserData] = useState([])
-
-  console.log("Search Debug", aLocation, aTstyle, aPeriod);
+  const [stylePath, setStylePath] = useState('semantic-ui-css/semantic.css')
 
   const handleAddUser = () => {
     const firestore = firebase.database().ref('/posts');
@@ -66,12 +65,11 @@ const FirebaseCrud = (props) => {
   getUserArray()
 
   function getFilteredArray(){
-    
 
     for (let l = 0; l < userArray.length; l++){
-      if (props.state.state.location == userArray[l].Location || props.state.state.location == "" || props.state.state.location == null){
-        if (props.state.state.type == userArray[l].Tstyle || props.state.state.type == "" || props.state.state.type == null){
-            if(props.state.state.period == userArray[l].Period || props.state.state.period == "" || props.state.state.period == null){
+      if (aLocation == userArray[l].Location || aLocation == ""){
+        if (aTstyle == userArray[l].Tstyle || aTstyle == ""){
+            if(aPeriod == userArray[l].Period || aPeriod == ""){
               filteredArraylt.push(userArray[l])
             }
           }
@@ -91,10 +89,11 @@ const FirebaseCrud = (props) => {
 
 
     return <div className ="ui hidden divider">
+      <link rel="stylesheet" type="text/css" href={stylePath} />
       <Container>
         <Grid>
           <Grid.Row columns="2">
-            
+
             <Grid.Column>
               <Segment padded="very">
                 <Form>

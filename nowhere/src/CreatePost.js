@@ -32,7 +32,7 @@ class CreatePost extends React.Component {
   componentWillMount(){
     var post_ref = f_database.ref("posts/");
     var data=null;
-    post_ref.orderByChild('pid').limitToLast(1).on("value",
+    post_ref.orderByChild('pid').limitToLast(1).once("value",
      snapshot=>{
       snapshot.forEach(snap=>{data=snap.val()});
       this.setState({pid:data.pid+1});

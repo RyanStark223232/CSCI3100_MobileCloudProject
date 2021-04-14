@@ -8,7 +8,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-class CreatePost extends React.Component {
+class EditPost extends React.Component {
 
   constructor(){
     super();
@@ -22,19 +22,18 @@ class CreatePost extends React.Component {
       cover:null,
       temp_cover:null,
       url:null,
-      pid:null
+      pid:null,
+      uid:null
     };
 
     this.changeInput = this.changeInput.bind(this);
   }
 
 
-
-
   componentWillMount() {
     const id = parseInt(this.props.match.params.id);
     var data = null;
-    f_database.ref("posts").orderByChild('pid').equalTo(id).once("value", snapshot=>{
+    f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
       snapshot.forEach(snap=>{
         data=snap.val()
       });
@@ -50,7 +49,8 @@ class CreatePost extends React.Component {
           travel_style:this.state.post.travel_style,
           remark:this.state.post.remark,
           url: this.state.post.url,
-          pid: id
+          pid: id,
+          uid:this.state.post.uid
         })
       })
     });
@@ -139,7 +139,7 @@ class CreatePost extends React.Component {
 
 
     render(){
-      if(this.state.post){
+      if(this.state.post && auth.currentUser.uid == this.state.post.uid){
         return (
             <header className="container">
                 <h1>Create / Edit Post Page</h1>
@@ -249,7 +249,6 @@ class CreatePost extends React.Component {
                       </textarea></div>
                   </div>
 
-
                   <Button
                       type="submit"
                       variant="contained"
@@ -263,6 +262,10 @@ class CreatePost extends React.Component {
 
             </header>
         );
+    }else if(this.state.post){
+      return(
+        <header className="container"><h1>You are not the Post Owner.</h1></header>
+      )
     }else{
       return(
         <header></header>
@@ -272,4 +275,4 @@ class CreatePost extends React.Component {
 
 }
 
-export default CreatePost;
+export default EditPost;

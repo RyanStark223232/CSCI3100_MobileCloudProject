@@ -44,10 +44,6 @@ class Post extends React.Component{
   }
 
   RequestJoin=()=>{
-    if(auth.currentUser === null) {
-      alert("please sign in first")
-      return
-    }
     let id = 1;
     let flag =1;
     f_database.ref("posts").child(this.state.post.pid)
@@ -106,6 +102,9 @@ class Post extends React.Component{
                   })
                   
                 })
+    // console.log(id);
+    // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"})
+    // id = Date.now()-1618326164000
     if(flag!==0) f_database.ref("posts").child(this.state.post.pid).child("participant").update({[id]:email})
     f_database.ref("posts").child(this.state.post.pid).child("waiting_list").orderByKey()
     .once("value",snapshot=>{  snapshot.forEach(snap=> {
