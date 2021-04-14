@@ -1,7 +1,9 @@
-import { Container, Form, Grid, Segment, Button, Input, Table, Header, Icon } from "semantic-ui-react"
+import { Container, Form, Grid, Segment, Input, Table, Header, Icon } from "semantic-ui-react"
 import {f_database, firebase} from "./Firebase.js";
 import React, {useState, useEffect} from "react";
 import './FirebaseCrud.css'
+import Button from '@material-ui/core/Button';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const FirebaseCrud = (props) => {
   console.log("Pass IN:", props.state.state);
@@ -123,9 +125,9 @@ const FirebaseCrud = (props) => {
                             <td className = "table-td">{data.Period}</td>
                             <td className = "table-td">{data.Size}</td>
                             <td className = "table-td">
-                              <Button primary onClick={()=>{window.location = "./post/"+data.Pid}}>
+                              <Button startIcon={<VisibilityIcon/>} color='secondary' variant="contained" onClick={()=>{window.location = "./post/"+data.Pid}}>
                                 <Icon name = "edit" primary></Icon>
-                                Detail
+                                View Post
                               </Button>
                             </td>
                           </tr>

@@ -237,25 +237,6 @@ class Search extends React.Component {
                         <div>
                             <Autocomplete
                                 className={classes.search_bar}
-                                {...this.defaultPropsSize}
-                                id="Size"
-                                debug
-                                onChange={this.onChangeSize}
-                                defaultValue={{ size: (this.props.location.state == null)?'': this.props.location.state.group_size}}
-                                renderInput={(params) => <TextField {...params}
-                                    label="Size"
-                                    variant="filled"
-                                    margin="normal"
-                                    onChange={this.onChangeSize}
-                                />}
-                            />
-                        </div>
-                    </FormControl>
-
-                    <FormControl  className={classes.formControl}>
-                        <div>
-                            <Autocomplete
-                                className={classes.search_bar}
                                 {...this.defaultPropsType}
                                 id="Type"
                                 debug
@@ -287,6 +268,25 @@ class Search extends React.Component {
                                     margin="normal"
                                     value={this.state.period}
                                     onChange={this.onChangePeriod}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+                    
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsSize}
+                                id="Size"
+                                debug
+                                onChange={this.onChangeSize}
+                                defaultValue={{ size: (this.props.location.state == null)?'': this.props.location.state.group_size}}
+                                renderInput={(params) => <TextField {...params}
+                                    label="Size"
+                                    variant="filled"
+                                    margin="normal"
+                                    onChange={this.onChangeSize}
                                 />}
                             />
                         </div>

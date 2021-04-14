@@ -33,6 +33,8 @@ import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
 import Fab from '@material-ui/core/fab'
 import { blue } from '@material-ui/core/colors';
+import HomeIcon from '@material-ui/icons/Home';
+import SearchIcon from '@material-ui/icons/Search';
 
 import {
   BrowserRouter as Router,
@@ -124,12 +126,14 @@ function App() {
             <ul>
               <li>
                 <Link to="/" style={{ textDecoration: 'none' }}>
-                  <Button variant="outlined" size="large">Home</Button>
+                  <Button startIcon={<HomeIcon/>} variant="outlined" size="large">
+                    Home
+                  </Button>
                 </Link>
               </li>
               <li>
                 <Link to="/search" style={{ textDecoration: 'none' }}>
-                  <Button variant="outlined" size="large">Search Post</Button>
+                  <Button startIcon={<SearchIcon/>} variant="outlined" size="large">Search Post</Button>
                 </Link>
               </li>
               {/* <li>

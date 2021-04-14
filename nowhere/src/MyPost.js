@@ -5,6 +5,8 @@ import Button from '@material-ui/core/Button';
 import {storage, f_database, auth} from "./Firebase.js";
 import cover_image from "./cover.jpeg";
 import SentimentVeryDissatisfiedIcon from './sadFace.png';
+import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 
 class MyPost extends React.Component{
@@ -74,11 +76,11 @@ class MyPost extends React.Component{
                       <div className="my-post-size">Group size: {post.size}</div>
                     </div>
                     <div className="right-column">
-                      <Button variant="contained" size="small" color="primary" onClick={()=>{window.location="./editpost/"+post.pid}}>
-                        Edit Post &rarr;
+                      <Button variant="contained" size="small" color="primary" startIcon={<EditIcon />} onClick={()=>{window.location="./editpost/"+post.pid}}>
+                        Edit Post
                       </Button>
-                      <Button variant="contained" size="small" color="primary" onClick={()=>{window.location="./post/"+post.pid}}>
-                        View Post &rarr;
+                      <Button variant="contained" size="small" color="primary" startIcon={<VisibilityIcon/>} onClick={()=>{window.location="./post/"+post.pid}}>
+                        View Post
                       </Button>
                     </div>
                   </div>
