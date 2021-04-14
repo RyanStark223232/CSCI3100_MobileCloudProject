@@ -139,7 +139,7 @@ class AccountDetails extends React.Component{
     });
     },1000); 
   }
-
+  
 
   render(){
     const {classes} = this.props;
@@ -294,11 +294,6 @@ class AccountDetails extends React.Component{
 
                     
                 </Grid>
-                <Grid align ="center">
-                <Button variant="contained" size="small" color="primary"  onClick = {()=>this.props.history.push("/editprofile")}>
-                  <EditIcon/> Edit Profile
-                </Button>
-              </Grid>
                                 
            </div>
 
