@@ -210,7 +210,7 @@ class Search extends React.Component {
         const {classes} = this.props;
         return (
             <header>
-                <div>
+                <div className="search-bar">
                     <img src={this.state.image} id="image" crossOrigin="anonymous" alt="test" style={{display: "none"}}></img>
 
                     <FormControl  className={classes.formControl}>
