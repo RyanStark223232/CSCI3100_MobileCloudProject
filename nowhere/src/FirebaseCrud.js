@@ -1,5 +1,4 @@
 import { Container, Form, Grid, Segment, Button, Input, Table, Header, Icon } from "semantic-ui-react"
-
 import {f_database, firebase} from "./Firebase.js";
 import React, {useState, useEffect} from "react";
 
@@ -9,6 +8,7 @@ const FirebaseCrud = () => {
   const [aTstyle,setATstyle] = useState('')
   const [aPeriod,setAPeriod] = useState('')
   const [userData,setUserData] = useState([])
+  const [stylePath, setStylePath] = useState('semantic-ui-css/semantic.css')
 
   const handleAddUser = () => {
     const firestore = firebase.database().ref('/posts');
@@ -88,6 +88,7 @@ const FirebaseCrud = () => {
 
 
     return <div className ="ui hidden divider">
+      <link rel="stylesheet" type="text/css" href={stylePath} />
       <Container>
         <Grid>
           <Grid.Row columns="2">

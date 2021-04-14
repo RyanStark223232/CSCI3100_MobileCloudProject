@@ -1,6 +1,6 @@
 import React from "react";
 import * as tf from '@tensorflow/tfjs';
-import FilteringTable from './FilteringTable.jsx';
+import FirebaseCrud from './FirebaseCrud.js';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import FormControl from '@material-ui/core/FormControl';
@@ -8,8 +8,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SearchIcon from '@material-ui/icons/Search';
-import FirebaseCrud from './FirebaseCrud.js';
-
 
 class Search extends React.Component {
     constructor(props){
@@ -82,7 +80,7 @@ class Search extends React.Component {
                        p3:predictions[2].className
         })
 
-        if (this.classifier.getNumClasses() > 0) {
+        if (this.classifier.getNumClasses() > 0) {      
             // Get the activation from mobilenet from the webcam.
             const inf_activation = model.infer(img, 'conv_preds');
             // Get the most likely class and confidence from the classifier module.
@@ -137,7 +135,108 @@ class Search extends React.Component {
         const {classes} = this.props;
         return (
             <header>
-                <FirebaseCrud />
+                <div>
+                    <img src={this.state.image} id="image" crossOrigin="anonymous" alt="test" style={{display: "none"}}></img>
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsLocations}
+                                id="Location"
+                                debug
+                                onChange={this.onChangeLocation}
+                                renderInput={(params) => <TextField {...params}
+                                    label="Location"
+                                    variant="filled"
+                                    margin="normal"
+                                    onChange={this.onChangeLocation}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsSize}
+                                id="GroupSize"
+                                debug
+                                onChange={this.onChangeSize}
+                                renderInput={(params) => <TextField {...params}
+                                    label="Group Size"
+                                    variant="filled"
+                                    margin="normal"
+                                    onChange={this.onChangeSize}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsType}
+                                id="Type"
+                                debug
+                                onChange={this.onChangeType}
+                                renderInput={(params) => <TextField {...params}
+                                    label="Type"
+                                    variant="filled"
+                                    margin="normal"
+                                    onChange={this.onChangeType}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl  className={classes.formControl}>
+                        <div>
+                            <Autocomplete
+                                className={classes.search_bar}
+                                {...this.defaultPropsPeriod}
+                                id="Period"
+                                debug
+                                onChange={this.onChangePeriod}
+                                renderInput={(params) => <TextField {...params}
+                                    label="Period"
+                                    variant="filled"
+                                    margin="normal"
+                                    onChange={this.onChangePeriod}
+                                />}
+                            />
+                        </div>
+                    </FormControl>
+
+                    <FormControl className={classes.imageControl} >
+                        <input
+                            accept="image/*"
+                            className={classes.input}
+                            id="contained-button-file"
+                            multiple
+                            type="file"
+                            onChange={this.loadImage}
+                        />
+                        <label htmlFor="contained-button-file">
+                            <Button variant="contained"
+                                className={classes.upload_button}
+                                component="span"
+                                startIcon={<CloudUploadIcon />}>
+                                Upload Image
+                            </Button>
+                        </label>
+                        <Button
+                            variant="contained"
+                            color="default"
+                            className={classes.search_button}
+                            startIcon={<SearchIcon />}>
+                            Search
+                        </Button>
+                    </FormControl>
+                </div>
+
+                <FirebaseCrud state={{state:this.state}}/>
             </header>
         );
     }
