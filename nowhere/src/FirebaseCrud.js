@@ -93,33 +93,6 @@ const FirebaseCrud = (props) => {
     return <div className ="ui hidden divider">
       <Container>
         <Grid>
-          <Grid.Row columns="2">
-            
-            <Grid.Column>
-              <Segment padded="very">
-                <Form>
-                  <Form.Field>
-                    <label>Location</label>
-                    <Input placeholder="Location" focus value = {aLocation} onChange={(e) => setALocation(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Travel Style</label>
-                    <Input placeholder="Travel Style" focus value = {aTstyle} onChange={(e) => setATstyle(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Period</label>
-                    <Input placeholder="First Name" focus value = {aPeriod} onChange={(e) => setAPeriod(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <Button onClick={()=>handleFilter()} positive>
-                      {" "}
-                      Filter</Button>
-                  </Form.Field>
-                </Form>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-
 
           <Grid.Row column="1">
             <Grid.Column>

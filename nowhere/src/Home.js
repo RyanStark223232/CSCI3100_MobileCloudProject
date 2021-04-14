@@ -135,24 +135,6 @@ class Home extends React.Component{
                             <div>
                                 <Autocomplete
                                     className={classes.search_bar}
-                                    {...this.defaultPropsSize}
-                                    id="GroupSize"
-                                    debug
-                                    onChange={this.onChangeSize}
-                                    renderInput={(params) => <TextField {...params}
-                                        label="Group Size"
-                                        variant="filled"
-                                        margin="normal"
-                                        onChange={this.onChangeSize}
-                                    />}
-                                />
-                            </div>
-                        </FormControl>
-
-                        <FormControl  className={classes.formControl}>
-                            <div>
-                                <Autocomplete
-                                    className={classes.search_bar}
                                     {...this.defaultPropsType}
                                     id="Type"
                                     debug
