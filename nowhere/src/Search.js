@@ -20,6 +20,11 @@ class Search extends React.Component {
             p3:null,
             place:null,
             loaded:false,
+
+            location:'',
+            type:'',
+            period:'',
+            
         };
         // props.location.state stores the data passed from Homepage
         // if you go to search tab by clicking "Search" on top, props.location.state is undefined
@@ -31,6 +36,9 @@ class Search extends React.Component {
         this.neuralInference = this.neuralInference.bind(this);
         const knnClassifier = require('@tensorflow-models/knn-classifier');
         this.classifier = knnClassifier.create();
+        this.onChangeLocation = this.onChangeLocation.bind(this);
+        this.onChangeType = this.onChangeType.bind(this);
+        this.onChangePeriod = this.onChangePeriod.bind(this);
 
         // Default Input Options for Material UI
         this.defaultPropsLocations = {
@@ -61,6 +69,48 @@ class Search extends React.Component {
                 this.loadImagePassIn(this.props.location.state.image);
                 this.props.location.state.image = null;
             }
+        }
+    }
+
+    // onChange for Location Input
+    onChangeLocation (event, values){
+        var temp_location = '';
+        if (values != null){
+            temp_location = values.name;
+        }
+        else {
+            temp_location = event.target.value            
+        }
+
+        if (temp_location){
+            this.setState({location:temp_location});
+        }
+        else {
+            this.setState({location:''});
+        }
+    }
+
+    // onChange for Type
+    onChangeType (event, values){
+        if (values != null){
+            console.log(values.type)
+            this.setState({type:values.type});
+        }
+        else {
+            console.log(event.target.value);
+            this.setState({type:event.target.value});
+        }
+    }
+
+    // onChange for Period
+    onChangePeriod (event, values){
+        if (values != null){
+            console.log(values.type)
+            this.setState({period:values.type});
+        }
+        else {
+            console.log(event.target.value);
+            this.setState({period:event.target.value});
         }
     }
 
@@ -296,9 +346,9 @@ const sampleSize = [
 ];
 
 const sampleType = [
-    { type: 'sporty' },
-    { type: 'shopping' },
-    { type: 'nature' },
+    { type: 'Sporty' },
+    { type: 'Shopping' },
+    { type: 'Nature' },
 ]
 
 const samplePeriod = [
