@@ -75,10 +75,10 @@ class MyPost extends React.Component{
                     </div>
                     <div className="right-column">
                       <Button variant="contained" size="small" color="primary" onClick={()=>{window.location="./editpost/"+post.pid}}>
-                        Edit Post &rarr;
+                        Edit Post
                       </Button>
                       <Button variant="contained" size="small" color="primary" onClick={()=>{window.location="./post/"+post.pid}}>
-                        View Post &rarr;
+                        View Post
                       </Button>
                     </div>
                   </div>
