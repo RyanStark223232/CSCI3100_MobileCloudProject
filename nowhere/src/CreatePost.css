@@ -1,0 +1,64 @@
+.container{
+  width:100%;
+  height: 100%;
+  color:black;
+}
+
+body{
+  padding:20px;
+}
+div{
+  margin:5px;
+}
+.wrapper{
+  display: flex;
+}
+.left-item{
+  width:10%;
+
+}
+.right-item{
+  width:90%;
+  text-align: left;
+}
+select{
+  margin-left: 10px;
+}
+input{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+span{
+  vertical-align: top;
+}
+textarea{
+  margin: auto 10px auto 10px;
+  width:50%;
+}
+
+h1{
+  text-align: center;
+}
+
+.title-container{
+  height: auto;
+  width :100%;
+  font-size:16px;
+  background-color:#0000;
+}
+
+#save-btn{
+  text-align: center;
+}
+
+#save-btn button{
+  display:inline-block;
+  padding:5px;
+
+  border-radius: 4px;
+  background-color:#4eb5f1;
+  color:#FFFFFF;
+}
+#save-btn button:hover{
+  background-color:#4095c6;
+}
