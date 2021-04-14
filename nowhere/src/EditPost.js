@@ -31,12 +31,10 @@ class CreatePost extends React.Component {
 
 
 
-  componentDidMount() {
-
-
+  componentWillMount() {
     const id = parseInt(this.props.match.params.id);
     var data = null;
-    f_database.ref("posts").orderByChild('pid').equalTo(id).on("value", snapshot=>{
+    f_database.ref("posts").orderByChild('pid').equalTo(id).once("value", snapshot=>{
       snapshot.forEach(snap=>{
         data=snap.val()
       });
@@ -126,7 +124,10 @@ class CreatePost extends React.Component {
       }else if(this.state.post.url){ post_ref.update({url:this.state.post.url}) }
       if(this.state.remark){ post_ref.update({remark:this.state.remark})}
 
-      alert("Submitted to database title/"+ this.state.post.pid);
+      setTimeout(()=>{
+         alert("Submitted to database posts/"+ this.state.post.pid);
+      } , 2500);
+
     } catch(e) {
       console.log(e);
       alert(e);
