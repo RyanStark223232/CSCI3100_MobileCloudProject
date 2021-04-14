@@ -14,7 +14,7 @@ class MyPost extends React.Component{
       my_posts:null,
       isLoggedIn:auth.currentUser
     }
-
+    this.getData=this.getData.bind(this);
   }
 
   componentWillMount(){
@@ -32,6 +32,21 @@ class MyPost extends React.Component{
       });
     }
   }
+
+  getData = ()=>{
+    var data = [];
+    f_database.ref("posts").orderByChild('uid').equalTo(auth.currentUser.uid).once("value", snapshot=>{
+      snapshot.forEach(snap=>{
+        data.push(snap.val());
+      });
+      this.setState({
+        my_posts:data
+      },()=>{
+        console.log(this.state);
+      })
+    });
+  }
+
 
 
   createPost=()=>{
@@ -73,7 +88,7 @@ class MyPost extends React.Component{
           </div>
         </header>
       )
-    }else{
+    }else if(auth.currentUser){
       return(
         <header>
           <div className="my-post-header">
@@ -84,6 +99,19 @@ class MyPost extends React.Component{
             <Button variant="contained" size="large" color="secondary" onClick={this.createPost} style={{margin:20}}>
               Create New Post
             </Button>
+          </div>
+        </header>
+      )
+    }else{
+      return(
+        <header>
+          <div className="my-post-header">
+            <div>
+              <img src={SentimentVeryDissatisfiedIcon} alt="sadFace"></img>
+              Please Login to view your posts.
+            </div>
+
+            <script>{auth.onAuthStateChanged(this.getData) }</script>
           </div>
         </header>
       )
