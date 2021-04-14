@@ -1,6 +1,7 @@
 import { Container, Form, Grid, Segment, Button, Input, Table, Header, Icon } from "semantic-ui-react"
 import {f_database, firebase} from "./Firebase.js";
 import React, {useState, useEffect} from "react";
+import './FirebaseCrud.css'
 
 const FirebaseCrud = (props) => {
   console.log("Pass IN:", props.state.state.location);
@@ -11,16 +12,6 @@ const FirebaseCrud = (props) => {
   const [userData,setUserData] = useState([])
 
   console.log("Search Debug", aLocation, aTstyle, aPeriod);
-
-  const handleAddUser = () => {
-    const firestore = firebase.database().ref('/posts');
-    let data = {
-      Location: aLocation,
-      Tstyle: aTstyle,
-      Period: aPeriod,
-    };
-    firestore.push(data);
-  }
 
   useEffect(()=>{
     const firestore = f_database.ref('/posts');
@@ -33,6 +24,7 @@ const FirebaseCrud = (props) => {
           Location:data[id].location,
           Tstyle: data[id].travel_style,
           Period:data[id].period,
+          Url: data[id].url
         });
       }
 
@@ -41,8 +33,6 @@ const FirebaseCrud = (props) => {
   },[])
 
   var userArray = [];
-  var filteredArray = [];
-  var filteredArrayl = [];
   var filteredArraylt = [];
 
 
@@ -90,37 +80,11 @@ const FirebaseCrud = (props) => {
   }
 
 
+  var imageUrl= "https//picsum.photos/10"
+
     return <div className ="ui hidden divider">
       <Container>
         <Grid>
-          <Grid.Row columns="2">
-            
-            <Grid.Column>
-              <Segment padded="very">
-                <Form>
-                  <Form.Field>
-                    <label>Location</label>
-                    <Input placeholder="Location" focus value = {aLocation} onChange={(e) => setALocation(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Travel Style</label>
-                    <Input placeholder="Travel Style" focus value = {aTstyle} onChange={(e) => setATstyle(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <label>Period</label>
-                    <Input placeholder="First Name" focus value = {aPeriod} onChange={(e) => setAPeriod(e.target.value)}/>
-                  </Form.Field>
-                  <Form.Field>
-                    <Button onClick={()=>handleFilter()} positive>
-                      {" "}
-                      Filter</Button>
-                  </Form.Field>
-                </Form>
-              </Segment>
-            </Grid.Column>
-          </Grid.Row>
-
-
           <Grid.Row column="1">
             <Grid.Column>
               {
@@ -130,35 +94,38 @@ const FirebaseCrud = (props) => {
                     Oops! No Result!
                   </Header>
                 </Segment>
-                ): (
+                ): (    
                   <Segment padded="very">
-                    <Table celled fixed singleLine>
-                      <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell> Location </Table.HeaderCell>
-                          <Table.HeaderCell> Travel Style </Table.HeaderCell>
-                          <Table.HeaderCell> Period </Table.HeaderCell>
-                          <Table.HeaderCell> Current Capacity </Table.HeaderCell>
-                          <Table.HeaderCell> </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
+                    <style>
+                      
+                    </style>
+                    <table className = "table">
+                      <tr className = "table-tr">
+                          <th className = "table-th"> </th>
+                          <th className = "table-th"> Location </th>
+                          <th className = "table-th"> Travel Style </th>
+                          <th className = "table-th"> Period </th>
+                          <th className = "table-th"> Current Capacity </th>
+                          <th className = "table-th"> </th>
+                      </tr>
                       {
                         filteredArraylt.map((data,index)=>{
-                          return <Table.Body>
-                            <Table.Cell>{data.Location}</Table.Cell>
-                            <Table.Cell>{data.Tstyle}</Table.Cell>
-                            <Table.Cell>{data.Period}</Table.Cell>
-                            <Table.Cell></Table.Cell>
-                            <Table.Cell>
+                          return <tr className = "table-tr">
+                            <td className = "table-td"><img src={data.Url} /> </td>
+                            <td className = "table-td">{data.Location}</td>
+                            <td className = "table-td">{data.Tstyle}</td>
+                            <td className = "table-td">{data.Period}</td>
+                            <td className = "table-td"></td>
+                            <td className = "table-td">
                               <Button primary>
                                 <Icon name = "edit" primary></Icon>
                                 Detail
                               </Button>
-                            </Table.Cell>
-                          </Table.Body>
+                            </td>
+                          </tr>
                         })
                       }
-                    </Table>
+                    </table>
                   </Segment>
                 )
               }
