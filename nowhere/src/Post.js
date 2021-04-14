@@ -23,19 +23,14 @@ class Post extends React.Component{
   }
 
   onAuthStateChanged = ()=>{
-    if (auth.currentUser && typeof this.state.post != "undefined" && auth.currentUser.email === this.state.post.owner){
+    if (auth.currentUser && auth.currentUser.email === this.state.post.owner){
       this.setState({isOwner:true})
       // this.setState({disable_button:true})
       document.getElementById("requestButton").style.display = "none";
-    }
-        
-  
+    }   
     else {
-      this.setState({isOwner:false})
-      // document.getElementsByClassName("PostAdminButton").style.display = "none"
     }
 
-    console.log(this.state.isOwner);
   }
 
 
@@ -48,6 +43,7 @@ class Post extends React.Component{
       // console.log(this.state.post)
       this.onAuthStateChanged()
     })
+    // this.onAuthStateChanged()
   }
 
   RequestJoin=()=>{
@@ -62,13 +58,15 @@ class Post extends React.Component{
                       flag =0
                       // console.log(flag);
                     }
+                    var key = snap.key;
+                    id=  parseInt(key, 10)+1
                   })
                   // console.log(snapshot.numChildren());
-                  id = snapshot.numChildren() +1
+                  // id = snapshot.numChildren() +1
                 })
     // id = Date.now() -1618326164000
     // console.log(id);
-    // f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
+    f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:"dummy@dummy.com"+id})
     if(flag!==0){
       f_database.ref("posts").child(this.state.post.pid).child("waiting_list").update({[id]:auth.currentUser.email})
       // this.setState({disable_button:true})
@@ -137,7 +135,7 @@ class Post extends React.Component{
     }
     var temp_list = [];
     var i;
-    for (i = 0; i < 10; i++){
+    for (i = 0; i < 100; i++){
       if (this.state.post.waiting_list[i] == null) {
         continue;
       }
@@ -159,7 +157,7 @@ class Post extends React.Component{
     }
     var temp_list = [];
     var i;
-    for (i = 0; i < 10; i++){
+    for (i = 0; i < 100; i++){
       if (this.state.post.participant[i] == null) {
         continue;
       }
