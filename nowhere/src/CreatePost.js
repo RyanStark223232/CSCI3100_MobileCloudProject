@@ -200,8 +200,8 @@ class CreatePost extends React.Component {
                   <div className="left-item"><span>Travelling Style:</span></div>
                   <div className="right-item">
                     <Select
-                      name="travel-style"
-                      labelId="travel-style"
+                      name="travel_style"
+                      labelId="travel_style"
                       id="travel-style"
                       onChange={this.changeInput}
                       variant="outlined"
