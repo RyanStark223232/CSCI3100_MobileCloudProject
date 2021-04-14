@@ -27,7 +27,7 @@ const FirebaseCrud = (props) => {
           Url: data[id].url
         });
       }
-
+      
       setUserData(userInfo);
     });
   },[])
@@ -45,6 +45,8 @@ const FirebaseCrud = (props) => {
           Location:data[id].location,
           Tstyle: data[id].travel_style,
           Period:data[id].period,
+          Url: data[id].url,
+          Pid: data[id].pid
         });
       }
 
@@ -80,12 +82,10 @@ const FirebaseCrud = (props) => {
   }
 
 
-  var imageUrl= "https//picsum.photos/10"
 
     return <div className ="ui hidden divider">
       <Container>
         <Grid>
-
           <Grid.Row column="1">
             <Grid.Column>
               {
@@ -106,19 +106,17 @@ const FirebaseCrud = (props) => {
                           <th className = "table-th"> Location </th>
                           <th className = "table-th"> Travel Style </th>
                           <th className = "table-th"> Period </th>
-                          <th className = "table-th"> Current Capacity </th>
                           <th className = "table-th"> </th>
                       </tr>
                       {
                         filteredArraylt.map((data,index)=>{
                           return <tr className = "table-tr">
-                            <td className = "table-td"><img src={data.Url} /> </td>
+                            <td className = "table-td"><img src={data.Url}/> </td>
                             <td className = "table-td">{data.Location}</td>
                             <td className = "table-td">{data.Tstyle}</td>
                             <td className = "table-td">{data.Period}</td>
-                            <td className = "table-td"></td>
                             <td className = "table-td">
-                              <Button primary>
+                              <Button primary onClick={()=>{window.location = "./post/"+data.Pid}}>
                                 <Icon name = "edit" primary></Icon>
                                 Detail
                               </Button>

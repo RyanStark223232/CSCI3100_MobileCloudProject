@@ -24,9 +24,16 @@
     padding: 10px;
     margin: 5px;
     height: 100px;
+    width: 100%;
 
   }
   
+  .table-td img{   width:100%;
+    object-fit: contain;
+    max-height:100%;
+    max-width:100%; }
+  
+
   .table-th,
   .table-td {
     padding: 10px;
@@ -35,6 +42,7 @@
     margin: 5px;
     height: 100px;
     opacity: 0.7;
+    width: 100%;
   }
   
   .table-th {
