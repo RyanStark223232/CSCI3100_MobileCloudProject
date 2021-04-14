@@ -20,6 +20,7 @@ class Home extends React.Component{
             location:null,
             group_size:null,
             type:null,
+            period:null,
         };
         // Bind function to class
         this.onChangeSize = this.onChangeSize.bind(this);
@@ -272,9 +273,9 @@ const sampleSize = [
 ];
 
 const sampleType = [
-    { type: 'sporty' },
-    { type: 'shopping' },
-    { type: 'nature' },
+    { type: 'Sporty' },
+    { type: 'Shopping' },
+    { type: 'Nature' },
 ]
 
 const samplePeriod = [
