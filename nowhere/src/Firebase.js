@@ -1,9 +1,15 @@
+
+/*  
+This is the backend module exporting the APIs for other modules 
+to communication with the Firebase project server.
+*/ 
+
 import firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
 import "firebase/storage";
 
-
+//configuration of the Firebase project, to authenticate this software
 const firebaseConfig = {
     apiKey: "AIzaSyBPCAkZ-IwzGk5qA9EeJZ1d2UE-Y2iG8GU",
     authDomain: "nowhere-571c3.firebaseapp.com",
@@ -15,14 +21,13 @@ const firebaseConfig = {
 };
 
 const app = firebase.initializeApp(firebaseConfig)
+ //for user authentication
 const auth = app.auth()
-const f_database = firebase.database()
-const storage = firebase.storage();
+//for the use of realtime databse
+const f_database = firebase.database() 
+//for storing pictures in storage
+const storage = firebase.storage(); 
 
-
-// const getProPic = ()=>{
-
-// }
 
 export { app, storage, auth, f_database, firebase}
 export default auth
