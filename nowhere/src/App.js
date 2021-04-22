@@ -10,27 +10,23 @@ WONG Hin 1155109054
 
 
 import './App.css';
-import SignIn from './SignIn.js';
-import SignUp from './SignUp.js';
+import SignIn from './Account/SignIn.js';
+import SignUp from './Account/SignUp.js';
 import Home from './Home.js';
-import Search from './Search.js';
-import AccountDetails from "./AccountDetails.js";
-import CreatePost from "./CreatePost.js";
-import EditPost from "./EditPost.js";
-import MyPost from "./MyPost.js";
-import Post from "./Post.js"
-import EditProfile from "./EditProfile.js";
+import Search from './Search/Search.js';
+import AccountDetails from "./Account/AccountDetails.js";
+import CreatePost from "./Post/CreatePost.js";
+import EditPost from "./Post/EditPost.js";
+import MyPost from "./Post/MyPost.js";
+import Post from "./Post/Post.js"
+import EditProfile from "./Profile/EditProfile.js";
 import Button from '@material-ui/core/Button';
-import nowhere from './Logo_Temp.jpg';
+import nowhere from './Image/Logo_Temp.jpg';
 import React, { useState }from 'react';
-import ReactDOM from "react-dom";
 import auth from "./Firebase";
-import EditIcon from '@material-ui/icons/Edit';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
-import Typography from '@material-ui/core/Typography';
-import Badge from '@material-ui/core/Badge';
 import Fab from '@material-ui/core/fab'
 import { blue } from '@material-ui/core/colors';
 import HomeIcon from '@material-ui/icons/Home';

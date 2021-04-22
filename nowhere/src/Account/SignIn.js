@@ -10,18 +10,12 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-// import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
-import { withRouter } from "react-router";
 
-import auth from "./Firebase";
-// import { Comment, Functions } from "@material-ui/icons";
-// import { IconButton } from '@material-ui/core';
-import App, { setLogedIn } from './App';
-
+import auth from "../Firebase";
+import App, { setLogedIn } from '../App';
 
 const useStyles = theme => ({
   paper: {

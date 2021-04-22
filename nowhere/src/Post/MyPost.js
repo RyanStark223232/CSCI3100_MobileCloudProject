@@ -1,10 +1,10 @@
 import React from "react";
-import db from "./Firebase.js";
+import db from "../Firebase.js";
 import './MyPost.css';
 import Button from '@material-ui/core/Button';
-import {storage, f_database, auth} from "./Firebase.js";
-import cover_image from "./cover.jpeg";
-import SentimentVeryDissatisfiedIcon from './sadFace.png';
+import {storage, f_database, auth} from "../Firebase.js";
+import cover_image from "../Image/cover.jpeg";
+import SentimentVeryDissatisfiedIcon from '../Image/sadFace.png';
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 

@@ -1,5 +1,5 @@
 
-import hk from './hk-Trim.png';
+import hk from './Image/hk-Trim.png';
 import './Home.css';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -11,16 +11,16 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import SearchIcon from '@material-ui/icons/Search';
 import { Link } from "react-router-dom";
 
-class Home extends React.Component{
-    constructor(props){
+class Home extends React.Component {
+    constructor(props) {
         super(props);
         // State of this class
         this.state = {
-            image:null,
-            location:null,
-            group_size:null,
-            type:null,
-            period:null,
+            image: null,
+            location: null,
+            group_size: null,
+            type: null,
+            period: null,
         };
         // Bind function to class
         this.onChangeSize = this.onChangeSize.bind(this);
@@ -50,70 +50,70 @@ class Home extends React.Component{
         };
     }
 
-    uploadImage = async(event) =>{
-        if ((event.target.files[0]) == null){return};
+    uploadImage = async (event) => {
+        if ((event.target.files[0]) == null) { return };
         var url = URL.createObjectURL(event.target.files[0]);
-        await this.setState({image:url});
+        await this.setState({ image: url });
         console.log(this.state);
     };
 
     // onChange for Location Input
-    onChangeLocation (event, values){
-        if (values != null){
+    onChangeLocation(event, values) {
+        if (values != null) {
             console.log(values.name)
-            this.setState({location:values.name});
+            this.setState({ location: values.name });
         }
         else {
             console.log(event.target.value);
-            this.setState({location:event.target.value});
+            this.setState({ location: event.target.value });
         }
     }
 
     // onChange for Size Input
-    onChangeSize (event, values){
-        if (values != null){
+    onChangeSize(event, values) {
+        if (values != null) {
             console.log(values.size)
-            this.setState({group_size:values.size});
+            this.setState({ group_size: values.size });
         }
         else {
             console.log(event.target.value);
-            this.setState({group_size:event.target.value});
+            this.setState({ group_size: event.target.value });
         }
     }
 
     // onChange for Type
-    onChangeType (event, values){
-        if (values != null){
+    onChangeType(event, values) {
+        if (values != null) {
             console.log(values.type)
-            this.setState({type:values.type});
+            this.setState({ type: values.type });
         }
         else {
             console.log(event.target.value);
-            this.setState({type:event.target.value});
+            this.setState({ type: event.target.value });
         }
     }
 
     // onChange for Period
-    onChangePeriod (event, values){
-        if (values != null){
+    onChangePeriod(event, values) {
+        if (values != null) {
             console.log(values.type)
-            this.setState({period:values.type});
+            this.setState({ period: values.type });
         }
         else {
             console.log(event.target.value);
-            this.setState({period:event.target.value});
+            this.setState({ period: event.target.value });
         }
     }
 
-    render(){
-        const {classes} = this.props;
+    render() {
+        const { classes } = this.props;
         return (
             <header>
                 <div className="container">
                     <img src={hk} alt="hk" className="hk"></img>
                     <div>
 
-                        <FormControl  className={classes.formControl}>
+                        <FormControl className={classes.formControl}>
                             <div>
                                 <Autocomplete
                                     className={classes.search_bar}
@@ -131,7 +131,7 @@ class Home extends React.Component{
                             </div>
                         </FormControl>
 
-                        <FormControl  className={classes.formControl}>
+                        <FormControl className={classes.formControl}>
                             <div>
                                 <Autocomplete
                                     className={classes.search_bar}
@@ -149,7 +149,7 @@ class Home extends React.Component{
                             </div>
                         </FormControl>
 
-                        <FormControl  className={classes.formControl}>
+                        <FormControl className={classes.formControl}>
                             <div>
                                 <Autocomplete
                                     className={classes.search_bar}
@@ -166,8 +166,8 @@ class Home extends React.Component{
                                 />
                             </div>
                         </FormControl>
-                        
-                        <FormControl  className={classes.formControl}>
+
+                        <FormControl className={classes.formControl}>
                             <div>
                                 <Autocomplete
                                     className={classes.search_bar}
@@ -202,7 +202,7 @@ class Home extends React.Component{
                                     Upload Image
                                 </Button>
                             </label>
-                            <Link to={{pathname:"/search", state:this.state}}>
+                            <Link to={{ pathname: "/search", state: this.state }}>
                                 <Button
                                     variant="contained"
                                     color="default"
@@ -222,34 +222,34 @@ class Home extends React.Component{
 // Constant Variable for class styling
 const useStyles = theme => ({
     formControl: {
-      margin: theme.spacing(-1),
-      marginTop: theme.spacing(3),
-      minWidth: 200,
-      background: "white",
-      borderRadius: "10px",
+        margin: theme.spacing(-1),
+        marginTop: theme.spacing(3),
+        minWidth: 200,
+        background: "white",
+        borderRadius: "10px",
 
     },
     imageControl: {
-      margin: theme.spacing(2),
-      marginTop: theme.spacing(0),
+        margin: theme.spacing(2),
+        marginTop: theme.spacing(0),
     },
     input: {
         display: 'none',
     },
     upload_button: {
         marginTop: theme.spacing(4),
-        background:"white",
+        background: "white",
         width: "200px",
     },
     search_button: {
         marginTop: theme.spacing(0.5),
-        background:"white",
+        background: "white",
         width: "200px",
     },
     search_bar: {
         borderRadius: "25px",
         marginTop: theme.spacing(0.5),
-        background:"white",
+        background: "white",
         width: "200px",
         display: 'flex',
     },
@@ -283,5 +283,5 @@ const samplePeriod = [
     { type: 'Day-Trip' },
     { type: 'Weeks-Trip' },
     { type: 'Months-Trip' },
-    { type: 'Exchange(student)'},
+    { type: 'Exchange(student)' },
 ]

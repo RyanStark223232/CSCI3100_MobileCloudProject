@@ -3,7 +3,6 @@ import "firebase/database";
 import "firebase/auth";
 import "firebase/storage";
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyBPCAkZ-IwzGk5qA9EeJZ1d2UE-Y2iG8GU",
     authDomain: "nowhere-571c3.firebaseapp.com",
@@ -18,11 +17,6 @@ const app = firebase.initializeApp(firebaseConfig)
 const auth = app.auth()
 const f_database = firebase.database()
 const storage = firebase.storage();
-
-
-// const getProPic = ()=>{
-
-// }
 
 export { app, storage, auth, f_database, firebase}
 export default auth

@@ -1,13 +1,10 @@
 import React from "react";
-import db from "./Firebase.js";
-import {storage, f_database, auth} from "./Firebase.js";
+import db from "../Firebase.js";
+import {storage, f_database, auth} from "../Firebase.js";
 import "./Post.css";
 import { withRouter } from "react-router";
 import Button from '@material-ui/core/Button';
-import banner from './banner.jpeg';
-import SentimentVeryDissatisfiedIcon from './sadFace.png';
-
-
+import banner from '../Image/banner.jpeg';
 
 class Post extends React.Component{
   constructor(props){
@@ -29,9 +26,7 @@ class Post extends React.Component{
     }
     else {
     }
-
   }
-
 
   componentWillMount() {
     const id = parseInt(this.props.match.params.id);
@@ -43,7 +38,6 @@ class Post extends React.Component{
 
     })
   }
-
 
   RequestJoin=()=>{
     if(auth.currentUser === null) {
