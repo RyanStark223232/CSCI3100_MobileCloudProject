@@ -1,18 +1,24 @@
+/*  
+This is a supplementary module for the EditProfile module so that the user can edit the image they uploaded
+before submitting it to the server. The editor support shift, zooming and rotation.
+*/
+
 import React from "react";
 import ReactDom from "react-dom";
 import { render } from "react-dom";
 import AvatarEditor from "react-avatar-editor";
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
-import Slider from '@material-ui/core/Slider';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import Slider from "@material-ui/core/Slider";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 class PicUpload extends React.Component {
   constructor(props) {
     super(props);
+    //Binding the methods
     this.handleSave = this.handleSave.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
@@ -20,19 +26,20 @@ class PicUpload extends React.Component {
     this.handleZoomSlider = this.handleZoomSlider.bind(this);
     this.rotateLeft = this.rotateLeft.bind(this);
     this.rotateRight = this.rotateRight.bind(this);
+    //State for the iamge editor
     this.state = {
       cropperOpen: false,
       img: null,
       zoom: 2,
       rotate: 0,
-      croppedImg:
-        this.props.img
+      croppedImg: this.props.img,
     };
   }
 
+  //For updating the img state in EditProfile if there is a new saved image
   componentDidUpdate(prevProps) {
-    if(this.props.img != prevProps.img){
-      this.setState({croppedImg:this.props.img});
+    if (this.props.img != prevProps.img) {
+      this.setState({ croppedImg: this.props.img });
     }
   }
 
@@ -82,23 +89,36 @@ class PicUpload extends React.Component {
   //For rotate buttons
   rotateLeft() {
     this.setState({
-      rotate: this.state.rotate - 90
+      rotate: this.state.rotate - 90,
     });
   }
 
   rotateRight() {
     this.setState({
-      rotate: this.state.rotate + 90
+      rotate: this.state.rotate + 90,
     });
   }
 
   render() {
     return (
       <MuiThemeProvider>
-        <div style={{ height: 475, display:'block', textAlign: 'center'  }}>
-          <img src={this.state.croppedImg} style={{height:400, width: 400,  marginLeft: 'auto', marginRight: 'auto' }}/>
+        <div style={{ height: 475, display: "block", textAlign: "center" }}>
+          <img
+            src={this.state.croppedImg}
+            style={{
+              height: 400,
+              width: 400,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          />
           <div
-            style={{marginLeft: 'auto', marginRight: 'auto', paddingInline: '5%', marginTop:'2%' }}
+            style={{
+              marginLeft: "auto",
+              marginRight: "auto",
+              paddingInline: "5%",
+              marginTop: "2%",
+            }}
           >
             <input
               ref="in"
@@ -106,12 +126,17 @@ class PicUpload extends React.Component {
               type="file"
               accept="image/*"
               onChange={this.handleFileChange}
-              style={{display:'none'}}
+              style={{ display: "none" }}
             />
             <label htmlFor="contained-button-file">
-            <Button variant="contained" color="primary" component="span" startIcon={<CloudUploadIcon />}>
+              <Button
+                variant="contained"
+                color="primary"
+                component="span"
+                startIcon={<CloudUploadIcon />}
+              >
                 Upload Profile Picture
-                </Button>
+              </Button>
             </label>
           </div>
           {this.state.cropperOpen && (
@@ -127,7 +152,7 @@ class PicUpload extends React.Component {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                position: 'fixed',
+                position: "fixed",
                 bottom: 0,
                 right: 0,
                 zIndex: 99,
@@ -147,14 +172,14 @@ class PicUpload extends React.Component {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <label
                   style={{
                     fontSize: 15,
                     marginRight: 10,
-                    fontWeight: 600
+                    fontWeight: 600,
                   }}
                 >
                   Zoom
@@ -172,37 +197,55 @@ class PicUpload extends React.Component {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <label
                   style={{
                     fontSize: 15,
                     marginRight: 10,
-                    fontWeight: 600
+                    fontWeight: 600,
                   }}
                 >
                   Rotate
                 </label>
-                <Button variant="contained" size="small" component="span" onClick={this.rotateLeft}>Left</Button>
-                <Button variant="contained" size="small" component="span" onClick={this.rotateRight}>Right</Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  component="span"
+                  onClick={this.rotateLeft}
+                >
+                  Left
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  component="span"
+                  onClick={this.rotateRight}
+                >
+                  Right
+                </Button>
               </div>
               <div>
                 <Button
                   onClick={this.handleSave}
                   variant="contained"
-                  size='small'
+                  size="small"
                   startIcon={<SaveIcon />}
                   color="primary"
-                > Save
+                >
+                  {" "}
+                  Save
                 </Button>
                 <Button
                   onClick={this.handleCancel}
                   variant="contained"
-                  size='small'
+                  size="small"
                   color="secondary"
                   startIcon={<CancelIcon />}
-                > Cancel
+                >
+                  {" "}
+                  Cancel
                 </Button>
               </div>
             </div>
