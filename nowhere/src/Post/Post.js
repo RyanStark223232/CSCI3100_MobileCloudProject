@@ -1,17 +1,22 @@
+/*
+This is the frontend module for viewing post.
+The module retrieves the post from the firebase database and display post details. 
+*/
+
 import React from "react";
-import db from "../Firebase.js";
 import {storage, f_database, auth} from "../Firebase.js";
 import "./Post.css";
-import { withRouter } from "react-router";
 import Button from '@material-ui/core/Button';
 import banner from '../Image/banner.jpeg';
 
 class Post extends React.Component{
+  //initialize the state of the class
   constructor(props){
     super(props);
     this.state={
       post:null,
       // I you can set disable_button to true if you want to gray-out the button when the members are full or something like that
+
       disable_button:false,
       w_list:null,
       isOwner:false,
@@ -28,17 +33,17 @@ class Post extends React.Component{
     }
   }
 
+  // retrieves the post details from firebase database
   componentWillMount() {
     const id = parseInt(this.props.match.params.id);
     var data = null;
     f_database.ref("posts").child(id).on("value", snapshot=>{
       data = snapshot.val()
       this.setState({post:data}, ()=>this.onAuthStateChanged())
-      // console.log(this.state.post)
-
     })
   }
 
+  
   RequestJoin=()=>{
     if(auth.currentUser === null) {
       alert("please sign in first")
