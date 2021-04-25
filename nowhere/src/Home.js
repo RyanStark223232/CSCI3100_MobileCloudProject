@@ -1,3 +1,9 @@
+/*  
+This is the homepage of our website.
+It includes a search bar that allows user to search for posts.
+It will teleport user to search tab by pressing the "Search" Button.
+The information filled in will be automatically reused in the search tab.
+*/ 
 
 import hk from './Image/hk-Trim.png';
 import './Home.css';
@@ -50,6 +56,7 @@ class Home extends React.Component {
         };
     }
 
+    // Store Uploaded Image to be used in Image Search
     uploadImage = async (event) => {
         if ((event.target.files[0]) == null) { return };
         var url = URL.createObjectURL(event.target.files[0]);

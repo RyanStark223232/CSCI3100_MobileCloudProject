@@ -1,6 +1,6 @@
-import { Container, Form, Grid, Segment, Input, Table, Header, Icon } from "semantic-ui-react"
+import { Container, Grid, Segment, Header, Icon } from "semantic-ui-react"
 import { f_database, firebase } from "../Firebase.js";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import './FirebaseCrud.css'
 import Button from '@material-ui/core/Button';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -100,7 +100,7 @@ const FirebaseCrud = (props) => {
                     {
                       filteredArraylt.map((data, index) => {
                         return <tr className="table-tr">
-                          <td className="table-td"><img src={data.Url} /> </td>
+                          <td className="table-td"><img src={data.Url}/> </td>
                           <td className="table-td">{data.Location}</td>
                           <td className="table-td">{data.Tstyle}</td>
                           <td className="table-td">{data.Period}</td>

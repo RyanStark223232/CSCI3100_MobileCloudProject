@@ -1,3 +1,13 @@
+/*  
+This is the search module of our system.
+It allows users to search for existing posts with
+desired Location, Travelling Type, Length of Travel, and Group Size.
+It also implemented Neural Network Image Matching that could determine
+locations similar to user-input images.
+The filtering information will be sent to FirebaseCrud Module, which
+communicates with backend, fetch data, and filter the data. The posts
+are ultimately displayed to the users.
+*/ 
 import React from "react";
 import * as tf from '@tensorflow/tfjs';
 import FirebaseCrud from './FirebaseCrud.js';
@@ -65,6 +75,7 @@ class Search extends React.Component {
         };
     }
 
+    // If information is passed in from Home module, fill them in accordingly
     componentDidMount(){
         if (this.props.location.state != null){
             this.updateStates();
@@ -76,6 +87,7 @@ class Search extends React.Component {
 
     }
 
+    // Function for filling in information from Home module
     updateStates = async() =>{
         await this.setState({   location:this.props.location.state.location,
                                 type:this.props.location.state.type,
@@ -175,6 +187,7 @@ class Search extends React.Component {
         await this.neuralInference();
     };
 
+    // Upon uploading an image from Home module, it perform neural network inference and find closest location
     loadImagePassIn = async(url) =>{
         await this.load();
         require('@tensorflow/tfjs-backend-webgl');
@@ -182,6 +195,7 @@ class Search extends React.Component {
         await this.neuralInference();
     };
 
+    // Load the Neural Network model for inference
     load() {
         if (this.state.loaded){
             console.log('data loaded');
