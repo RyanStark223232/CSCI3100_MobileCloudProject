@@ -1,3 +1,9 @@
+/* 
+This is a class for redering the signup page
+and handle the signup using Firebase
+Authentication API
+*/
+
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,10 +18,11 @@ import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import auth from "../Firebase.js";
-import App, { setLogedIn } from '../App';
+//import auth api from backend module
+import auth from "./Firebase.js";
+import  { setLogedIn } from './App';
 
-
+//define styling for material ui design
 const useStyles = theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -39,23 +46,25 @@ const useStyles = theme => ({
 class SignUp extends React.Component {
   constructor(props) {
     super(props);
+    //get the input content from the input boxes of email, password and password verifier
     this.emailRef = React.createRef();
     this.pwRef = React.createRef();
     this.pwVRef = React.createRef();
 
   }
 
-
+  // call this function when the user hit sign up button
   handleSignUp = (e) => {
     e.preventDefault()
-    if(this.pwRef.current.value != this.pwVRef.current.value){
+    if (this.pwRef.current.value != this.pwVRef.current.value) {
       alert("the two passwords are different, please try again")
       return
     }
     try {
       auth.createUserWithEmailAndPassword(this.emailRef.current.value, this.pwRef.current.value).then((authData) => {
-        alert("Signed up successfully with email " + this.emailRef.current.value +"\n Please fill in more information about you.")
+        alert("Signed up successfully with email " + this.emailRef.current.value + "\n Please fill in more information about you.")
         if (auth.currentUser != null) {
+          //direct to editprofile page when signing up suceeded
           this.props.history.push("/editprofile")
           setLogedIn();
         } else {

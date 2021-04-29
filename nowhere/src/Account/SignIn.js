@@ -1,10 +1,14 @@
+/* 
+This is a class for redering the signin page
+and handle the signin using Firebase
+Authentication API
+*/
+
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -13,10 +17,12 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
+//import auth api from backend module
 import auth from "../Firebase";
-import App, { setLogedIn } from '../App';
+import  { setLogedIn } from '../App';
 
+
+//define styling for material ui design
 const useStyles = theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -41,26 +47,20 @@ const useStyles = theme => ({
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
+    //get the input content from the input box of email and password
     this.emailRef = React.createRef();
     this.pwRef = React.createRef();
-    // this.state = {
-    //   logedIn: false      
-    // }
-    
   }
   
-  onStateChange =()=>{
-    console.log("in onStateChange");
-    if(this.state.logedIn ===true) console.log("it is true!!");
-  }
 
+  // call this function when the user hit sign in button
   handleSignin = async (e) => {
     e.preventDefault()
     try {
       await auth.signInWithEmailAndPassword(this.emailRef.current.value, this.pwRef.current.value).then(value => {
         if (auth.currentUser != null) {
-          // alert("Sign in succeeded with email =" + this.emailRef.current.value)
           setLogedIn();
+          // direct to homepage when signing in succeeded
           this.props.history.push("/")
         } else {
           alert("login failed")
@@ -121,10 +121,6 @@ class SignIn extends React.Component {
               autoComplete="current-password"
               inputRef={this.pwRef}
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
             <Button
               type="submit"
               fullWidth
@@ -135,11 +131,6 @@ class SignIn extends React.Component {
               Sign In
           </Button>
             <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-              </Link>
-              </Grid> */}
               <Grid item>
                 <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}

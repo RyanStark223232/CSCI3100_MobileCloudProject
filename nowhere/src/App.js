@@ -41,19 +41,16 @@ import {
 
 
 
-
+// change the ui depeding on wheter or not the user is logged in. 
+// hide sign in and sign up tabs if user is logged in
 export function setLogedIn() {
-  // console.log("in setloged in");
   document.getElementById("beforeAuth").style.display = "none";
-  // document.getElementById("myPostButton").style.display = "inline";
   document.getElementById("displayName").innerHTML =  auth.currentUser.email;
   document.getElementById("afterAuth").style.display = "inline";
 }
-
+// hide "my profile" and "my posts" tabs if user is not logged in
 export function setLogedOut() {
-  // console.log("in setloged out");
   document.getElementById("beforeAuth").style.display = "inline";
-  // document.getElementById("myPostButton").style.display = "none";
   document.getElementById("afterAuth").style.display = "none";
   auth.signOut();
 }
@@ -81,22 +78,15 @@ function App() {
             <div className="toHide" id="afterAuth" >
             <Link to="/accountdetails" style={{ textDecoration: 'none' , margin: 5}} ><Fab size="small" variant="extended"  id="displayName" style={{backgroundColor: blue[200]}} ></Fab></Link>
             <Link to="/mypost" style={{ textDecoration: 'none' , margin: 5}} >
-            {/* <Badge badgeContent="" color="secondary" > */}
             <Button variant="contained" size="small" color="primary">
             <AssignmentTurnedInIcon/>My Posts
                 </Button>
-                {/* </Badge> */}
                 </Link>
               <Link to="/accountdetails" style={{ textDecoration: 'none' , margin: 5}} >
                 <Button variant="contained" size="small" color="primary">
                    <AccountCircleIcon/> My Profile
                 </Button>
               </Link>
-              {/* <Link to="/editprofile" style={{ textDecoration: 'none' , margin: 5}}>
-                <Button variant="contained" size="small" color="primary">
-                  <EditIcon/> Edit Profile
-                </Button>
-              </Link> */}
               <Link to="/" style={{ textDecoration: 'none' , margin: 5}}>
                 <Button variant="contained" size="small" color="secondary" onClick={setLogedOut}>
                   <ExitToAppIcon/> Log Out
@@ -132,11 +122,6 @@ function App() {
                   <Button startIcon={<SearchIcon/>} variant="outlined" size="large">Search Post</Button>
                 </Link>
               </li>
-              {/* <li>
-                <Link to="/mypost" style={{ textDecoration: 'none' }}>
-                  <Button variant="outlined" size="large" id="myPostButton">My Post</Button>
-                </Link>
-              </li> */}
 
             </ul>
           </nav>
