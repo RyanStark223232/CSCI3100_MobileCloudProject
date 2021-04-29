@@ -19,8 +19,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 //import auth api from backend module
-import auth from "./Firebase.js";
-import  { setLogedIn } from './App';
+import auth from "../Firebase.js";
+import  { setLogedIn } from '../App';
 
 //define styling for material ui design
 const useStyles = theme => ({
