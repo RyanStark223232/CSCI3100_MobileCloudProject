@@ -1,3 +1,10 @@
+/**
+This is the function FirenaseCrud fetching data from Firebase Backend and
+filter the data by the variables passing from Search.js. 
+The posts are ultimately displayed to the users.
+ * 
+ */
+
 import { Container, Grid, Segment, Header, Icon } from "semantic-ui-react"
 import { f_database, firebase } from "../Firebase.js";
 import React, { useEffect } from "react";
@@ -5,6 +12,7 @@ import './FirebaseCrud.css'
 import Button from '@material-ui/core/Button';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
+//Connect to the Firebase and Fetch the data(post) from the Realtime Database
 const FirebaseCrud = (props) => {
   console.log("Pass IN:", props.state.state);
 
@@ -29,7 +37,8 @@ const FirebaseCrud = (props) => {
   var userArray = [];
   var filteredArraylt = [];
 
-
+  //Turn the data from the database into arrays.
+  //After the transformation, the array will process to the next step: filtering
   function getUserArray() {
     const firestore = firebase.database().ref('/posts');
     firestore.on('value', (response) => {
@@ -52,6 +61,9 @@ const FirebaseCrud = (props) => {
 
   getUserArray()
 
+  //This is the filtering function
+  //The searching critieria is either the exact label or null
+  //To ensure that the different combinations of filtering.
   function getFilteredArray() {
 
 
