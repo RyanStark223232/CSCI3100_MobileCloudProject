@@ -70,7 +70,7 @@ class EditPost extends React.Component {
 
   }
 
-  // get the image from user upload and temporarily display the uploaded image on the website 
+  // get the image from user upload and temporarily display the uploaded image on the website
   handleImage = (event) => {
     this.setState({
       cover: event.target.files[0],
@@ -80,7 +80,7 @@ class EditPost extends React.Component {
     });
   }
 
-  // User edit the post and update the post details 
+  // User edit the post and update the post details
   handlePost = () => {
     var image_url;
     console.log(this.state);
@@ -116,7 +116,7 @@ class EditPost extends React.Component {
   render() {
     if (this.state.post && auth.currentUser.uid == this.state.post.uid) {
       return (<header className="container">
-        <h1>Create / Edit Post Page</h1>
+        <h1>Edit Post</h1>
         <div className="wrapper">
           <div className="left-item">
             <span>Cover Photo:</span>
