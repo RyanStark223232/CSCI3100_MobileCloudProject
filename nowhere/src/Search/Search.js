@@ -25,14 +25,13 @@ class Search extends React.Component {
         super(props);
         this.state = {
             image:null,
-            train:null,
             p1:null,
             p2:null,
             p3:null,
-            autocompletePlace:"Stark",
             loaded:false,
-
+            train:null,
             location:'',
+            autocompletePlace:"Stark",
             type:'',
             period:'',
             group_size:'',
