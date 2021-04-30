@@ -28,7 +28,9 @@ class EditPost extends React.Component {
       temp_cover: null,
       url: null,
       pid: null,
-      uid: null
+      uid: null,
+      submitError: false,
+      submitSuccessful: false
     };
 
     this.changeInput = this.changeInput.bind(this);
@@ -84,31 +86,39 @@ class EditPost extends React.Component {
   handlePost = () => {
     var image_url;
     console.log(this.state);
-    try {
-      var post_ref = f_database.ref("posts/" + this.state.post.pid);
-      // update the details of the post
-      post_ref.update({title: this.state.title, location: this.state.location, size: this.state.size, travel_style: this.state.travel_style, period: this.state.period});
-      // if user update anther cover image, upload to the firebase storage and update the image link to the post
-      if (this.state.cover) {
-        const uploadImage = storage.ref('cover_images/' + this.state.post.pid + "/" + this.state.cover.name).put(this.state.cover);
-        uploadImage.on('state_changed', (snapshot) => {}, error => {
-          console.log(error);
-        }, () => {
-          storage.ref("cover_images/" + this.state.post.pid + "/").child(this.state.cover.name).getDownloadURL().then(i_url => {
-            post_ref.update({url: i_url})
-          })
+    if(this.state.title && this.state.location){
+      try {
+        var post_ref = f_database.ref("posts/" + this.state.post.pid);
+        // update the details of the post
+        post_ref.update({title: this.state.title, location: this.state.location, size: this.state.size, travel_style: this.state.travel_style, period: this.state.period});
+        // if user update anther cover image, upload to the firebase storage and update the image link to the post
+        if (this.state.cover) {
+          const uploadImage = storage.ref('cover_images/' + this.state.post.pid + "/" + this.state.cover.name).put(this.state.cover);
+          uploadImage.on('state_changed', (snapshot) => {}, error => {
+            console.log(error);
+          }, () => {
+            storage.ref("cover_images/" + this.state.post.pid + "/").child(this.state.cover.name).getDownloadURL().then(i_url => {
+              post_ref.update({url: i_url})
+            })
+          });
+        } else if (this.state.post.url) {
+          // cover image remains unchanged
+          post_ref.update({url: this.state.post.url})
+        }
+        // user update the remark
+        if (this.state.remark) {
+          post_ref.update({remark: this.state.remark})
+        }
+        this.setState({
+          submitError:false,
+          submitSuccessful:true
         });
-      } else if (this.state.post.url) {
-        // cover image remains unchanged
-        post_ref.update({url: this.state.post.url})
-      }
-      // user update the remark
-      if (this.state.remark) {
-        post_ref.update({remark: this.state.remark})
-      }
 
-    } catch (e) {
-      console.log(e);
+      } catch (e) {
+        console.log(e);
+      }
+    }else{
+      this.setState({submitError:true});
     }
 
   }
@@ -178,8 +188,7 @@ class EditPost extends React.Component {
             <span>Travelling Style:</span>
           </div>
           <div className="right-item">
-            <Select name="travel-style" labelId="travel-style" id="travel-style" onChange={this.changeInput} variant="outlined" value={this.state.travel_style}>
-              <MenuItem value={"None"}>None</MenuItem>
+            <Select name="travel-style" labelId="travel-style" id="travel-style" onChange={this.changeInput} variant="outlined" defaultValue={"Sporty"}>
               <MenuItem value={"Sporty"}>Sporty</MenuItem>
               <MenuItem value={"Shopping"}>Shopping</MenuItem>
               <MenuItem value={"Cultural"}>Cultural</MenuItem>
@@ -202,6 +211,16 @@ class EditPost extends React.Component {
           }} onClick={this.handlePost}>
           SAVE CHANGES
         </Button>
+        {(this.state.submitError && (
+          <p style={{ color: "red", textAlign: "center" }}>
+            Please fill the title and location
+          </p>
+        )) ||
+          (this.state.submitSuccessful && (
+            <p style={{ color: "green", textAlign: "center" }}>
+              Successfully updated the post!
+            </p>
+          ))}
 
       </header>);
     } else if (this.state.post) {

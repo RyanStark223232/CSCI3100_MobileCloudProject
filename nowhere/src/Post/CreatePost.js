@@ -1,6 +1,6 @@
 /*
 This is the frontend module for creating post.
-The module creates new post and write the details to the firebase database. 
+The module creates new post and write the details to the firebase database.
 */
 import React from "react";
 import './CreatePost.css';
@@ -26,12 +26,14 @@ class CreatePost extends React.Component {
       cover: null,
       temp_cover: null,
       url: null,
-      pid: null
+      pid: null,
+      submitError: false,
+      submitSuccessful: false
     };
     this.changeInput = this.changeInput.bind(this);
   }
 
-  // Get the largest post id from the firebase database reference post 
+  // Get the largest post id from the firebase database reference post
   // and initilize the post id (the largest post_id +1) of the current post
   componentWillMount() {
     var post_ref = f_database.ref("posts/");
@@ -57,7 +59,7 @@ class CreatePost extends React.Component {
     console.log(this.state);
   }
 
-  // get the image from user upload and temporarily display the uploaded image on the website 
+  // get the image from user upload and temporarily display the uploaded image on the website
   handleImage = (event) => {
     this.setState({
       cover: event.target.files[0],
@@ -75,51 +77,59 @@ class CreatePost extends React.Component {
       this.setState({pid: 0});
 
     //
-    try {
-      var current_uid = auth.currentUser.uid;
+    if(this.state.title && this.state.location){
+      try {
+        var current_uid = auth.currentUser.uid;
 
-      var post_ref = f_database.ref("posts/");
-      var data = null;
-      post_ref.orderByChild('pid').limitToLast(1).on("value", snapshot => {
-        snapshot.forEach(snap => {
-          data = snap.val()
-          this.setState({pid: data.pid});
+        var post_ref = f_database.ref("posts/");
+        var data = null;
+        post_ref.orderByChild('pid').limitToLast(1).on("value", snapshot => {
+          snapshot.forEach(snap => {
+            data = snap.val()
+            this.setState({pid: data.pid});
+          });
         });
-      });
 
-      // create post and save data to the firebase database
-      var postdb = post_ref.child(this.state.pid);
-      postdb.set({
-        title: this.state.title,
-        location: this.state.location,
-        size: this.state.size,
-        travel_style: this.state.travel_style,
-        uid: current_uid,
-        period: this.state.period,
-        pid: this.state.pid,
-        owner: auth.currentUser.email
-      });
-      // set/updte the remark to the current post of database
-      if (this.state.remark) {
-        postdb.update({remark: this.state.remark})
-      }
-
-      // upload the cover image to the firebase storage
-      if (this.state.cover) {
-        const uploadImage = storage.ref("cover_images/" + this.state.pid + "/" + this.state.cover.name).put(this.state.cover);
-        uploadImage.on('state_changed', (snapshot) => {}, error => {
-          console.log(error);
-        }, () => {
-          storage.ref("cover_images/" + this.state.pid + "/").child(this.state.cover.name).getDownloadURL().then(i_url => {
-            // set/update the link of the cover image which is located in the firebase storage
-            // to the current post of firebase database
-            postdb.update({url: i_url})
-          })
+        // create post and save data to the firebase database
+        var postdb = post_ref.child(this.state.pid);
+        postdb.set({
+          title: this.state.title,
+          location: this.state.location,
+          size: this.state.size,
+          travel_style: this.state.travel_style,
+          uid: current_uid,
+          period: this.state.period,
+          pid: this.state.pid,
+          owner: auth.currentUser.email
         });
-      }
+        // set/updte the remark to the current post of database
+        if (this.state.remark) {
+          postdb.update({remark: this.state.remark})
+        }
 
-    } catch (e) {
-      console.log(e);
+        // upload the cover image to the firebase storage
+        if (this.state.cover) {
+          const uploadImage = storage.ref("cover_images/" + this.state.pid + "/" + this.state.cover.name).put(this.state.cover);
+          uploadImage.on('state_changed', (snapshot) => {}, error => {
+            console.log(error);
+          }, () => {
+            storage.ref("cover_images/" + this.state.pid + "/").child(this.state.cover.name).getDownloadURL().then(i_url => {
+              // set/update the link of the cover image which is located in the firebase storage
+              // to the current post of firebase database
+              postdb.update({url: i_url})
+            })
+          });
+        }
+        this.setState({
+          submitError:false,
+          submitSuccessful:true
+        });
+
+      } catch (e) {
+        console.log(e);
+      }
+    }else{
+      this.setState({submitError:true});
     }
   }
 
@@ -209,6 +219,16 @@ class CreatePost extends React.Component {
         }} onClick={this.handlePost}>
         Create Post
       </Button>
+      {(this.state.submitError && (
+        <p style={{ color: "red", textAlign: "center" }}>
+          Please fill the title and location
+        </p>
+      )) ||
+        (this.state.submitSuccessful && (
+          <p style={{ color: "green", textAlign: "center" }}>
+            Successfully created the post!
+          </p>
+        ))}
     </header>);
   }
 }
